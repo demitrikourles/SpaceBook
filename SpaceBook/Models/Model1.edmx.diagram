@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="00a377438fe44ff398cbfa2ac4fe3d56" Name="Diagram1">
+        <EntityTypeShape EntityType="SpaceBookModel.Booking" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SpaceBookModel.Facility" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SpaceBookModel.Notification" Width="1.5" PointX="3" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SpaceBookModel.Review" Width="1.5" PointX="6" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="SpaceBookModel.User" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
+        <AssociationConnector Association="SpaceBookModel.FK_Booking_Facility" ManuallyRouted="false" />
+        <AssociationConnector Association="SpaceBookModel.FK_Booking_User" ManuallyRouted="false" />
+        <AssociationConnector Association="SpaceBookModel.FK_Review_Facility" ManuallyRouted="false" />
+        <AssociationConnector Association="SpaceBookModel.FK_Notification_User" ManuallyRouted="false" />
+        <AssociationConnector Association="SpaceBookModel.FK_Review_User" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
