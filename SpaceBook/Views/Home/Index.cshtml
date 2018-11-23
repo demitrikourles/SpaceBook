@@ -2,30 +2,48 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+
+<script>
+    $(function () {
+        $('.selectpicker').selectpicker();
+    });
+</script>
 
 <div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
+    <div class="form-group col-md-5">
+        <h2>Search facilities by name</h2>
+        @*<label for="exampleFormControlSelect1">Example select</label>*@
+        <select class="form-control selectpicker" id="select-facility" data-live-search="true">
+            <option value="" selected disabled>Please select</option>
+            <option>Balfour Arena</option>
+            <option>Curry Field</option>
+            <option>Cooperators Arena</option>
+            <option>Liebel Field</option>
+            <option>Mosaic Stadium</option>
+            <option>Realtors East Soccer Field</option>
+            <option>Realtors West Soccer Field</option>
+            <option>Staples Centre</option>
+            <option>Wimbledon Court #1</option>
+            <option>Wimbledon Court #2</option>
+        </select>
+
+
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
+    <div class="form-group col-md-5">
+        <h2>Search facilities by category</h2>
+        @*<label for="exampleFormControlSelect1">Example select</label>*@
+        <select class="form-control" id="exampleFormControlSelect1">
+            <option value="" selected disabled>Please select</option>
+            <option>Baseball</option>
+            <option>Basketball</option>
+            <option>Football</option>
+            <option>Hockey</option>
+            <option>Soccer</option>
+        </select>
     </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
+    <div class="form-group col-md-2">
+        <br />
+        <br />
+        <button type="button" class="btn btn-primary btn-lg">Search Facilities</button>
     </div>
 </div>
