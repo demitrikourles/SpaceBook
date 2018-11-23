@@ -1,4 +1,7 @@
 ﻿body {
+    background: url(Images/Skyline.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
     padding-top: 50px;
     padding-bottom: 20px;
 }
@@ -17,7 +20,12 @@
 }
 
 .backImage {
-    background-image: url("~/Content/Images/Skyline.jpg");
+    /*background: url(Images/Skyline.jpg);
+    background-size: cover;
+    height: 100vh;*/
+    /*background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;*/
 }
 
 /* Set width on the form input elements since they're 100% wide by default */

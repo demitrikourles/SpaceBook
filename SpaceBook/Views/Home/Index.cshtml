@@ -2,51 +2,52 @@
     ViewBag.Title = "Home Page";
 }
 
+
 <div class="backImage">
+    
 
-</div>
+    <script>
+        $(function () {
+            $('.selectpicker').selectpicker();
+        });
+    </script>
 
-<script>
-    $(function () {
-        $('.selectpicker').selectpicker();
-    });
-</script>
-
-<div class="row">
-    <div class="form-group col-md-5">
-        <h2>Search facilities by name</h2>
-        @*<label for="exampleFormControlSelect1">Example select</label>*@
-        <select class="form-control selectpicker" id="select-facility" data-live-search="true">
-            <option value="" selected disabled>Please select</option>
-            <option>Balfour Arena</option>
-            <option>Curry Field</option>
-            <option>Cooperators Arena</option>
-            <option>Liebel Field</option>
-            <option>Mosaic Stadium</option>
-            <option>Realtors East Soccer Field</option>
-            <option>Realtors West Soccer Field</option>
-            <option>Staples Centre</option>
-            <option>Wimbledon Court #1</option>
-            <option>Wimbledon Court #2</option>
-        </select>
+    <div class="row">
+        <div class="form-group col-md-5">
+            <h2>Search facilities by name</h2>
+            @*<label for="exampleFormControlSelect1">Example select</label>*@
+            <select class="form-control selectpicker" id="select-facility" data-live-search="true">
+                <option value="" selected disabled>Please select</option>
+                <option>Balfour Arena</option>
+                <option>Curry Field</option>
+                <option>Cooperators Arena</option>
+                <option>Liebel Field</option>
+                <option>Mosaic Stadium</option>
+                <option>Realtors East Soccer Field</option>
+                <option>Realtors West Soccer Field</option>
+                <option>Staples Centre</option>
+                <option>Wimbledon Court #1</option>
+                <option>Wimbledon Court #2</option>
+            </select>
 
 
-    </div>
-    <div class="form-group col-md-5">
-        <h2>Search facilities by category</h2>
-        @*<label for="exampleFormControlSelect1">Example select</label>*@
-        <select class="form-control" id="exampleFormControlSelect1">
-            <option value="" selected disabled>Please select</option>
-            <option>Baseball</option>
-            <option>Basketball</option>
-            <option>Football</option>
-            <option>Hockey</option>
-            <option>Soccer</option>
-        </select>
-    </div>
-    <div class="form-group col-md-2">
-        <br />
-        <br />
-        <button type="button" class="btn btn-primary btn-lg">Search Facilities</button>
+        </div>
+        <div class="form-group col-md-5">
+            <h2>Search facilities by category</h2>
+            @*<label for="exampleFormControlSelect1">Example select</label>*@
+            <select class="form-control" id="exampleFormControlSelect1">
+                <option value="" selected disabled>Please select</option>
+                <option>Baseball</option>
+                <option>Basketball</option>
+                <option>Football</option>
+                <option>Hockey</option>
+                <option>Soccer</option>
+            </select>
+        </div>
+        <div class="form-group col-md-2">
+            <br />
+            <br />
+            <button type="button" class="btn btn-primary btn-lg">Search Facilities</button>
+        </div>
     </div>
 </div>
