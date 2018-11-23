@@ -26,5 +26,17 @@ namespace SpaceBook.Controllers
 
             return View();
         }
+
+        public ActionResult SearchResults()
+        {
+
+            return View();
+        }
+
+        public ActionResult ViewFacility()
+        {
+
+            return View();
+        }
     }
 }

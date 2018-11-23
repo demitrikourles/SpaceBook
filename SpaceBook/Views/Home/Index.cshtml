@@ -4,13 +4,19 @@
 
 
 <div class="backImage">
-    
+
 
     <script>
         $(function () {
             $('.selectpicker').selectpicker();
         });
     </script>
+
+    <br />
+    <div class="jumbotron">
+        <h1>SpaceBook</h1>
+        <p class="lead">SpaceBook is Regina's free application for booking and advertising local venues.</p>
+    </div>
 
     <div class="row">
         <div class="form-group col-md-5">
@@ -47,7 +53,7 @@
         <div class="form-group col-md-2">
             <br />
             <br />
-            <button type="button" class="btn btn-primary btn-lg">Search Facilities</button>
+            <button type="button" onclick="location.href='@Url.Action("SearchResults", "Home")'" class="btn btn-primary btn-lg">Search Facilities</button>
         </div>
     </div>
 </div>
