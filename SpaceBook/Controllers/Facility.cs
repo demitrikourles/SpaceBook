@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SpaceBook.Models
+namespace SpaceBook.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -21,15 +21,15 @@ namespace SpaceBook.Models
             this.Reviews = new HashSet<Review>();
         }
     
-        public int id { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
-        public string address { get; set; }
-        public string type { get; set; }
-        public Nullable<System.TimeSpan> openTime { get; set; }
-        public Nullable<System.TimeSpan> closeTime { get; set; }
-        public Nullable<double> hourlyRate { get; set; }
-        public Nullable<bool> active { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Address { get; set; }
+        public Nullable<int> Type { get; set; }
+        public Nullable<System.TimeSpan> StartTime { get; set; }
+        public Nullable<System.TimeSpan> EndTime { get; set; }
+        public Nullable<decimal> HourlyRate { get; set; }
+        public Nullable<bool> ActiveFlag { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Booking> Bookings { get; set; }

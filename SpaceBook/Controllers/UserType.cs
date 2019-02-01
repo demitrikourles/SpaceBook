@@ -7,20 +7,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SpaceBook.Models
+namespace SpaceBook.Controllers
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Notification
+    public partial class UserType
     {
-        public int id { get; set; }
-        public string type { get; set; }
-        public int userId { get; set; }
-        public string message { get; set; }
-        public Nullable<System.DateTime> dateTime { get; set; }
-        public string isRead { get; set; }
-    
-        public virtual User User { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
     }
 }

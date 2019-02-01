@@ -7,16 +7,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SpaceBook.Models
+namespace SpaceBook.Controllers
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class SpaceBookEntities : DbContext
+    public partial class SpaceBookEntities1 : DbContext
     {
-        public SpaceBookEntities()
-            : base("name=SpaceBookEntities")
+        public SpaceBookEntities1()
+            : base("name=SpaceBookEntities1")
         {
         }
     
@@ -27,8 +27,13 @@ namespace SpaceBook.Models
     
         public virtual DbSet<Booking> Bookings { get; set; }
         public virtual DbSet<Facility> Facilities { get; set; }
+        public virtual DbSet<FacilityType> FacilityTypes { get; set; }
         public virtual DbSet<Notification> Notifications { get; set; }
+        public virtual DbSet<NotificationType> NotificationTypes { get; set; }
         public virtual DbSet<Review> Reviews { get; set; }
+        public virtual DbSet<TagAssignment> TagAssignments { get; set; }
+        public virtual DbSet<TagType> TagTypes { get; set; }
         public virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<UserType> UserTypes { get; set; }
     }
 }
