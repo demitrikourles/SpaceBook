@@ -7,23 +7,21 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SpaceBook.Controllers
+namespace SpaceBook.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Booking
+    public partial class Notification
     {
         public int Id { get; set; }
         public int UserId { get; set; }
-        public int FacilityId { get; set; }
-        public Nullable<System.DateTime> StartDateTime { get; set; }
-        public Nullable<System.DateTime> EndDateTime { get; set; }
-        public Nullable<decimal> Cost { get; set; }
-        public string Notes { get; set; }
-        public Nullable<bool> Cancelled { get; set; }
+        public Nullable<int> Type { get; set; }
+        public string Message { get; set; }
+        public Nullable<System.DateTime> DateTime { get; set; }
+        public Nullable<bool> IsReadFlag { get; set; }
+        public Nullable<bool> ActiveFlag { get; set; }
     
-        public virtual Facility Facility { get; set; }
         public virtual User User { get; set; }
     }
 }

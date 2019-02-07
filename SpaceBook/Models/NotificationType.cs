@@ -7,18 +7,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SpaceBook.Controllers
+namespace SpaceBook.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class TagAssignment
+    public partial class NotificationType
     {
         public int Id { get; set; }
-        public int TagId { get; set; }
-        public int FacilityId { get; set; }
-    
-        public virtual FacilityType FacilityType { get; set; }
-        public virtual TagType TagType { get; set; }
+        public string Name { get; set; }
     }
 }

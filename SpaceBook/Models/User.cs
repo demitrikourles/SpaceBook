@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SpaceBook.Controllers
+namespace SpaceBook.Models
 {
     using System;
     using System.Collections.Generic;
@@ -25,9 +25,10 @@ namespace SpaceBook.Controllers
         public int Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public Nullable<int> Phone { get; set; }
+        public string Phone { get; set; }
         public int Type { get; set; }
         public Nullable<bool> ActiveFlag { get; set; }
+        public string Password { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Booking> Bookings { get; set; }

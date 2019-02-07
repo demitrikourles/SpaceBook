@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SpaceBook.Controllers
+namespace SpaceBook.Models
 {
     using System;
     using System.Collections.Generic;

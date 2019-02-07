@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="SpaceBookModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="SpaceBookModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Booking">
           <Key>
             <PropertyRef Name="Id" />
@@ -90,8 +90,9 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="Email" Type="varchar" MaxLength="50" />
-          <Property Name="Phone" Type="int" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Phone" Type="varchar" MaxLength="15" />
           <Property Name="Type" Type="int" Nullable="false" />
           <Property Name="ActiveFlag" Type="bit" />
         </EntityType>
@@ -226,8 +227,7 @@
             <End Role="TagAssignment" EntitySet="TagAssignment" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="SpaceBookModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -327,13 +327,14 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Phone" Type="Int32" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Phone" Type="String" />
           <Property Name="Type" Type="Int32" Nullable="false" />
           <Property Name="ActiveFlag" Type="Boolean" />
           <NavigationProperty Name="Bookings" Relationship="Self.FK_Booking_User" FromRole="User" ToRole="Booking" />
           <NavigationProperty Name="Notifications" Relationship="Self.FK_Notification_User" FromRole="User" ToRole="Notification" />
           <NavigationProperty Name="Reviews" Relationship="Self.FK_Review_User" FromRole="User" ToRole="Review" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="UserType">
           <Key>
@@ -562,6 +563,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="SpaceBookModel.User">
               <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Email" ColumnName="Email" />

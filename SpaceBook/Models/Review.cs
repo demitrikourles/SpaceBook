@@ -7,14 +7,21 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SpaceBook.Controllers
+namespace SpaceBook.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class NotificationType
+    public partial class Review
     {
         public int Id { get; set; }
-        public string Name { get; set; }
+        public int UserId { get; set; }
+        public int FacilityId { get; set; }
+        public Nullable<int> Rating { get; set; }
+        public string Comment { get; set; }
+        public Nullable<bool> ActiveFlag { get; set; }
+    
+        public virtual Facility Facility { get; set; }
+        public virtual User User { get; set; }
     }
 }
