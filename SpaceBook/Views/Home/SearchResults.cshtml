@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<SpaceBook.Models.Facility>
 @{
     ViewBag.Title = "SearchResults";
 }
@@ -7,6 +7,19 @@
 <h2>Search Results</h2>
 
 <div class="row">
+    @foreach (var result in Model) 
+    {
+    <div class="col-sm-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">@Html.DisplayFor(modelResult => result.Name)</h5>
+                <p class="card-text">@Html.DisplayFor(modelResult => result.Description)</p>
+                <button type="button" onclick="location.href='@Url.Action("ViewFacility", new { Id = result.Id })'" class="btn btn-primary">View Facility</button>
+            </div>
+        </div>
+    </div>
+    }
+
     <div class="col-sm-4">
         <div class="card">
             <div class="card-body">

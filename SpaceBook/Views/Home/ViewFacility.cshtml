@@ -1,4 +1,4 @@
-﻿
+﻿@model SpaceBook.Models.Facility
 @{
     ViewBag.Title = "ViewFacility";
 }
@@ -11,19 +11,21 @@
     <div class="col-md-5">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title">Mosaic Stadium</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <h5 class="card-title">@Model.Name</h5>
+                <p class="card-text">@Model.Description</p>
                 <hr />
-                <p class="card-text">Hourly booking rate: $200</p>
+                <p class="card-text">Rate - $@Model.HourlyRate</p>
                 <hr />
-                <p><span class="fa fa-map-marker fa-fw"></span> 700 Elphinstone St, Regina, SK S4P 2Z6</p>
-                <p><span class="fa fa-phone fa-fw"></span> (306) 781-9200</p>
-                <p><span class="fa fa-envelope fa-fw"></span> booking@mosaicstadium.com</p>
+                <p><span class="fa fa-clock-o fa-fw"></span>Open Time - @Model.StartTime</p>
+                <p><span class="fa fa-clock-o fa-fw"></span>Close Time - @Model.EndTime</p>
+                <p><span class="fa fa-map-marker fa-fw"></span>@Model.Address</p>
+                <p><span class="fa fa-phone fa-fw"></span>@Model.Phone</p>
+                <p><span class="fa fa-envelope fa-fw"></span>@Model.Email</p>
                 <hr />
-                <button type="button" onclick="location.href='@Url.Action("ViewFacility", "Home")'" class="btn btn-primary"><span class="fa fa-calendar fa-fw"></span> View Availability</button>
+                <button type="button" onclick="location.href='@Url.Action("ViewFacilityAvailability", new { Id = Model.Id })'" class="btn btn-primary"><span class="fa fa-calendar fa-fw"></span> View Availability</button>
             </div>
             <div class="card-footer">
-                <small class="text-muted">Last booked 3 weeks ago</small>
+                <small class="text-muted">**Last booked date text**</small>
             </div>
         </div>
     </div>

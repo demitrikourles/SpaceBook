@@ -38,6 +38,18 @@
           <Property Name="HourlyRate" Type="money" />
           <Property Name="ActiveFlag" Type="bit" />
         </EntityType>
+        <EntityType Name="FacilityTime">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FacilityId" Type="int" Nullable="false" />
+          <Property Name="BookingId" Type="int" />
+          <Property Name="StartTime" Type="time" Precision="7" />
+          <Property Name="Day" Type="int" />
+          <Property Name="Rate" Type="money" />
+          <Property Name="IsAvailable" Type="bit" />
+        </EntityType>
         <EntityType Name="FacilityType">
           <Key>
             <PropertyRef Name="Id" />
@@ -133,6 +145,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_FacilityTime_Booking">
+          <End Role="Booking" Type="Self.Booking" Multiplicity="0..1" />
+          <End Role="FacilityTime" Type="Self.FacilityTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Booking">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FacilityTime">
+              <PropertyRef Name="BookingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FacilityTime_Facility">
+          <End Role="Facility" Type="Self.Facility" Multiplicity="1" />
+          <End Role="FacilityTime" Type="Self.FacilityTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Facility">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FacilityTime">
+              <PropertyRef Name="FacilityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Notification_User">
           <End Role="User" Type="Self.User" Multiplicity="1" />
           <End Role="Notification" Type="Self.Notification" Multiplicity="*" />
@@ -196,6 +232,7 @@
         <EntityContainer Name="SpaceBookModelStoreContainer">
           <EntitySet Name="Booking" EntityType="Self.Booking" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Facility" EntityType="Self.Facility" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FacilityTime" EntityType="Self.FacilityTime" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FacilityType" EntityType="Self.FacilityType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Notification" EntityType="Self.Notification" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NotificationType" EntityType="Self.NotificationType" Schema="dbo" store:Type="Tables" />
@@ -211,6 +248,14 @@
           <AssociationSet Name="FK_Booking_User" Association="Self.FK_Booking_User">
             <End Role="User" EntitySet="User" />
             <End Role="Booking" EntitySet="Booking" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FacilityTime_Booking" Association="Self.FK_FacilityTime_Booking">
+            <End Role="Booking" EntitySet="Booking" />
+            <End Role="FacilityTime" EntitySet="FacilityTime" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FacilityTime_Facility" Association="Self.FK_FacilityTime_Facility">
+            <End Role="Facility" EntitySet="Facility" />
+            <End Role="FacilityTime" EntitySet="FacilityTime" />
           </AssociationSet>
           <AssociationSet Name="FK_Notification_User" Association="Self.FK_Notification_User">
             <End Role="User" EntitySet="User" />
@@ -251,6 +296,7 @@
           <Property Name="Cancelled" Type="Boolean" />
           <NavigationProperty Name="Facility" Relationship="Self.FK_Booking_Facility" FromRole="Booking" ToRole="Facility" />
           <NavigationProperty Name="User" Relationship="Self.FK_Booking_User" FromRole="Booking" ToRole="User" />
+          <NavigationProperty Name="FacilityTimes" Relationship="SpaceBookModel.FK_FacilityTime_Booking" FromRole="Booking" ToRole="FacilityTime" />
         </EntityType>
         <EntityType Name="Facility">
           <Key>
@@ -273,6 +319,7 @@
           <Property Name="PostalCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Province" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="FacilityTimes" Relationship="SpaceBookModel.FK_FacilityTime_Facility" FromRole="Facility" ToRole="FacilityTime" />
         </EntityType>
         <EntityType Name="FacilityType">
           <Key>
@@ -478,7 +525,54 @@
             <End Role="TagType" EntitySet="TagTypes" />
             <End Role="TagAssignment" EntitySet="TagAssignments" />
           </AssociationSet>
+          <EntitySet Name="FacilityTimes" EntityType="SpaceBookModel.FacilityTime" />
+          <AssociationSet Name="FK_FacilityTime_Booking" Association="SpaceBookModel.FK_FacilityTime_Booking">
+            <End Role="Booking" EntitySet="Bookings" />
+            <End Role="FacilityTime" EntitySet="FacilityTimes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_FacilityTime_Facility" Association="SpaceBookModel.FK_FacilityTime_Facility">
+            <End Role="Facility" EntitySet="Facilities" />
+            <End Role="FacilityTime" EntitySet="FacilityTimes" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="FacilityTime">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FacilityId" Type="Int32" Nullable="false" />
+          <Property Name="BookingId" Type="Int32" />
+          <Property Name="StartTime" Type="Time" Precision="7" />
+          <Property Name="Day" Type="Int32" />
+          <Property Name="Rate" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="IsAvailable" Type="Boolean" />
+          <NavigationProperty Name="Booking" Relationship="SpaceBookModel.FK_FacilityTime_Booking" FromRole="FacilityTime" ToRole="Booking" />
+          <NavigationProperty Name="Facility" Relationship="SpaceBookModel.FK_FacilityTime_Facility" FromRole="FacilityTime" ToRole="Facility" />
+        </EntityType>
+        <Association Name="FK_FacilityTime_Booking">
+          <End Type="SpaceBookModel.Booking" Role="Booking" Multiplicity="0..1" />
+          <End Type="SpaceBookModel.FacilityTime" Role="FacilityTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Booking">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FacilityTime">
+              <PropertyRef Name="BookingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_FacilityTime_Facility">
+          <End Type="SpaceBookModel.Facility" Role="Facility" Multiplicity="1" />
+          <End Type="SpaceBookModel.FacilityTime" Role="FacilityTime" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Facility">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="FacilityTime">
+              <PropertyRef Name="FacilityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -596,6 +690,19 @@
               <MappingFragment StoreEntitySet="UserType">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FacilityTimes">
+            <EntityTypeMapping TypeName="SpaceBookModel.FacilityTime">
+              <MappingFragment StoreEntitySet="FacilityTime">
+                <ScalarProperty Name="IsAvailable" ColumnName="IsAvailable" />
+                <ScalarProperty Name="Rate" ColumnName="Rate" />
+                <ScalarProperty Name="Day" ColumnName="Day" />
+                <ScalarProperty Name="StartTime" ColumnName="StartTime" />
+                <ScalarProperty Name="BookingId" ColumnName="BookingId" />
+                <ScalarProperty Name="FacilityId" ColumnName="FacilityId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

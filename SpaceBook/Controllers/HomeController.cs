@@ -36,14 +36,47 @@ namespace SpaceBook.Controllers
 
         public ActionResult SearchResults()
         {
+            using (var context = new SpaceBookEntities1()) 
+            {
+                var results = context.Facilities.Where(x => x.ActiveFlag == true).ToList();
+                if (results != null && results.Count > 0) 
+                {
+                    //return View(results);
+                }
+                return View(results);
 
-            return View();
+                //else 
+                //{
+                //    return View();
+                //}  
+            }
         }
 
-        public ActionResult ViewFacility()
+        public ActionResult ViewFacility(int id)
         {
+            using (var context = new SpaceBookEntities1()) 
+            {
+                var facility = context.Facilities.Where(x => x.Id == id).ToList().FirstOrDefault();
+                return View(facility);
+            }
+        }
 
-            return View();
+        public ActionResult ViewFacilityAvailability(int id) 
+        {
+            using (var context = new SpaceBookEntities1()) 
+            {
+                var times = context.FacilityTimes.Where(x => x.FacilityId == id).ToList();
+
+                if (times.Count > 0)
+                {
+                    foreach (FacilityTime time in times)
+                    {
+                        time.Facility.Name.FirstOrDefault();
+                        //time.Booking.Id.ToString().FirstOrDefault();
+                    }
+                }
+                return View(times);
+            }
         }
 
         [HttpGet]

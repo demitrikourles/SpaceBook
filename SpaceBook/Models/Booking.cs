@@ -14,6 +14,12 @@ namespace SpaceBook.Models
     
     public partial class Booking
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Booking()
+        {
+            this.FacilityTimes = new HashSet<FacilityTime>();
+        }
+    
         public int Id { get; set; }
         public int UserId { get; set; }
         public int FacilityId { get; set; }
@@ -25,5 +31,7 @@ namespace SpaceBook.Models
     
         public virtual Facility Facility { get; set; }
         public virtual User User { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FacilityTime> FacilityTimes { get; set; }
     }
 }

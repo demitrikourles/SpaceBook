@@ -5,7 +5,7 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="180578457f9c478693c1fd4ee155c733" Name="Diagram1">
-        <EntityTypeShape EntityType="SpaceBookModel.Booking" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SpaceBookModel.Booking" Width="1.5" PointX="3.125" PointY="4.875" IsExpanded="true" />
         <EntityTypeShape EntityType="SpaceBookModel.Facility" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="SpaceBookModel.FacilityType" Width="1.5" PointX="2.75" PointY="1.375" IsExpanded="true" />
         <EntityTypeShape EntityType="SpaceBookModel.Notification" Width="1.5" PointX="3" PointY="8.75" IsExpanded="true" />
@@ -13,7 +13,7 @@
         <EntityTypeShape EntityType="SpaceBookModel.Review" Width="1.5" PointX="6" PointY="5" IsExpanded="true" />
         <EntityTypeShape EntityType="SpaceBookModel.TagAssignment" Width="1.5" PointX="5" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="SpaceBookModel.TagType" Width="1.5" PointX="2.75" PointY="12.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="SpaceBookModel.User" Width="1.5" PointX="0.75" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="SpaceBookModel.User" Width="1.5" PointX="0.5" PointY="6.375" IsExpanded="true" />
         <EntityTypeShape EntityType="SpaceBookModel.UserType" Width="1.5" PointX="8.75" PointY="4" IsExpanded="true" />
         <AssociationConnector Association="SpaceBookModel.FK_Booking_Facility" ManuallyRouted="false" />
         <AssociationConnector Association="SpaceBookModel.FK_Booking_User" ManuallyRouted="false" />
@@ -22,6 +22,9 @@
         <AssociationConnector Association="SpaceBookModel.FK_Notification_User" ManuallyRouted="false" />
         <AssociationConnector Association="SpaceBookModel.FK_Review_User" ManuallyRouted="false" />
         <AssociationConnector Association="SpaceBookModel.FK_TagAssignment_TagType" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="SpaceBookModel.FacilityTime" Width="1.5" PointX="5.75" PointY="8.25" />
+        <AssociationConnector Association="SpaceBookModel.FK_FacilityTime_Booking" />
+        <AssociationConnector Association="SpaceBookModel.FK_FacilityTime_Facility" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

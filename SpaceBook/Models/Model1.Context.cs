@@ -35,5 +35,6 @@ namespace SpaceBook.Models
         public virtual DbSet<TagType> TagTypes { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<UserType> UserTypes { get; set; }
+        public virtual DbSet<FacilityTime> FacilityTimes { get; set; }
     }
 }
