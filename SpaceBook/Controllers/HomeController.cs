@@ -56,7 +56,7 @@ namespace SpaceBook.Controllers
         {
             using (var context = new SpaceBookEntities1()) 
             {
-                var facility = context.Facilities.Where(x => x.Id == id).ToList().FirstOrDefault();
+                var facility = context.Facilities.Where(x => x.Id == id).FirstOrDefault();
                 return View(facility);
             }
         }
@@ -65,18 +65,31 @@ namespace SpaceBook.Controllers
         {
             using (var context = new SpaceBookEntities1()) 
             {
-                var times = context.FacilityTimes.Where(x => x.FacilityId == id).ToList();
-
-                if (times.Count > 0)
-                {
-                    foreach (FacilityTime time in times)
-                    {
+                var times = context.FacilityTimes.Where(x => x.FacilityId == id).ToList().OrderBy(x => x.StartTime).ToList();
+                if (times.Count > 0) {
+                    foreach (FacilityTime time in times) {
                         time.Facility.Name.FirstOrDefault();
                         //time.Booking.Id.ToString().FirstOrDefault();
                     }
                 }
+                //times.Facility.Name.FirstOrDefault();
                 return View(times);
             }
+        }
+
+        public ActionResult PartialViewTimes(int day) {
+            using (var context = new SpaceBookEntities1()) 
+            {
+                var times = context.FacilityTimes.Where(x => x.Day == day).ToList().OrderBy(x => x.StartTime).ToList();
+                if (times.Count > 0) {
+                    foreach (FacilityTime time in times) {
+                        time.Facility.Name.FirstOrDefault();
+                        //time.Booking.Id.ToString().FirstOrDefault();
+                    }
+                }
+                return PartialView(times);
+            }
+                
         }
 
         [HttpGet]

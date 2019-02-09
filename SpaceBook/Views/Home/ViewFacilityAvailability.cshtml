@@ -1,45 +1,43 @@
 ﻿@model IEnumerable<SpaceBook.Models.FacilityTime>
+
 <br />
 
 <h2>@Model.FirstOrDefault().Facility.Name</h2>
+
 <table class="table">
     <tr>
         <th>
-            Times
+            <button href="#" class="showTimes btn btn-primary" data-id="1">Monday</button>
+            <button href="#" class="showTimes btn btn-primary" data-id="2">Tuesday</button>
+            <button href="#" class="showTimes btn btn-primary" data-id="3">Wednesday</button>
+            <button href="#" class="showTimes btn btn-primary" data-id="4">Thursday</button>
+            <button href="#" class="showTimes btn btn-primary" data-id="5">Friday</button>
+            <button href="#" class="showTimes btn btn-primary" data-id="6">Saturday</button>
+            <button href="#" class="showTimes btn btn-primary" data-id="7">Sunday</button>
+            @*<button type="button" onclick="location.href='@Url.Action("PartialViewTimes", "Home")'" class="btn btn-primary">Tuesday</button>*@
         </th>
-        <th>
-            Day
-        </th>
-        <th>
-            Rate
-        </th>
-        <th>
-            IsAvailable
-        </th>
-        <th></th>
     </tr>
-
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.StartTime)
-        </td>
-        <td>
-           @Html.DisplayFor(modelItem => item.Day)
-        </td>
-        <td>
-            $@Html.DisplayFor(modelItem => item.Rate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsAvailable)
-        </td>
-
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
-
 </table>
+
+<div id="showPartialView" style="display:none">
+    @Html.Partial("PartialViewTimes", Model)
+</div>
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.showTimes').click(function () {
+            var $buttonClicked = $(this);
+            var day = $buttonClicked.attr('data-id');
+            $.ajax({
+                url: '@Url.Action("PartialViewTimes")',
+                type: 'GET',
+                data: { day: day },
+                success: function (partialView) {
+                    $('#showPartialView').html(partialView);
+                    $('#showPartialView').show();
+                }
+            });
+        });
+    });
+</script>

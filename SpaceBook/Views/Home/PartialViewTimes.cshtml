@@ -1,0 +1,66 @@
+﻿@model IEnumerable<SpaceBook.Models.FacilityTime>
+<h3>Partial View</h3>
+<table style="float:left" class="table table-striped col-md-2 table-sm">
+    <tr>       
+        <th>Start Time</th>
+        @*<th>Day</th>
+        <th>Rate</th>
+        <th>IsAvailable</th>*@        
+    </tr>
+@for (int x = 0; x < (Model.Count() > 10 ? 10 : Model.Count()); x++) {
+    <tr>
+        @if (Model.ElementAtOrDefault(x).IsAvailable == true) {
+            <td><button href="#" class="bookTime btn btn-sm btn-primary" data-id="1">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
+        }
+    </tr>
+    @*<tr>
+        @if (Model.ElementAtOrDefault(x).IsAvailable == true) {
+        <td>@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</td>
+        <td>@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).Day)</td>
+        <td>@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).Rate)</td>
+        <td>@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).IsAvailable)</td>
+        }
+    </tr>*@
+}
+</table>
+
+@if (Model.Count() > 10) {
+<table style="float:left" class="table table-striped col-md-2 table-sm ">
+    <tr>       
+        <th>Start Time</th>
+        @*<th>Day</th>
+        <th>Rate</th>
+        <th>IsAvailable</th>*@        
+    </tr>
+@for (int x = 10; x < (Model.Count() > 20 ? 20 : Model.Count()); x++) {
+    {
+    <tr>
+        @if (Model.ElementAtOrDefault(x).IsAvailable == true) {
+            <td><button href="#" class="bookTime btn btn-sm btn btn-primary data-id="1">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
+        }
+    </tr>
+    }
+}
+</table>
+}
+
+@if (Model.Count() > 20) {
+<table style="float:left" class="table table-striped col-md-2 table-sm ">
+    <tr>       
+        <th>Start Time</th>
+        @*<th>Day</th>
+        <th>Rate</th>
+        <th>IsAvailable</th>*@        
+    </tr>
+@for (int x = 20; x < (Model.Count() > 30 ? 30 : Model.Count()); x++) {
+    {
+    <tr>
+        @if (Model.ElementAtOrDefault(x).IsAvailable == true) {
+            <td><button href="#" class="bookTime btn btn-sm btn-primary" data-id="1">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
+        }
+    </tr>
+    }
+}
+</table>
+}
+
