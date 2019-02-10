@@ -7,13 +7,13 @@
 <table class="table">
     <tr>
         <th>
-            <button href="#" class="showTimes btn btn-primary" data-id="1">Monday</button>
-            <button href="#" class="showTimes btn btn-primary" data-id="2">Tuesday</button>
-            <button href="#" class="showTimes btn btn-primary" data-id="3">Wednesday</button>
-            <button href="#" class="showTimes btn btn-primary" data-id="4">Thursday</button>
-            <button href="#" class="showTimes btn btn-primary" data-id="5">Friday</button>
-            <button href="#" class="showTimes btn btn-primary" data-id="6">Saturday</button>
-            <button href="#" class="showTimes btn btn-primary" data-id="7">Sunday</button>
+            <button href="#" class="showTimes btn btn-primary" data-facilityID="@Model.FirstOrDefault().FacilityId" data-day="1">Monday</button>
+            <button href="#" class="showTimes btn btn-primary" data-facilityID="@Model.FirstOrDefault().FacilityId" data-day="2">Tuesday</button>
+            <button href="#" class="showTimes btn btn-primary" data-facilityID="@Model.FirstOrDefault().FacilityId" data-day="3">Wednesday</button>
+            <button href="#" class="showTimes btn btn-primary" data-facilityID="@Model.FirstOrDefault().FacilityId" data-day="4">Thursday</button>
+            <button href="#" class="showTimes btn btn-primary" data-facilityID="@Model.FirstOrDefault().FacilityId" data-day="5">Friday</button>
+            <button href="#" class="showTimes btn btn-primary" data-facilityID="@Model.FirstOrDefault().FacilityId" data-day="6">Saturday</button>
+            <button href="#" class="showTimes btn btn-primary" data-facilityID="@Model.FirstOrDefault().FacilityId" data-day="7">Sunday</button>
             @*<button type="button" onclick="location.href='@Url.Action("PartialViewTimes", "Home")'" class="btn btn-primary">Tuesday</button>*@
         </th>
     </tr>
@@ -28,11 +28,12 @@
     $(function () {
         $('.showTimes').click(function () {
             var $buttonClicked = $(this);
-            var day = $buttonClicked.attr('data-id');
+            var day = $buttonClicked.attr('data-day');
+            var facilityId = $buttonClicked.attr('data-facilityId');
             $.ajax({
                 url: '@Url.Action("PartialViewTimes")',
                 type: 'GET',
-                data: { day: day },
+                data: { day: day, facilityId : facilityId },
                 success: function (partialView) {
                     $('#showPartialView').html(partialView);
                     $('#showPartialView').show();

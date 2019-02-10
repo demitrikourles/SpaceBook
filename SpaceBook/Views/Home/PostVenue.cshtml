@@ -1,13 +1,10 @@
 ﻿@model SpaceBook.Models.Facility
-
 @{
     ViewBag.Title = "PostVenue";
 }
 
 <h2>PostVenue</h2>
-
-
-@using (Html.BeginForm())
+@using (Html.BeginForm("PostVenue", "Home", Model, FormMethod.Post, new { id = "postVenueForm"}))
 {
     @Html.AntiForgeryToken()
 
@@ -69,6 +66,23 @@
                             </div>
                         </div>
 
+                        <div class="tab">
+                            <div class="form-group row justify-content-center">
+                                @Html.EditorFor(model => model.StartTime, new { htmlAttributes = new { @class = "form-control form-control-md col-6", @placeholder = "Open Time", onfocus = "this.placeholder = ''", onblur = "this.placeholder = 'Open Time'" } })
+                                @Html.ValidationMessageFor(model => model.StartTime, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group row justify-content-center">
+                                @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control form-control-md col-6", @placeholder = "Close Time", onfocus = "this.placeholder = ''", onblur = "this.placeholder = 'Open Time'" } })
+                                @Html.ValidationMessageFor(model => model.EndTime, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group row justify-content-center">
+                                @Html.EditorFor(model => model.HourlyRate, new { htmlAttributes = new { @class = "form-control form-control-md col-6", @placeholder = "Hourly Rate", onfocus = "this.placeholder = ''", onblur = "this.placeholder = 'Hourly Rate'" } })
+                                @Html.ValidationMessageFor(model => model.HourlyRate, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
                         <button type="button" class="btn btn-info" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
                         <button type="button" class="btn btn-info" id="nextBtn" onclick="nextPrev(1)">Next</button>
                     </div>
@@ -84,9 +98,6 @@
             </div>
         </div>
     </div>
-
-
-
 
 
     @*<div class="tab">
@@ -156,7 +167,7 @@
             // This function will figure out which tab to display
             var x = document.getElementsByClassName("tab");
             // Exit the function if any field in the current tab is invalid:
-            if (n == 1 && !validateForm()) return false;
+            if (n == 1 && !validateForm()) return false; //Comment out this line to disable validation
             // Hide the current tab:
             x[currentTab].style.display = "none";
             // Increase or decrease the current tab by 1:
@@ -164,7 +175,7 @@
             // if you have reached the end of the form... :
             if (currentTab >= x.length) {
                 //...the form gets submitted:
-                document.getElementById("regForm").submit();
+                document.getElementById("postVenueForm").submit();
                 return false;
             }
             // Otherwise, display the correct tab:

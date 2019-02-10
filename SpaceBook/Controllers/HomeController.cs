@@ -66,6 +66,7 @@ namespace SpaceBook.Controllers
             using (var context = new SpaceBookEntities1()) 
             {
                 var times = context.FacilityTimes.Where(x => x.FacilityId == id).ToList().OrderBy(x => x.StartTime).ToList();
+                
                 if (times.Count > 0) {
                     foreach (FacilityTime time in times) {
                         time.Facility.Name.FirstOrDefault();
@@ -77,19 +78,77 @@ namespace SpaceBook.Controllers
             }
         }
 
-        public ActionResult PartialViewTimes(int day) {
+        public ActionResult PartialViewTimes(int day, int facilityId) {
             using (var context = new SpaceBookEntities1()) 
             {
-                var times = context.FacilityTimes.Where(x => x.Day == day).ToList().OrderBy(x => x.StartTime).ToList();
+                var times = context.FacilityTimes.Where(x => ((x.Day == day) && (x.FacilityId == facilityId))).ToList().OrderBy(x => x.StartTime).ToList();
                 if (times.Count > 0) {
                     foreach (FacilityTime time in times) {
                         time.Facility.Name.FirstOrDefault();
-                        //time.Booking.Id.ToString().FirstOrDefault();
                     }
                 }
                 return PartialView(times);
             }
                 
+        }
+
+        [HttpGet]
+        public ActionResult PostVenue() 
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult PostVenue(Facility facilityParam)
+        {
+            using (var context = new SpaceBookEntities1()) 
+            {
+                Facility newFacility = new Facility();
+                if (ModelState.IsValid) 
+                {
+                    newFacility.Name = facilityParam.Name;
+                    newFacility.StartTime = facilityParam.StartTime;
+                    newFacility.EndTime = facilityParam.EndTime;
+                    newFacility.HourlyRate = facilityParam.HourlyRate;
+                    newFacility.Description = facilityParam.Description; //Not on postVenue form yet
+                    newFacility.Email = facilityParam.Email;
+                    newFacility.Phone = facilityParam.Phone;
+                    newFacility.Address = facilityParam.Address;
+                    newFacility.PostalCode = facilityParam.PostalCode; //Not on postVenue form yet
+                    newFacility.City = facilityParam.City;
+                    newFacility.Province = facilityParam.Province;
+                    newFacility.Country = facilityParam.Country;
+                    newFacility.ActiveFlag = true;
+                    newFacility.Type = 1; //Need to set up types
+
+                    context.Facilities.Add(newFacility);
+                    context.SaveChanges();
+                }
+
+                //Facility Times table binding and creation of time slots
+                    //Need to change/add code to unactivate time slots based on open/close times
+                for (int x=1; x<8; x++) //x = day number
+                {
+                    TimeSpan interval = new TimeSpan(0, 0, 0);
+                    for (int y = 0; y < 48; y++)  //y = number of time slots to create
+                    {
+                        FacilityTime newFacilityTime = new FacilityTime();
+                        newFacilityTime.Facility = newFacility;
+                        newFacilityTime.FacilityId = newFacility.Id;
+                        newFacilityTime.StartTime = interval;
+                        newFacilityTime.Day = x;
+                        newFacilityTime.Rate = facilityParam.HourlyRate;
+                        newFacilityTime.IsAvailable = true;
+
+                        context.FacilityTimes.Add(newFacilityTime);
+                        context.SaveChanges();
+
+                        interval = interval.Add(new TimeSpan(0, 30, 0));
+                    }
+                }
+                
+                return View();
+            }
         }
 
         [HttpGet]
@@ -126,11 +185,6 @@ namespace SpaceBook.Controllers
         {
             Session.Abandon();
             return RedirectToAction("Login");
-        }
-
-        public ActionResult PostVenue()
-        {
-            return View();
         }
 
         [HttpGet]
