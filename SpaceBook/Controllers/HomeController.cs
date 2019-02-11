@@ -125,12 +125,11 @@ namespace SpaceBook.Controllers
                     context.SaveChanges();
                 }
 
-                //Facility Times table binding and creation of time slots
-                    //Need to change/add code to unactivate time slots based on open/close times
+                //Creation of time slots
                 for (int x=1; x<8; x++) //x = day number
                 {
                     TimeSpan interval = new TimeSpan(0, 0, 0);
-                    for (int y = 0; y < 48; y++)  //y = number of time slots to create
+                    for (int y = 0; y < 48; y++)  //y = number of time slots to create per day
                     {
                         FacilityTime newFacilityTime = new FacilityTime();
                         newFacilityTime.Facility = newFacility;
@@ -140,14 +139,17 @@ namespace SpaceBook.Controllers
                         newFacilityTime.Rate = facilityParam.HourlyRate;
                         newFacilityTime.IsAvailable = true;
 
+                        if ((interval < newFacility.StartTime) || (interval >= newFacility.EndTime))
+                        {
+                            newFacilityTime.IsAvailable = false;
+                        }
+
                         context.FacilityTimes.Add(newFacilityTime);
                         context.SaveChanges();
-
                         interval = interval.Add(new TimeSpan(0, 30, 0));
                     }
                 }
-                
-                return View();
+                return RedirectToAction("index");
             }
         }
 
