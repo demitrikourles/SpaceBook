@@ -73,7 +73,7 @@
                             </div>
 
                             <div class="form-group row justify-content-center">
-                                @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control form-control-md col-6", @placeholder = "Close Time", onfocus = "this.placeholder = ''", onblur = "this.placeholder = 'Open Time'" } })
+                                @Html.EditorFor(model => model.EndTime, new { htmlAttributes = new { @class = "form-control form-control-md col-6", @placeholder = "Close Time", onfocus = "this.placeholder = ''", onblur = "this.placeholder = 'Close Time'" } })
                                 @Html.ValidationMessageFor(model => model.EndTime, "", new { @class = "text-danger" })
                             </div>
 
@@ -167,7 +167,7 @@
             // This function will figure out which tab to display
             var x = document.getElementsByClassName("tab");
             // Exit the function if any field in the current tab is invalid:
-            if (n == 1 && !validateForm()) return false; //Comment out this line to disable validation
+           // if (n == 1 && !validateForm()) return false; //Comment out this line to disable validation
             // Hide the current tab:
             x[currentTab].style.display = "none";
             // Increase or decrease the current tab by 1:
