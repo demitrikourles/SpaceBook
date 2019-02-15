@@ -342,7 +342,6 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\PostVenue.cshtml" />
-    <Content Include="Views\Home\Register.cshtml" />
     <Content Include="webfonts\fa-brands-400.svg" />
     <Content Include="webfonts\fa-regular-400.svg" />
     <Content Include="webfonts\fa-solid-900.svg" />
@@ -360,6 +359,7 @@
     <Content Include="webfonts\fa-brands-400.eot" />
     <Content Include="Views\Home\ViewFacilityAvailability.cshtml" />
     <Content Include="Views\Home\PartialViewTimes.cshtml" />
+    <Content Include="Views\Home\UserRegistration.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
