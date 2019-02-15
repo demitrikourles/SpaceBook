@@ -206,6 +206,10 @@ namespace SpaceBook.Controllers
         [HttpPost]
         public ActionResult UserRegistration(User userParam, HttpPostedFileBase ProfilePicFile)
         {
+            //checks if ProfilePicFile is null
+            //if ProfilePicFile is null, it will explicity request the file and assign it to ProfilePicFile
+            ProfilePicFile = ProfilePicFile ?? Request.Files["ProfilePicFileName"];
+
             using (var context = new SpaceBookEntities1())
             {
                 User newUser = new User();
@@ -241,7 +245,7 @@ namespace SpaceBook.Controllers
                             ProfilePicFileName = Path.GetFileName(ProfilePicFile.FileName);
                             //Saves the uploaded picture to the specified folder
                             ProfilePicFilePath = Path.Combine(Server.MapPath(ProfilePicFolderPath), ProfilePicFileName);
-                            ProfilePicFile.SaveAs(ProfilePicFileName);
+                            ProfilePicFile.SaveAs(ProfilePicFilePath);
                             newUser.ProfilePicFilename = ProfilePicFileName;
                         }
                         else
