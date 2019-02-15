@@ -6,7 +6,7 @@ using System.Web.Mvc;
 using SpaceBook.Models;
 using SpaceBook.ViewModels;
 using SpaceBook.Models.MetaData;
-
+using System.IO;
 
 namespace SpaceBook.Controllers
 {
@@ -194,5 +194,84 @@ namespace SpaceBook.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public ActionResult UserRegistration()
+        {
+            ViewBag.Message = "User registration page";
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult UserRegistration(User userParam, HttpPostedFileBase ProfilePicFile)
+        {
+            //checks if ProfilePicFile is null
+            //if ProfilePicFile is null, it will explicity request the file and assign it to ProfilePicFile
+            ProfilePicFile = ProfilePicFile ?? Request.Files["ProfilePicFileName"];
+
+            using (var context = new SpaceBookEntities1())
+            {
+                User newUser = new User();
+                if (ModelState.IsValid)
+                {
+                    //Checks to see if all parameters have been filled out
+                    if (!string.IsNullOrEmpty(userParam.FirstName) &&
+                        !string.IsNullOrEmpty(userParam.LastName) &&
+                        !string.IsNullOrEmpty(userParam.Email) &&
+                        !string.IsNullOrEmpty(userParam.Phone) &&
+                        !string.IsNullOrEmpty(userParam.Password))
+                    {
+
+                        //assigns form values to the user fields
+                        //User ID is autoincremented so no need to assign that
+                        newUser.FirstName = userParam.FirstName;
+                        newUser.LastName = userParam.LastName;
+                        newUser.Email = userParam.Email;
+                        newUser.Phone = userParam.Phone;
+                        newUser.Password = userParam.Password;
+                        //Sets the user to active and default type (1)
+                        newUser.Type = 1;
+                        newUser.ActiveFlag = true;
+
+                        var ProfilePicFileName = "";
+                        var ProfilePicFilePath = "";
+                        var ProfilePicFolderPath = "~/App_Data/ProfilePics";
+
+                        //If a file was selected, save the file to the specified folder
+                        if (ProfilePicFile != null && ProfilePicFile.ContentLength > 0)
+                        {
+                            //gets the name of the file
+                            ProfilePicFileName = Path.GetFileName(ProfilePicFile.FileName);
+                            //Saves the uploaded picture to the specified folder
+                            ProfilePicFilePath = Path.Combine(Server.MapPath(ProfilePicFolderPath), ProfilePicFileName);
+                            ProfilePicFile.SaveAs(ProfilePicFilePath);
+                            newUser.ProfilePicFilename = ProfilePicFileName;
+                        }
+                        else
+                        {
+                            //if no file was selected, use the default profile picture
+                            newUser.ProfilePicFilename = "default.jpg";
+                        }
+
+                        //Adds the user to the User table in the database
+                        context.Users.Add(newUser);
+                        context.SaveChanges();
+
+                        //Redirects the user to the login page when the "Create" button is pressed
+                        return RedirectToAction("Login");
+                    }
+                }
+            }
+
+            /*
+             * Triggered if the user fails to fill out all the fields before pressing the "Create" button.
+             * This returns the user to the UserRegistration page to try again.
+            */
+            TempData["UserMessage"] = new MessageViewModel() { CssClassName = "alert-danger", Message = "You have not entered a value for all fields. Please try again" };
+            return RedirectToAction("UserRegistration");
+        }
+
+
     }
 }
