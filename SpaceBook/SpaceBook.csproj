@@ -360,6 +360,7 @@
     <Content Include="Views\Home\ViewFacilityAvailability.cshtml" />
     <Content Include="Views\Home\PartialViewTimes.cshtml" />
     <Content Include="Views\Home\UserRegistration.cshtml" />
+    <Content Include="Views\Home\ViewUserProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
