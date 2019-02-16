@@ -220,6 +220,9 @@
     <Content Include="Content\fontawesome.css" />
     <Content Include="Content\fontawesome.min.css" />
     <Content Include="Content\Images\Skyline.jpg" />
+    <Content Include="Content\ProfilePics\default.jpg" />
+    <Content Include="Content\ProfilePics\yoda1.jpg" />
+    <Content Include="Content\ProfilePics\yoda2.jpg" />
     <Content Include="Content\regular.css" />
     <Content Include="Content\regular.min.css" />
     <Content Include="Content\solid.css" />

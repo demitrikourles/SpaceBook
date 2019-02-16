@@ -236,7 +236,7 @@ namespace SpaceBook.Controllers
 
                         var ProfilePicFileName = "";
                         var ProfilePicFilePath = "";
-                        var ProfilePicFolderPath = "~/App_Data/ProfilePics";
+                        var ProfilePicFolderPath = "~/Content/ProfilePics";
 
                         //If a file was selected, save the file to the specified folder
                         if (ProfilePicFile != null && ProfilePicFile.ContentLength > 0)
