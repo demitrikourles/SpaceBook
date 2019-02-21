@@ -236,7 +236,7 @@ namespace SpaceBook.Controllers
 
                         var ProfilePicFileName = "";
                         var ProfilePicFilePath = "";
-                        var ProfilePicFolderPath = "~/App_Data/ProfilePics";
+                        var ProfilePicFolderPath = "~/Content/ProfilePics";
 
                         //If a file was selected, save the file to the specified folder
                         if (ProfilePicFile != null && ProfilePicFile.ContentLength > 0)
@@ -272,6 +272,32 @@ namespace SpaceBook.Controllers
             return RedirectToAction("UserRegistration");
         }
 
+        [HttpGet]
+        public ActionResult ViewUserProfile()
+        {
+            using (var context = new SpaceBookEntities1())
+            {
+                //ensures user is logged in
+                if (Session["UserID"] != null)
+                {
+                    //gets the logged in user's UserID
+                    var sessionID = Convert.ToInt32(Session["UserID"]);
+
+                    //gets the user corresponding to the sessionID
+                    var user = context.Users.Where(u => u.Id == sessionID && u.ActiveFlag == true).FirstOrDefault();
+
+                    //if a matching user is found, go to the User profile view
+                    if (user != null)
+                    {
+                        //passes the matching user to the view
+                        return View(user);
+                    }
+                }
+
+                //if the user is not logged in, return them to the login view
+                return RedirectToAction("Login");
+            }
+        }
 
     }
 }
