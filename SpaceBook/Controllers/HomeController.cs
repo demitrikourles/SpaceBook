@@ -16,7 +16,7 @@ namespace SpaceBook.Controllers
         {
             using (var context = new SpaceBookEntities1())
             {
-                return View();
+                return View("Index");
             }
         }
 
@@ -57,7 +57,10 @@ namespace SpaceBook.Controllers
             using (var context = new SpaceBookEntities1()) 
             {
                 var facility = context.Facilities.Where(x => x.Id == id).FirstOrDefault();
-                return View(facility);
+                if(facility == null)
+                    return RedirectToAction("index");
+                else
+                    return View("ViewFacility", facility);
             }
         }
 
