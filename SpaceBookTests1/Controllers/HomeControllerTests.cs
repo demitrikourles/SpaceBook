@@ -44,8 +44,7 @@ namespace SpaceBook.Controllers.Tests
         {
             var controller = new HomeController();
             var result = (RedirectToRouteResult)controller.ViewFacility(-1);
-            Assert.AreEqual("Index", result.Values["action"]);
-
+            Assert.AreEqual("Index", result.RouteValues["action"]);
         }
     }
 }
