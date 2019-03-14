@@ -1,0 +1,205 @@
+﻿@model SpaceBook.Models.Facility
+@{
+    /**/
+
+    ViewBag.Title = "Regsiter your facility";
+}
+<h2 style="margin: 2% 0% 2% 0%" align="center">Register your Facility</h2>
+
+<div class="row justify-content-center" style="margin: 2% 0% 2% 0%">
+    <div class="col-8">
+        <div class="progress" style="height: 25px;">
+            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0"
+                 aria-valuemin="0" aria-valuemax="100" style="width:100%">
+                Availability - Step 3 of 3
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@using (Html.BeginForm("RegisterFacilityComplete", "Home", Model, FormMethod.Post, new { id = "postVenueForm" }))
+{
+
+    <div class="row justify-content-center">
+        <div class="col-6">
+
+            <div class="form-group" style="margin: 5% 0% 5% 0%">
+                <div class="">
+                    <h6>Monday</h6>
+                </div>
+                <div id="mondayHoursContainer"></div>
+            </div>
+            <div>
+                <button type="button" onclick="newStartAndEndTime('monday')" class="btn btn-sm btn-success">Add +</button>
+                <hr />
+            </div>
+
+
+            <div class="form-group" style="margin: 5% 0% 5% 0%">
+                <div class="">
+                    <h6>Tuesday</h6>
+                </div>
+                <div id="tuesdayHoursContainer"></div>
+            </div>
+            <div>
+                <button type="button" onclick="newStartAndEndTime('tuesday')" class="btn btn-sm btn-success">Add +</button>
+                <hr />
+            </div>
+
+
+            <div class="form-group" style="margin: 5% 0% 5% 0%">
+                <div class="">
+                    <h6>Wednesday</h6>
+                </div>
+                <div id="wednesdayHoursContainer"></div>
+            </div>
+            <div>
+                <button type="button" onclick="newStartAndEndTime('wednesday')" class="btn btn-sm btn-success">Add +</button>
+                <hr />
+            </div>
+
+
+            <div class="form-group" style="margin: 5% 0% 5% 0%">
+                <div class="">
+                    <h6>Thursday</h6>
+                </div>
+                <div id="thursdayHoursContainer"></div>
+            </div>
+            <div>
+                <button type="button" onclick="newStartAndEndTime('thursday')" class="btn btn-sm btn-success">Add +</button>
+                <hr />
+            </div>
+
+
+            <div class="form-group" style="margin: 5% 0% 5% 0%">
+                <div class="">
+                    <h6>Friday</h6>
+                </div>
+                <div id="fridayHoursContainer"></div>
+            </div>
+            <div>
+                <button type="button" onclick="newStartAndEndTime('friday')" class="btn btn-sm btn-success">Add +</button>
+                <hr />
+            </div>
+
+
+            <div class="form-group" style="margin: 5% 0% 5% 0%">
+                <div class="">
+                    <h6>Saturday</h6>
+                </div>
+                <div id="saturdayHoursContainer"></div>
+            </div>
+            <div>
+                <button type="button" onclick="newStartAndEndTime('saturday')" class="btn btn-sm btn-success">Add +</button>
+                <hr />
+            </div>
+
+
+            <div class="form-group" style="margin: 5% 0% 5% 0%">
+                <div class="">
+                    <h6>Sunday</h6>
+                </div>
+                <div id="sundayHoursContainer"></div>
+            </div>
+            <div>
+                <button type="button" onclick="newStartAndEndTime('sunday')" class="btn btn-sm btn-success">Add +</button>
+                <hr />
+            </div>
+
+
+
+            <div class="form-group" style="text-align:center">
+                <button value="Back" type="button" onclick="location.href='@Url.Action("RegisterFacilityInfo", Model)'" class="btn btn-danger" style="margin-right: 5%">Back</button>
+                <input type="submit" value="Finish" class="btn btn-primary" style="margin-left: 5%" />
+            </div>
+        </div>
+    </div>
+
+}
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+
+
+            newStartAndEndTime("monday");
+            newStartAndEndTime("tuesday");
+            newStartAndEndTime("wednesday");
+            newStartAndEndTime("thursday");
+            newStartAndEndTime("friday");
+            newStartAndEndTime("saturday");
+            newStartAndEndTime("sunday");
+
+
+        });
+
+
+        function removeThis(_this) {
+            _this.parentNode.parentNode.remove();
+        };
+
+
+        function newStartAndEndTime(day) {
+
+            var formRowDiv = document.createElement('div');
+            formRowDiv.className = "form-row";
+            formRowDiv.style.margin = "2% 0% 2% 0%";
+
+            var startTimeDiv = document.createElement('div');
+            startTimeDiv.className = "col col-3 offset-2";
+
+            var startTimeInput = document.createElement('input');
+            startTimeInput.type = "text";
+            startTimeInput.className = "form-control timepicker";
+
+            var dashDiv = document.createElement('div');
+            dashDiv.className = "col col-1";
+
+            var dash = document.createElement('p');
+            dash.style.textAlign = "center";
+            dash.innerHTML = " - ";
+
+            var endTimeDiv = document.createElement('div');
+            endTimeDiv.className = "col col-3";
+
+            var endTimeInput = document.createElement('input');
+            endTimeInput.type = "text";
+            endTimeInput.className = "form-control timepicker";
+
+            var deleteButtonDiv = document.createElement('div');
+            deleteButtonDiv.className = "col col-1";
+
+            var deleteButton = document.createElement('button');
+            deleteButton.type = "button";
+            deleteButton.className = "close";
+            deleteButton.innerHTML = "&times;";
+            deleteButton.onclick = function () { removeThis(this) };
+
+
+            formRowDiv.appendChild(startTimeDiv);
+            formRowDiv.appendChild(dashDiv);
+            formRowDiv.appendChild(endTimeDiv);
+            formRowDiv.appendChild(deleteButtonDiv);
+
+            startTimeDiv.append(startTimeInput);
+
+            dashDiv.appendChild(dash);
+
+            endTimeDiv.appendChild(endTimeInput);
+
+            deleteButtonDiv.appendChild(deleteButton);
+
+            document.getElementById(day + "HoursContainer").appendChild(formRowDiv);
+
+            $('.timepicker').timepicker({
+                'step': 30,
+            });
+        }
+
+
+    </script>
+
+
+

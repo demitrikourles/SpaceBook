@@ -1,15 +1,14 @@
 ﻿@model SpaceBook.Models.Facility
 @{
-    ViewBag.Title = "PostVenue";
+    ViewBag.Title = "Post a Venue";
 }
 
-<h2>PostVenue</h2>
+<h2 style="margin-top: 10px" align="center">Post a Venue</h2>
 @using (Html.BeginForm("PostVenue", "Home", Model, FormMethod.Post, new { id = "postVenueForm"}))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
-        <h4>Facility</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -24,7 +23,7 @@
             <div class="col-md-8">
                 <div class="card text-center">
                     <div class="card-header">
-                        Featured
+                       
                     </div>
                     <div class="card-body">
                         <div class="tab">

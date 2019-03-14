@@ -299,5 +299,79 @@ namespace SpaceBook.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult RegisterFacility(Facility facilityParam)
+        {
+            return View("~/Views/Home/RegisterFacility/Info.cshtml", facilityParam);
+        }
+
+        public ActionResult RegisterFacilityInfo(Facility facilityParam)
+        {
+            //be sure to validate contact info here in the future
+            return View("~/Views/Home/RegisterFacility/Address.cshtml", facilityParam);
+        }
+
+        public ActionResult RegisterFacilityAddress(Facility facilityParam)
+        {
+            //be sure to validate contact info here in the future
+            return View("~/Views/Home/RegisterFacility/Hours.cshtml", facilityParam);
+        }
+
+        [HttpPost]
+        public ActionResult RegisterFacilityComplete(Facility facilityParam)
+        {
+            using (var context = new SpaceBookEntities1())
+            {
+                Facility newFacility = new Facility();
+                if (ModelState.IsValid)
+                {
+                    newFacility.Name = facilityParam.Name;
+                    newFacility.StartTime = facilityParam.StartTime;
+                    newFacility.EndTime = facilityParam.EndTime;
+                    newFacility.HourlyRate = facilityParam.HourlyRate;
+                    newFacility.Description = facilityParam.Description; //Not on postVenue form yet
+                    newFacility.Email = facilityParam.Email;
+                    newFacility.Phone = facilityParam.Phone;
+                    newFacility.Address = facilityParam.Address;
+                    newFacility.PostalCode = facilityParam.PostalCode; //Not on postVenue form yet
+                    newFacility.City = facilityParam.City;
+                    newFacility.Province = facilityParam.Province;
+                    newFacility.Country = facilityParam.Country;
+                    newFacility.ActiveFlag = true;
+                    newFacility.Type = 1; //Need to set up types
+
+                    context.Facilities.Add(newFacility);
+                    context.SaveChanges();
+                }
+
+                //Creation of time slots
+                for (int x = 1; x < 8; x++) //x = day number
+                {
+                    TimeSpan interval = new TimeSpan(0, 0, 0);
+                    for (int y = 0; y < 48; y++)  //y = number of time slots to create per day
+                    {
+                        FacilityTime newFacilityTime = new FacilityTime();
+                        newFacilityTime.Facility = newFacility;
+                        newFacilityTime.FacilityId = newFacility.Id;
+                        newFacilityTime.StartTime = interval;
+                        newFacilityTime.Day = x;
+                        newFacilityTime.Rate = facilityParam.HourlyRate;
+                        newFacilityTime.IsAvailable = true;
+
+                        if ((interval < newFacility.StartTime) || (interval >= newFacility.EndTime))
+                        {
+                            newFacilityTime.IsAvailable = false;
+                        }
+
+                        context.FacilityTimes.Add(newFacilityTime);
+                        context.SaveChanges();
+                        interval = interval.Add(new TimeSpan(0, 30, 0));
+                    }
+                }
+                return RedirectToAction("index");
+            }
+        }
+
+
     }
 }
