@@ -327,19 +327,18 @@ namespace SpaceBook.Controllers
                 var monStart = Request.Form["monStart"];
                 var monEnd = Request.Form["monEnd"];
                 List<string> monList = monStart.Split(',').ToList<string>();
-                monList.AddRange(monEnd.Split(',').ToList<string>());
+                monList.AddRange(monEnd.Split(',').ToList<string>()); //pass this list when creating time slots
 
                 var tueStart = Request.Form["tueStart"];
                 var tueEnd = Request.Form["tueEnd"];
                 List<string> tueList = tueStart.Split(',').ToList<string>();
-                tueList.AddRange(tueEnd.Split(',').ToList<string>());
+                tueList.AddRange(tueEnd.Split(',').ToList<string>()); //pass this list when creating time slots
 
                 //var tueTimeSpanList = tueList.Select(x => {TimeSpan result;
                 //    if (TimeSpan.TryParse(x, out result))
                 //        return new Nullable<TimeSpan>(result);
                 //    return null;
                 //}).Where(x => x.HasValue).ToList();
-
                 //List<TimeSpan> tueList = new List<TimeSpan>();
 
                 //return RedirectToAction("index");
