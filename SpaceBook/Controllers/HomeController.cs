@@ -323,17 +323,38 @@ namespace SpaceBook.Controllers
             using (var context = new SpaceBookEntities1())
             {
                 Facility newFacility = new Facility();
+
+                var monStart = Request.Form["monStart"];
+                var monEnd = Request.Form["monEnd"];
+                List<string> monList = monStart.Split(',').ToList<string>();
+                monList.AddRange(monEnd.Split(',').ToList<string>());
+
+                var tueStart = Request.Form["tueStart"];
+                var tueEnd = Request.Form["tueEnd"];
+                List<string> tueList = tueStart.Split(',').ToList<string>();
+                tueList.AddRange(tueEnd.Split(',').ToList<string>());
+
+                //var tueTimeSpanList = tueList.Select(x => {TimeSpan result;
+                //    if (TimeSpan.TryParse(x, out result))
+                //        return new Nullable<TimeSpan>(result);
+                //    return null;
+                //}).Where(x => x.HasValue).ToList();
+
+                //List<TimeSpan> tueList = new List<TimeSpan>();
+
+                //return RedirectToAction("index");
+
                 if (ModelState.IsValid)
                 {
                     newFacility.Name = facilityParam.Name;
                     newFacility.StartTime = facilityParam.StartTime;
                     newFacility.EndTime = facilityParam.EndTime;
                     newFacility.HourlyRate = facilityParam.HourlyRate;
-                    newFacility.Description = facilityParam.Description; //Not on postVenue form yet
+                    newFacility.Description = facilityParam.Description;
                     newFacility.Email = facilityParam.Email;
                     newFacility.Phone = facilityParam.Phone;
                     newFacility.Address = facilityParam.Address;
-                    newFacility.PostalCode = facilityParam.PostalCode; //Not on postVenue form yet
+                    newFacility.PostalCode = facilityParam.PostalCode;
                     newFacility.City = facilityParam.City;
                     newFacility.Province = facilityParam.Province;
                     newFacility.Country = facilityParam.Country;
@@ -344,7 +365,16 @@ namespace SpaceBook.Controllers
                     context.SaveChanges();
                 }
 
-                //Creation of time slots
+                //CreateTimeSlots(newFacility, [start and end time list parameters]); //Creation of time slots
+
+                return RedirectToAction("index");
+            }
+        }
+
+        public void CreateTimeSlots(Facility newFacility)
+        {
+            using (var context = new SpaceBookEntities1()) 
+            {
                 for (int x = 1; x < 8; x++) //x = day number
                 {
                     TimeSpan interval = new TimeSpan(0, 0, 0);
@@ -355,11 +385,10 @@ namespace SpaceBook.Controllers
                         newFacilityTime.FacilityId = newFacility.Id;
                         newFacilityTime.StartTime = interval;
                         newFacilityTime.Day = x;
-                        newFacilityTime.Rate = facilityParam.HourlyRate;
+                        newFacilityTime.Rate = newFacility.HourlyRate;
                         newFacilityTime.IsAvailable = true;
 
-                        if ((interval < newFacility.StartTime) || (interval >= newFacility.EndTime))
-                        {
+                        if ((interval < newFacility.StartTime) || (interval >= newFacility.EndTime)) {
                             newFacilityTime.IsAvailable = false;
                         }
 
@@ -368,8 +397,9 @@ namespace SpaceBook.Controllers
                         interval = interval.Add(new TimeSpan(0, 30, 0));
                     }
                 }
-                return RedirectToAction("index");
             }
+
+            return;
         }
 
 
