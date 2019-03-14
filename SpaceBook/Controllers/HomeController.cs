@@ -334,6 +334,31 @@ namespace SpaceBook.Controllers
                 List<string> tueList = tueStart.Split(',').ToList<string>();
                 tueList.AddRange(tueEnd.Split(',').ToList<string>()); //pass this list when creating time slots
 
+                var wedStart = Request.Form["wedStart"];
+                var wedEnd = Request.Form["wedEnd"];
+                List<string> wedList = wedStart.Split(',').ToList<string>();
+                wedList.AddRange(wedEnd.Split(',').ToList<string>()); //pass this list when creating time slots
+
+                var thuStart = Request.Form["thuStart"];
+                var thuEnd = Request.Form["thuEnd"];
+                List<string> thuList = thuStart.Split(',').ToList<string>();
+                thuList.AddRange(thuEnd.Split(',').ToList<string>()); //pass this list when creating time slots
+
+                var friStart = Request.Form["friStart"];
+                var friEnd = Request.Form["friEnd"];
+                List<string> friList = friStart.Split(',').ToList<string>();
+                friList.AddRange(friEnd.Split(',').ToList<string>()); //pass this list when creating time slots
+
+                var satStart = Request.Form["satStart"];
+                var satEnd = Request.Form["satEnd"];
+                List<string> satList = satStart.Split(',').ToList<string>();
+                satList.AddRange(satEnd.Split(',').ToList<string>()); //pass this list when creating time slots
+
+                var sunStart = Request.Form["sunStart"];
+                var sunEnd = Request.Form["sunEnd"];
+                List<string> sunList = sunStart.Split(',').ToList<string>();
+                sunList.AddRange(sunEnd.Split(',').ToList<string>()); //pass this list when creating time slots
+
                 //var tueTimeSpanList = tueList.Select(x => {TimeSpan result;
                 //    if (TimeSpan.TryParse(x, out result))
                 //        return new Nullable<TimeSpan>(result);
