@@ -512,5 +512,133 @@ namespace SpaceBook.Controllers
             return RedirectToAction("ViewUserProfile");
         }
 
+        [HttpGet]
+        public ActionResult RegisterFacility(Facility facilityParam)
+        {
+            return View("~/Views/Home/RegisterFacility/Info.cshtml", facilityParam);
+        }
+
+        public ActionResult RegisterFacilityInfo(Facility facilityParam)
+        {
+            //be sure to validate contact info here in the future
+            return View("~/Views/Home/RegisterFacility/Address.cshtml", facilityParam);
+        }
+
+        public ActionResult RegisterFacilityAddress(Facility facilityParam)
+        {
+            //be sure to validate contact info here in the future
+            return View("~/Views/Home/RegisterFacility/Hours.cshtml", facilityParam);
+        }
+
+        [HttpPost]
+        public ActionResult RegisterFacilityComplete(Facility facilityParam)
+        {
+            using (var context = new SpaceBookEntities1())
+            {
+                Facility newFacility = new Facility();
+
+                var monStart = Request.Form["monStart"];
+                var monEnd = Request.Form["monEnd"];
+                List<string> monList = monStart.Split(',').ToList<string>();
+                monList.AddRange(monEnd.Split(',').ToList<string>()); //pass this list when creating time slots
+
+                var tueStart = Request.Form["tueStart"];
+                var tueEnd = Request.Form["tueEnd"];
+                List<string> tueList = tueStart.Split(',').ToList<string>();
+                tueList.AddRange(tueEnd.Split(',').ToList<string>()); //pass this list when creating time slots
+
+                var wedStart = Request.Form["wedStart"];
+                var wedEnd = Request.Form["wedEnd"];
+                List<string> wedList = wedStart.Split(',').ToList<string>();
+                wedList.AddRange(wedEnd.Split(',').ToList<string>()); //pass this list when creating time slots
+
+                var thuStart = Request.Form["thuStart"];
+                var thuEnd = Request.Form["thuEnd"];
+                List<string> thuList = thuStart.Split(',').ToList<string>();
+                thuList.AddRange(thuEnd.Split(',').ToList<string>()); //pass this list when creating time slots
+
+                var friStart = Request.Form["friStart"];
+                var friEnd = Request.Form["friEnd"];
+                List<string> friList = friStart.Split(',').ToList<string>();
+                friList.AddRange(friEnd.Split(',').ToList<string>()); //pass this list when creating time slots
+
+                var satStart = Request.Form["satStart"];
+                var satEnd = Request.Form["satEnd"];
+                List<string> satList = satStart.Split(',').ToList<string>();
+                satList.AddRange(satEnd.Split(',').ToList<string>()); //pass this list when creating time slots
+
+                var sunStart = Request.Form["sunStart"];
+                var sunEnd = Request.Form["sunEnd"];
+                List<string> sunList = sunStart.Split(',').ToList<string>();
+                sunList.AddRange(sunEnd.Split(',').ToList<string>()); //pass this list when creating time slots
+
+                //var tueTimeSpanList = tueList.Select(x => {TimeSpan result;
+                //    if (TimeSpan.TryParse(x, out result))
+                //        return new Nullable<TimeSpan>(result);
+                //    return null;
+                //}).Where(x => x.HasValue).ToList();
+                //List<TimeSpan> tueList = new List<TimeSpan>();
+
+                //return RedirectToAction("index");
+
+                if (ModelState.IsValid)
+                {
+                    newFacility.Name = facilityParam.Name;
+                    newFacility.StartTime = facilityParam.StartTime;
+                    newFacility.EndTime = facilityParam.EndTime;
+                    newFacility.HourlyRate = facilityParam.HourlyRate;
+                    newFacility.Description = facilityParam.Description;
+                    newFacility.Email = facilityParam.Email;
+                    newFacility.Phone = facilityParam.Phone;
+                    newFacility.Address = facilityParam.Address;
+                    newFacility.PostalCode = facilityParam.PostalCode;
+                    newFacility.City = facilityParam.City;
+                    newFacility.Province = facilityParam.Province;
+                    newFacility.Country = facilityParam.Country;
+                    newFacility.ActiveFlag = true;
+                    newFacility.Type = 1; //Need to set up types
+
+                    context.Facilities.Add(newFacility);
+                    context.SaveChanges();
+                }
+
+                //CreateTimeSlots(newFacility, [start and end time list parameters]); //Creation of time slots
+
+                return RedirectToAction("index");
+            }
+        }
+
+        public void CreateTimeSlots(Facility newFacility)
+        {
+            using (var context = new SpaceBookEntities1()) 
+            {
+                for (int x = 1; x < 8; x++) //x = day number
+                {
+                    TimeSpan interval = new TimeSpan(0, 0, 0);
+                    for (int y = 0; y < 48; y++)  //y = number of time slots to create per day
+                    {
+                        FacilityTime newFacilityTime = new FacilityTime();
+                        newFacilityTime.Facility = newFacility;
+                        newFacilityTime.FacilityId = newFacility.Id;
+                        newFacilityTime.StartTime = interval;
+                        newFacilityTime.Day = x;
+                        newFacilityTime.Rate = newFacility.HourlyRate;
+                        newFacilityTime.IsAvailable = true;
+
+                        if ((interval < newFacility.StartTime) || (interval >= newFacility.EndTime)) {
+                            newFacilityTime.IsAvailable = false;
+                        }
+
+                        context.FacilityTimes.Add(newFacilityTime);
+                        context.SaveChanges();
+                        interval = interval.Add(new TimeSpan(0, 30, 0));
+                    }
+                }
+            }
+
+            return;
+        }
+
+
     }
 }

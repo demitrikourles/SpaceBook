@@ -7,6 +7,12 @@
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    @* NOTE: Make sure the lines below do not break any parts of application *@
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css" type="text/css" />
+    <script src="https://code.jquery.com/jquery-2.2.2.js"></script>
+    <script src="https://code.jquery.com/ui/1.11.3/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.1/jquery.timepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-timepicker/1.8.1/jquery.timepicker.min.css" type="text/css" />
 </head>
 <body>
     @if (Session["UserID"] != null)
@@ -29,6 +35,9 @@
                     <a class="nav-link" href="@Url.Action("PostVenue")">POST VENUE TEST</a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("RegisterFacility")">Register a Facility</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("ViewUserProfile")">Profile</a>
                 </li>
             </ul>
@@ -43,7 +52,7 @@
         <footer></footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
+    @*@Scripts.Render("~/bundles/jquery")*@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>

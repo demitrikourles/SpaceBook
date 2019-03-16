@@ -365,6 +365,10 @@
     <Content Include="Views\Home\UserRegistration.cshtml" />
     <Content Include="Views\Home\ViewUserProfile.cshtml" />
     <Content Include="Views\Home\EditUserProfile.cshtml" />
+    <Content Include="Views\Home\RegisterFacility\Info.cshtml" />
+    <Content Include="Views\Home\RegisterFacility\Address.cshtml" />
+    <Content Include="Views\Home\RegisterFacility\Address2.cshtml" />
+    <Content Include="Views\Home\RegisterFacility\Hours.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

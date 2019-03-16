@@ -1,0 +1,306 @@
+﻿@model SpaceBook.Models.Facility
+@{
+    /**/
+
+    ViewBag.Title = "Regsiter your facility";
+}
+<h2 style="margin: 2% 0% 2% 0%" align="center">Register your Facility</h2>
+
+<div class="row justify-content-center" style="margin: 2% 0% 2% 0%">
+    <div class="col-8">
+        <div class="progress" style="height: 25px;">
+            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0"
+                 aria-valuemin="0" aria-valuemax="100" style="width:100%">
+                Availability - Step 3 of 3
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("RegisterFacilityComplete", "Home", Model, FormMethod.Post, new { id = "postVenueForm" }))
+{
+    <div class="row justify-content-center">
+        <div class="col-6">
+
+            <div class="form-group" style="margin: 5% 0% 5% 0%">
+                <div class="">
+                    <h6>Monday</h6>
+                </div>
+                <div id="mondayHoursContainer"></div>
+            </div>
+            <div>
+                <button type="button" onclick="newStartAndEndTime('monday')" class="btn btn-sm btn-success">Add +</button>
+                <hr />
+            </div>
+
+            <div class="form-group" style="margin: 5% 0% 5% 0%">
+                <div class="">
+                    <h6 id="dis">Tuesday</h6>
+                </div>
+                <div id="tuesdayHoursContainer"></div>
+            </div>
+            <div>
+                <button type="button" onclick="newStartAndEndTime('tuesday')" class="btn btn-sm btn-success">Add +</button>
+                <hr />
+            </div>
+
+            <div class="form-group" style="margin: 5% 0% 5% 0%">
+                <div class="">
+                    <h6>Wednesday</h6>
+                </div>
+                <div id="wednesdayHoursContainer"></div>
+            </div>
+            <div>
+                <button type="button" onclick="newStartAndEndTime('wednesday')" class="btn btn-sm btn-success">Add +</button>
+                <hr />
+            </div>
+
+            <div class="form-group" style="margin: 5% 0% 5% 0%">
+                <div class="">
+                    <h6>Thursday</h6>
+                </div>
+                <div id="thursdayHoursContainer"></div>
+            </div>
+            <div>
+                <button type="button" onclick="newStartAndEndTime('thursday')" class="btn btn-sm btn-success">Add +</button>
+                <hr />
+            </div>
+
+            <div class="form-group" style="margin: 5% 0% 5% 0%">
+                <div class="">
+                    <h6>Friday</h6>
+                </div>
+                <div id="fridayHoursContainer"></div>
+            </div>
+            <div>
+                <button type="button" onclick="newStartAndEndTime('friday')" class="btn btn-sm btn-success">Add +</button>
+                <hr />
+            </div>
+
+            <div class="form-group" style="margin: 5% 0% 5% 0%">
+                <div class="">
+                    <h6>Saturday</h6>
+                </div>
+                <div id="saturdayHoursContainer"></div>
+            </div>
+            <div>
+                <button type="button" onclick="newStartAndEndTime('saturday')" class="btn btn-sm btn-success">Add +</button>
+                <hr />
+            </div>
+
+            <div class="form-group" style="margin: 5% 0% 5% 0%">
+                <div class="">
+                    <h6>Sunday</h6>
+                </div>
+                <div id="sundayHoursContainer"></div>
+            </div>
+            <div>
+                <button type="button" onclick="newStartAndEndTime('sunday')" class="btn btn-sm btn-success">Add +</button>
+                <hr />
+            </div>
+
+            <input type="hidden" id="monStart" name="monStart" value="" />
+            <input type="hidden" id="tueStart" name="tueStart" value="" />
+            <input type="hidden" id="wedStart" name="wedStart" value="" />
+            <input type="hidden" id="thuStart" name="thuStart" value="" />
+            <input type="hidden" id="friStart" name="friStart" value="" />
+            <input type="hidden" id="satStart" name="satStart" value="" />
+            <input type="hidden" id="sunStart" name="sunStart" value="" />
+
+            <input type="hidden" id="monEnd" name="monEnd" value="" />
+            <input type="hidden" id="tueEnd" name="tueEnd" value="" />
+            <input type="hidden" id="wedEnd" name="wedEnd" value="" />
+            <input type="hidden" id="thuEnd" name="thuEnd" value="" />
+            <input type="hidden" id="friEnd" name="friEnd" value="" />
+            <input type="hidden" id="satEnd" name="satEnd" value="" />
+            <input type="hidden" id="sunEnd" name="sunEnd" value="" />
+
+            <div class="form-group" style="text-align:center">
+                <button value="Back" type="button" onclick="location.href='@Url.Action("RegisterFacilityInfo", Model)'" class="btn btn-danger" style="margin-right: 5%">Back</button>
+                <input type="submit" value="Finish" class="btn btn-primary" style="margin-left: 5%" />
+            </div>
+        </div>
+    </div>
+
+}
+<script type="text/javascript">
+    var monStartTimes = [];
+    var tueStartTimes = [];
+    var wedStartTimes = [];
+    var thuStartTimes = [];
+    var friStartTimes = [];
+    var satStartTimes = [];
+    var sunStartTimes = [];
+
+    var monEndTimes = [];
+    var tueEndTimes = [];
+    var wedEndTimes = [];
+    var thuEndTimes = [];
+    var friEndTimes = [];
+    var satEndTimes = [];
+    var sunEndTimes = [];
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //Create inital select inputs
+        newStartAndEndTime("monday");
+        newStartAndEndTime("tuesday");
+        newStartAndEndTime("wednesday");
+        newStartAndEndTime("thursday");
+        newStartAndEndTime("friday");
+        newStartAndEndTime("saturday");
+        newStartAndEndTime("sunday");
+    });
+
+    function removeThis(_this) {
+        _this.parentNode.parentNode.remove();
+    };
+
+    function newStartAndEndTime(day) {
+        var formRowDiv = document.createElement('div');
+        formRowDiv.className = "form-row";
+        formRowDiv.style.margin = "2% 0% 2% 0%";
+
+        var startTimeDiv = document.createElement('div');
+        startTimeDiv.className = "col col-3 offset-2";
+
+        var startTimeInput = document.createElement('input');
+        startTimeInput.type = "text";
+        startTimeInput.className = "form-control timepicker";
+        startTimeInput.classList.add(day + "Starts");
+
+        var dashDiv = document.createElement('div');
+        dashDiv.className = "col col-1";
+
+        var dash = document.createElement('p');
+        dash.style.textAlign = "center";
+        dash.innerHTML = " - ";
+
+        var endTimeDiv = document.createElement('div');
+        endTimeDiv.className = "col col-3";
+
+        var endTimeInput = document.createElement('input');
+        endTimeInput.type = "text";
+        endTimeInput.className = "form-control timepicker";
+        endTimeInput.classList.add(day + "Ends");
+
+        var deleteButtonDiv = document.createElement('div');
+        deleteButtonDiv.className = "col col-1";
+
+        var deleteButton = document.createElement('button');
+        deleteButton.type = "button";
+        deleteButton.className = "close";
+        deleteButton.innerHTML = "&times;";
+        deleteButton.onclick = function () { removeThis(this) };
+        
+        formRowDiv.appendChild(startTimeDiv);
+        formRowDiv.appendChild(dashDiv);
+        formRowDiv.appendChild(endTimeDiv);
+        formRowDiv.appendChild(deleteButtonDiv);
+
+        startTimeDiv.append(startTimeInput);
+        dashDiv.appendChild(dash);
+        endTimeDiv.appendChild(endTimeInput);
+        deleteButtonDiv.appendChild(deleteButton);
+        document.getElementById(day + "HoursContainer").appendChild(formRowDiv);
+
+        $('.timepicker').timepicker({
+            'step': 30,
+        });
+    }
+
+    $('#postVenueForm').submit(function () {
+        var classVar = document.getElementsByClassName("mondayStarts");
+        for (var i = 0; i < classVar.length; i++) {
+            monStartTimes.push(classVar.item(i).value);
+        }
+        classVar = document.getElementsByClassName("mondayEnds");
+        for (var i = 0; i < classVar.length; i++) {
+            monEndTimes.push(classVar.item(i).value);
+        }
+
+        classVar = document.getElementsByClassName("tuesdayStarts");
+        for (var i = 0; i < classVar.length; i++) {
+            tueStartTimes.push(classVar.item(i).value);
+        }
+        classVar = document.getElementsByClassName("tuesdayEnds");
+        for (var i = 0; i < classVar.length; i++) {
+            tueEndTimes.push(classVar.item(i).value);
+        }
+
+        classVar = document.getElementsByClassName("wednesdayStarts");
+        for (var i = 0; i < classVar.length; i++) {
+            wedStartTimes.push(classVar.item(i).value);
+        }
+        classVar = document.getElementsByClassName("wednesdayEnds");
+        for (var i = 0; i < classVar.length; i++) {
+            wedEndTimes.push(classVar.item(i).value);
+        }
+
+        classVar = document.getElementsByClassName("thursdayStarts");
+        for (var i = 0; i < classVar.length; i++) {
+            thuStartTimes.push(classVar.item(i).value);
+        }
+        classVar = document.getElementsByClassName("thursdayEnds");
+        for (var i = 0; i < classVar.length; i++) {
+            thuEndTimes.push(classVar.item(i).value);
+        }
+
+        classVar = document.getElementsByClassName("fridayStarts");
+        for (var i = 0; i < classVar.length; i++) {
+            friStartTimes.push(classVar.item(i).value);
+        }
+        classVar = document.getElementsByClassName("fridayEnds");
+        for (var i = 0; i < classVar.length; i++) {
+            friEndTimes.push(classVar.item(i).value);
+        }
+
+        classVar = document.getElementsByClassName("saturdayStarts");
+        for (var i = 0; i < classVar.length; i++) {
+            satStartTimes.push(classVar.item(i).value);
+        }
+        classVar = document.getElementsByClassName("saturdayEnds");
+        for (var i = 0; i < classVar.length; i++) {
+            satEndTimes.push(classVar.item(i).value);
+        }
+
+        classVar = document.getElementsByClassName("sundayStarts");
+        for (var i = 0; i < classVar.length; i++) {
+            sunStartTimes.push(classVar.item(i).value);
+        }
+        classVar = document.getElementsByClassName("sundayEnds");
+        for (var i = 0; i < classVar.length; i++) {
+            sunEndTimes.push(classVar.item(i).value);
+        }
+
+        $('#monStart').val(monStartTimes);
+        $('#monEnd').val(monEndTimes);
+
+        $('#tueStart').val(tueStartTimes);
+        $('#tueEnd').val(tueEndTimes);
+
+        $('#wedStart').val(wedStartTimes);
+        $('#wedEnd').val(wedEndTimes);
+
+        $('#thuStart').val(thuStartTimes);
+        $('#thuEnd').val(thuEndTimes);
+
+        $('#friStart').val(friStartTimes);
+        $('#friEnd').val(friEndTimes);
+
+        $('#satStart').val(satStartTimes);
+        $('#satEnd').val(satEndTimes);
+
+        $('#sunStart').val(sunStartTimes);
+        $('#sunEnd').val(sunEndTimes);
+
+
+        return true; // return false to cancel form action
+    });
+
+
+</script>
+
+
+
