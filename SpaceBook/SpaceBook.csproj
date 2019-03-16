@@ -368,6 +368,7 @@
     <Content Include="Views\Home\RegisterFacility\Address.cshtml" />
     <Content Include="Views\Home\RegisterFacility\Address2.cshtml" />
     <Content Include="Views\Home\RegisterFacility\Hours.cshtml" />
+    <Content Include="Views\Home\ViewBookings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
