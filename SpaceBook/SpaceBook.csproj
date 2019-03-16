@@ -364,6 +364,7 @@
     <Content Include="Views\Home\PartialViewTimes.cshtml" />
     <Content Include="Views\Home\UserRegistration.cshtml" />
     <Content Include="Views\Home\ViewUserProfile.cshtml" />
+    <Content Include="Views\Home\EditUserProfile.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

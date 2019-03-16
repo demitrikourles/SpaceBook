@@ -52,7 +52,7 @@ namespace SpaceBook.Controllers
             }
         }
 
-        public ActionResult ViewFacility(int id)
+        public ActionResult ViewFacility(Int32 id)
         {
             using (var context = new SpaceBookEntities1()) 
             {
@@ -61,19 +61,65 @@ namespace SpaceBook.Controllers
             }
         }
 
-        public ActionResult ViewFacilityAvailability(int id) 
+        public ActionResult ViewFacilityAvailability(Int32 id) 
         {
+            Session["selectStart"] = true;
+            Session["selectEnd"] = false;
+            Session["FacilityID"] = id.ToString();
+
+            DateTime refMonday = DateTime.Now.AddDays((DayOfWeek.Monday - DateTime.Now.DayOfWeek));
+            refMonday = new DateTime(refMonday.Year, refMonday.Month, refMonday.Day, 0, 0, 0);
+            Session["CurrentWeekMonday"] = refMonday.ToString();
+
             using (var context = new SpaceBookEntities1()) 
             {
                 var times = context.FacilityTimes.Where(x => x.FacilityId == id).ToList().OrderBy(x => x.StartTime).ToList();
-                
+                var bookings = context.Bookings.Where(b => b.FacilityId == id && b.Cancelled == false).ToList().OrderBy(b => b.Id).ToList();
+
                 if (times.Count > 0) {
                     foreach (FacilityTime time in times) {
+
+                        //reset available time
+                        time.IsAvailable = true;
+
+                        //Compare = 0 => equal, Compare < 0 => t1 is earlier than t2, Compare > 0 => t1 is later than t2
+                        //t1 = facility open time, t2 = start time of time block
+                        var isClosedEarly = DateTime.Compare(refMonday.Add(TimeSpan.Parse(time.Facility.StartTime.ToString())), refMonday.Add(TimeSpan.Parse(time.StartTime.ToString())));
+                        //t1 = facility close time, t2 = start time of time block
+                        var isClosedLate = DateTime.Compare(refMonday.Add(TimeSpan.Parse(time.Facility.EndTime.ToString())), refMonday.Add(TimeSpan.Parse(time.StartTime.ToString())));
+
+                        foreach (Booking booking in bookings)
+                        {
+                            //t1 = booking start time, t2 = start time of time block
+                            var isBookedAfterStart = DateTime.Compare(DateTime.Parse(booking.StartDateTime.ToString()), refMonday.Add(TimeSpan.Parse(time.StartTime.ToString())));
+                            //t1 = booking end time, t2 = start time of time block
+                            var isBookedBeforeEnd = DateTime.Compare(DateTime.Parse(booking.EndDateTime.ToString()), refMonday.Add(TimeSpan.Parse(time.StartTime.ToString())));
+
+                            //if the facility is booked during the time block, disable it
+                            if (isBookedAfterStart <= 0 && isBookedBeforeEnd >= 0)
+                            {
+                                time.IsAvailable = false;
+                            }
+
+                        }
+
+                        //if the facility is closed during the time block, disable it
+                        //NOTE: No test for Compare == 0 because the last block is actually half an hour longer than it states
+                        //if the time block is before opening hours
+                        if (isClosedEarly > 0)
+                        {
+                            time.IsAvailable = false;
+                        }
+                        //if the time block is after closing hours
+                        else if (isClosedLate < 0)
+                        {
+                            time.IsAvailable = false;
+                        }
+
                         time.Facility.Name.FirstOrDefault();
-                        //time.Booking.Id.ToString().FirstOrDefault();
                     }
+                    context.SaveChanges();
                 }
-                //times.Facility.Name.FirstOrDefault();
                 return View(times);
             }
         }
@@ -91,6 +137,89 @@ namespace SpaceBook.Controllers
             }
                 
         }
+
+        [HttpPost]
+        public bool confirmStart(String StartTime, String ftID)
+        {
+
+            using (var context = new SpaceBookEntities1())
+            {
+                Booking newBooking = new Booking();
+                if (ModelState.IsValid)
+                {
+
+                    var uID = Convert.ToInt32(Session["UserID"]);
+                    var FacID = Convert.ToInt32(Session["FacilityID"]);
+
+                    newBooking.UserId = context.Facilities.Where(u => u.Id == uID).FirstOrDefault().Id;
+                    newBooking.FacilityId = context.Facilities.Where(f => f.Id == FacID).FirstOrDefault().Id;
+                    newBooking.Cancelled = true;
+
+                    DateTime currentDate = DateTime.Parse(Session["CurrentWeekMonday"].ToString());
+                    //currentDate.DayOfWeek();
+
+                    newBooking.StartDateTime = DateTime.Parse(currentDate.ToString()).Add(TimeSpan.Parse(StartTime));
+
+                    context.Bookings.Add(newBooking);
+                    context.SaveChanges();
+
+                    Session["bookingID"] = newBooking.Id.ToString();
+                    Session["selectStart"] = false;
+                    Session["selectEnd"] = true;
+
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        [HttpPost]
+        public bool confirmEnd(String EndTime)
+        {
+
+            using (var context = new SpaceBookEntities1())
+            {
+                Int32 bookingID = Convert.ToInt32(Session["bookingID"]);
+                Booking myBooking = context.Bookings.Where(b => b.Id == bookingID).FirstOrDefault();
+                if (ModelState.IsValid)
+                {
+                    myBooking.EndDateTime = DateTime.Parse(Session["CurrentWeekMonday"].ToString()).Add(TimeSpan.Parse(EndTime));
+                    myBooking.Cancelled = false;
+
+                    context.SaveChanges();
+
+                    Session["selectStart"] = false;
+                    Session["selectEnd"] = false;
+                    Session["bookingID"] = "";
+
+                    Int32 FacID = Convert.ToInt32(Session["FacilityID"]);
+                    Session["FacilityID"] = "";
+
+                    return true;
+                }
+
+                return false;
+            }
+        }
+
+        /*[HttpPost]
+        public ActionResult PartialViewTimes(FacilityTime ftParam)
+        {
+            using (var context = new SpaceBookEntities1())
+            {
+                Booking newBooking = new Booking();
+                FacilityTime bookedTime = new FacilityTime();
+                if (ModelState.IsValid) {
+                    newBooking.StartDateTime = newBooking.StartDateTime + ftParam.StartTime;
+
+                    context.Bookings.Add(newBooking);
+                    var myTime = context.FacilityTimes.Where(x => ((x.Id == ftParam.Id))).FirstOrDefault();
+                    myTime.IsAvailable = false;
+                    context.SaveChanges();
+                }
+            }
+            return PartialView();
+        }*/
 
         [HttpGet]
         public ActionResult PostVenue() 
@@ -297,6 +426,90 @@ namespace SpaceBook.Controllers
                 //if the user is not logged in, return them to the login view
                 return RedirectToAction("Login");
             }
+        }
+
+        [HttpGet]
+        public ActionResult EditUserProfile()
+        {
+            ViewBag.Message = "Edit User Profile Page";
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult EditUserProfile(User userParam, HttpPostedFileBase ProfilePicFile)
+        {
+            //checks if ProfilePicFile is null
+            //if ProfilePicFile is null, it will explicity request the file and assign it to ProfilePicFile
+            ProfilePicFile = ProfilePicFile ?? Request.Files["ProfilePicFileName"];
+            
+
+            using (var context = new SpaceBookEntities1())
+            {
+                var userID = Convert.ToInt32(Session["UserID"]);
+                User myUser = context.Users.Where(u => u.Id == userID).FirstOrDefault();
+                if (ModelState.IsValid)
+                {
+                    //Checks to see if all parameters have been filled out
+                    /*if (!string.IsNullOrEmpty(userParam.FirstName) &&
+                        !string.IsNullOrEmpty(userParam.LastName) &&
+                        !string.IsNullOrEmpty(userParam.Email) &&
+                        !string.IsNullOrEmpty(userParam.Phone) &&
+                        !string.IsNullOrEmpty(userParam.Password))
+                    {*/
+
+                        //assigns form values to the user fields
+                        //User ID is autoincremented so no need to assign that
+                        if (userParam.FirstName != null)
+                            myUser.FirstName = userParam.FirstName;
+
+                        if (userParam.LastName != null)
+                            myUser.LastName = userParam.LastName;
+
+                        if (userParam.Email != null)
+                            myUser.Email = userParam.Email;
+
+                        if (userParam.Phone != null)
+                            myUser.Phone = userParam.Phone;
+
+                        if (userParam.Password != null)
+                            myUser.Password = userParam.Password;
+
+                        var ProfilePicFileName = "";
+                        var ProfilePicFilePath = "";
+                        var ProfilePicFolderPath = "~/Content/ProfilePics";
+
+                        //If a file was selected, save the file to the specified folder
+                        if (ProfilePicFile != null && ProfilePicFile.ContentLength > 0)
+                        {
+                            //gets the name of the file
+                            ProfilePicFileName = Path.GetFileName(ProfilePicFile.FileName);
+                            //Saves the uploaded picture to the specified folder
+                            ProfilePicFilePath = Path.Combine(Server.MapPath(ProfilePicFolderPath), ProfilePicFileName);
+                            ProfilePicFile.SaveAs(ProfilePicFilePath);
+                            myUser.ProfilePicFilename = ProfilePicFileName;
+                        }
+                        /*else
+                        {
+                            //if no file was selected, use the default profile picture
+                            myUser.ProfilePicFilename = "default.jpg";
+                        }*/
+
+                        //Adds the user to the User table in the database
+                        context.SaveChanges();
+
+                        //Redirects the user to the login page when the "Create" button is pressed
+                        return RedirectToAction("ViewUserProfile");
+                    }
+                //}
+            }
+
+            /*
+             * Triggered if the user fails to fill out all the fields before pressing the "Create" button.
+             * This returns the user to the UserRegistration page to try again.
+            */
+            //TempData["UserMessage"] = new MessageViewModel() { CssClassName = "alert-danger", Message = "You have not entered a value for all fields. Please try again" };
+            return RedirectToAction("ViewUserProfile");
         }
 
     }

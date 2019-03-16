@@ -1,94 +1,143 @@
 ﻿@model IEnumerable<SpaceBook.Models.FacilityTime>
 <h3>Time Slots</h3>
-
 <div class="col-md-6">
-<table style="float:left" class="table table-striped col-md-2 table-sm">
-@for (int x = 0; x < (Model.Count() > 10 ? 10 : Model.Count()); x++) {
-    <tr>
-        @if (Model.ElementAtOrDefault(x).IsAvailable == true) {
-            <td><button href="#" class="bookTime btn btn-sm btn-primary" data-time="@Model.ElementAtOrDefault(x).StartTime" data-facilityId="@Model.ElementAtOrDefault(x).FacilityId">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
+    <table style="float:left" class="table table-striped col-md-2 table-sm">
+        @for (int x = 0; x < (Model.Count() > 10 ? 10 : Model.Count()); x++)
+        {
+            <tr>
+                @if (Model.ElementAtOrDefault(x).IsAvailable == true)
+                {
+                    <td>
+                        <button href="#" class="bookTime btn btn-sm btn-primary"
+                                data-time="@Model.ElementAtOrDefault(x).StartTime"
+                                data-facilityId="@Model.ElementAtOrDefault(x).FacilityId"
+                                data-ftId="@Model.ElementAtOrDefault(x).Id">
+                            @Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)
+                        </button>
+                    </td>
+                }
+                else
+                {
+                    <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
+                }
+            </tr>
         }
-        else {
-            <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
-        }
-    </tr>
-    @*<tr>
-        @if (Model.ElementAtOrDefault(x).IsAvailable == true) {
-        <td>@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</td>
-        <td>@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).Day)</td>
-        <td>@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).Rate)</td>
-        <td>@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).IsAvailable)</td>
-        }
-    </tr>*@
-}
-</table>
+    </table>
 
-@if (Model.Count() > 10) {
-<table style="float:left" class="table table-striped col-md-2 table-sm ">
-@for (int x = 10; x < (Model.Count() > 20 ? 20 : Model.Count()); x++) {
-    <tr>
-        @if (Model.ElementAtOrDefault(x).IsAvailable == true) {
-            <td><button href="#" class="bookTime btn btn-sm btn-primary" data-time="@Model.ElementAtOrDefault(x).StartTime" data-facilityId="@Model.ElementAtOrDefault(x).FacilityId">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
-        }
-        else {
-            <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
-        }
-    </tr>
-}
-</table>
-}
+    @if (Model.Count() > 10)
+    {
+        <table style="float:left" class="table table-striped col-md-2 table-sm ">
+            @for (int x = 10; x < (Model.Count() > 20 ? 20 : Model.Count()); x++)
+            {
+                <tr>
+                    @if (Model.ElementAtOrDefault(x).IsAvailable == true)
+                    {
+                        <td>
+                            <button href="#" class="bookTime btn btn-sm btn-primary"
+                                    data-time="@Model.ElementAtOrDefault(x).StartTime"
+                                    data-facilityId="@Model.ElementAtOrDefault(x).FacilityId"
+                                    data-ftId="@Model.ElementAtOrDefault(x).Id">
+                                @Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)
+                            </button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
+                    }
+                </tr>
+            }
+        </table>
+    }
 
-@if (Model.Count() > 20) {
-<table style="float:left" class="table table-striped col-md-2 table-sm ">
-@for (int x = 20; x < (Model.Count() > 30 ? 30 : Model.Count()); x++) {
-    <tr>
-        @if (Model.ElementAtOrDefault(x).IsAvailable == true) {
-            <td><button href="#" class="bookTime btn btn-sm btn-primary" data-time="@Model.ElementAtOrDefault(x).StartTime" data-facilityId="@Model.ElementAtOrDefault(x).FacilityId">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
-        }
-        else {
-            <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
-        }
-    </tr>
-}
-</table>
-}
+    @if (Model.Count() > 20)
+    {
+        <table style="float:left" class="table table-striped col-md-2 table-sm ">
+            @for (int x = 20; x < (Model.Count() > 30 ? 30 : Model.Count()); x++)
+            {
+                <tr>
+                    @if (Model.ElementAtOrDefault(x).IsAvailable == true)
+                    {
+                        <td>
+                            <button href="#" class="bookTime btn btn-sm btn-primary"
+                                    data-time="@Model.ElementAtOrDefault(x).StartTime"
+                                    data-facilityId="@Model.ElementAtOrDefault(x).FacilityId"
+                                    data-ftId="@Model.ElementAtOrDefault(x).Id">
+                                @Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)
+                            </button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
+                    }
+                </tr>
+            }
+        </table>
+    }
 
-@if (Model.Count() > 30) {
-<table style="float:left" class="table table-striped col-md-2 table-sm ">
-@for (int x = 30; x < (Model.Count() > 40 ? 40 : Model.Count()); x++) {
-    <tr>
-        @if (Model.ElementAtOrDefault(x).IsAvailable == true) {
-            <td><button href="#" class="bookTime btn btn-sm btn-primary" data-time="@Model.ElementAtOrDefault(x).StartTime" data-facilityId="@Model.ElementAtOrDefault(x).FacilityId">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
-        }
-        else {
-            <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
-        }
-    </tr>
-}
-</table>
-}
+    @if (Model.Count() > 30)
+    {
+        <table style="float:left" class="table table-striped col-md-2 table-sm ">
+            @for (int x = 30; x < (Model.Count() > 40 ? 40 : Model.Count()); x++)
+            {
+                <tr>
+                    @if (Model.ElementAtOrDefault(x).IsAvailable == true)
+                    {
+                        <td>
+                            <button href="#" class="bookTime btn btn-sm btn-primary"
+                                    data-time="@Model.ElementAtOrDefault(x).StartTime"
+                                    data-facilityId="@Model.ElementAtOrDefault(x).FacilityId"
+                                    data-ftId="@Model.ElementAtOrDefault(x).Id">
+                                @Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)
+                            </button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
+                    }
+                </tr>
+            }
+        </table>
+    }
 
-@if (Model.Count() > 40) {
-<table style="float:left" class="table table-striped col-md-2 table-sm ">
-@for (int x = 40; x < (Model.Count() > 50 ? 50 : Model.Count()); x++) {
-    <tr>
-        @if (Model.ElementAtOrDefault(x).IsAvailable == true) {
-            <td><button href="#" class="bookTime btn btn-sm btn-primary" data-time="@Model.ElementAtOrDefault(x).StartTime" data-facilityId="@Model.ElementAtOrDefault(x).FacilityId">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
-        }
-        else {
-            <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
-        }
-    </tr>
-}
-</table>
-}
+    @if (Model.Count() > 40)
+    {
+        <table style="float:left" class="table table-striped col-md-2 table-sm ">
+            @for (int x = 40; x < (Model.Count() > 50 ? 50 : Model.Count()); x++)
+            {
+                <tr>
+                    @if (Model.ElementAtOrDefault(x).IsAvailable == true)
+                    {
+                        <td>
+                            <button href="#" class="bookTime btn btn-sm btn-primary"
+                                    data-time="@Model.ElementAtOrDefault(x).StartTime"
+                                    data-facilityId="@Model.ElementAtOrDefault(x).FacilityId"
+                                    data-ftId="@Model.ElementAtOrDefault(x).Id"
+                                    data-dayOfWeek="@Model.ElementAtOrDefault(x).Day">
+                                @Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)
+                            </button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
+                    }
+                </tr>
+            }
+        </table>
+    }
 </div>
 
 <div>
     <h3>Start Time: </h3>
-    <p id="start">Choose Time</p>
+    <p id="start">08:00:00</p>
+    <button href="#" class="confirmStart btn btn-sm btn-primary">Confirm</button>
     <h3>End Time: </h3>
-    <p id="end">Choose Time</p>
+    <p id="end">17:00:00</p>
+    <button disabled href="#" onclick="location.href='@Url.Action("ViewFacility", new { Id = Model.ElementAtOrDefault(0).FacilityId })'" class="confirmEnd btn btn-sm btn-primary">Submit</button>
+
 </div>
 
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
@@ -96,11 +145,62 @@
     $(function () {
         $('.bookTime').click(function () {
             var $buttonClicked = $(this);
+            var selectStart = $('.confirmStart').prop('disabled');
+            var selectEnd = $('.confirmEnd').prop('disabled');
             var time = $buttonClicked.attr('data-time');
             $.ajax({
-                data: { time: time },
+                data: {
+                    time: time,
+                    selectStart: selectStart,
+                    selectEnd: selectEnd
+                },
                 success: function (partialView) {
-                    $('#start').text(time);
+                    if (!selectStart && selectEnd)
+                        $('#start').text(time);
+                    else if (selectStart && !selectEnd)
+                        $('#end').text(time);
+                }
+            });
+        });
+    });
+
+</script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.confirmStart').click(function () {
+            var $buttonClicked = $(this);
+            $('.confirmStart').attr('disabled', true);
+            $('.confirmEnd').attr('disabled', false);
+            var StartTime = $('#start').text();
+            $.ajax({
+                url: '/Home/confirmStart',
+                type: 'POST',
+                data: {
+                    StartTime: StartTime
+                },
+                success: function (partialView) {
+                }
+            });
+        });
+    });
+
+</script>
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.confirmEnd').click(function () {
+            var $buttonClicked = $(this);
+            $('.confirmEnd').attr('disabled', true);
+            var EndTime = $('#end').text();
+            $.ajax({
+                url: '/Home/confirmEnd',
+                type: 'POST',
+                data: {
+                    EndTime: EndTime
+                },
+                success: function (partialView) {
                 }
             });
         });
