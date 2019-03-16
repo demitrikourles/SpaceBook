@@ -7,7 +7,7 @@
 <h2>Your Bookings</h2>
 
 <p>
-    Show: <a href="@Url.Action("ViewBookings")">All</a> | <a href="@Url.Action("FilterBookings", "Home", new { greaterOrLess = ">"})">Active</a> | <a href="@Url.Action("FilterBookings", "Home", new {greaterOrLess = "<"})">Completed</a>
+    Show: <a href="@Url.Action("ViewBookings")">All</a> | <a href="@Url.Action("ViewBookings", "Home", new { greaterOrLess = ">"})">Active</a> | <a href="@Url.Action("ViewBookings", "Home", new {greaterOrLess = "<"})">Completed</a>
 </p>
 @foreach (var item in Model) {
 <div class="row">

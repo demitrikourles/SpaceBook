@@ -638,66 +638,43 @@ namespace SpaceBook.Controllers
             return;
         }
 
-        public ActionResult ViewBookings() 
-        {
-            using (var context = new SpaceBookEntities1()) {
-                //ensures user is logged in
-                if (Session["UserID"] != null) 
-                {
-                    var sessionID = Convert.ToInt32(Session["UserID"]);
-                    var user = context.Users.Where(u => u.Id == sessionID && u.ActiveFlag == true).FirstOrDefault();
-                    var bookings = context.Bookings.Where(x => x.UserId == sessionID && x.Cancelled == false).ToList();
-
-                    if (user != null) 
-                    {
-                        if (bookings.Count > 0) {
-                            foreach (var booking in bookings)
-                                booking.Facility.Name.FirstOrDefault();
-                            return View(bookings);
-                        }
-                        
-                        //if no bookings, redirect to index?
-                        return View("index");
-                    }
-                }
-                //if the user is not logged in, return to the login view
-                return RedirectToAction("Login");
-            }
-        }
-
-        public ActionResult FilterBookings(string greaterOrLess) 
+        public ActionResult ViewBookings(string greaterOrLess) 
         {
             using (var context = new SpaceBookEntities1()) 
             {
                 if (Session["UserID"] != null) 
                 {
                     var sessionID = Convert.ToInt32(Session["UserID"]);
+                    var user = context.Users.Where(u => u.Id == sessionID && u.ActiveFlag == true).FirstOrDefault();
                     var bookings = context.Bookings.Where(x => x.UserId == sessionID && x.Cancelled == false).ToList();
                     if (bookings.Count > 0)
                         foreach (var booking in bookings)
                             booking.Facility.Name.FirstOrDefault();
 
-                    if (greaterOrLess == ">")
-                        foreach (Booking item in bookings.ToList()) 
-                        {
-                            //confirm this logic 
-                            if (((TimeSpan)(DateTime.Today - item.StartDateTime)).Days > 30) 
+                    if (user != null) 
+                    {
+                        if (greaterOrLess == ">")
+                            foreach (Booking item in bookings.ToList()) 
                             {
-                                bookings.Remove(item);
+                                //confirm this logic 
+                                if (((TimeSpan)(DateTime.Today - item.StartDateTime)).Days > 30) 
+                                {
+                                    bookings.Remove(item);
+                                }
                             }
-                        }
 
-                    else if (greaterOrLess == "<")
-                        foreach (Booking item in bookings.ToList()) 
-                        {
-                            //confirm this logic 
-                            if (((TimeSpan)(DateTime.Today - item.StartDateTime)).Days < 30) 
+                        else if (greaterOrLess == "<")
+                            foreach (Booking item in bookings.ToList()) 
                             {
-                                bookings.Remove(item);
+                                //confirm this logic 
+                                if (((TimeSpan)(DateTime.Today - item.StartDateTime)).Days < 30) 
+                                {
+                                    bookings.Remove(item);
+                                }
                             }
-                        }
 
-                    return View("ViewBookings", bookings);
+                        return View("ViewBookings", bookings);
+                    }
                 }
                 //if the user is not logged in, return to the login view
                 return RedirectToAction("Login");
