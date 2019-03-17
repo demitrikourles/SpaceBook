@@ -547,6 +547,12 @@ namespace SpaceBook.Controllers
             }
         }
 
+        public ActionResult RegisterFacilityAddressBack(RegisterFacilityViewModel facilityParam)
+        {
+            return View("~/Views/Home/RegisterFacility/Info.cshtml", facilityParam);
+        }
+
+
         [HttpPost]
         public ActionResult RegisterFacilityComplete(RegisterFacilityViewModel facilityParam)
         {

@@ -23,73 +23,47 @@
     <div class="row justify-content-center">
         <div class="col-6">
 
-            @*<div class="form-group" style="margin: 2% 0% 5% 0%">
-            <label>Street address</label>
-            @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control form-control-lg", @id = "autocomplete", @onFocus = "geolocate()", @placeholder = "What is the street address of your facility?" } })
-            @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
-        </div>
-
-        <div class="form-group" style="margin: 5% 0% 5% 0%">
-            <label>City</label>
-            @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control form-control-lg", @id = "locality", @disabled = "true", @placeholder = "What city is your facility located in?" } })
-            @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
-        </div>
-
-        <div class="form-group" style="margin: 5% 0% 5% 0%">
-            <label>Province</label>
-            @Html.EditorFor(model => model.Province, new { htmlAttributes = new { @class = "form-control form-control-lg", @id = "administrative_area_level_1", @disabled = "true", @placeholder = "What province is your facility located in?" } })
-            @Html.ValidationMessageFor(model => model.Province, "", new { @class = "text-danger" })
-        </div>
-
-        <div class="form-group" style="margin: 5% 0% 5% 0%">
-            <label>Postal Code</label>
-            @Html.EditorFor(model => model.PostalCode, new { htmlAttributes = new { @class = "form-control form-control-lg", @id = "postal_code", @disabled = "true", @placeholder = "What is your facility's postal code?" } })
-            @Html.ValidationMessageFor(model => model.PostalCode, "", new { @class = "text-danger" })
-        </div>
-
-        <div class="form-group" style="margin: 5% 0% 5% 0%">
-            <label>Country</label>
-            @Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control form-control-lg", @id = "country", @disabled = "true", @placeholder = "What country is your facility located in?" } })
-            @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
-        </div>*@
-
-
             @* **Note** These two hidden inputs are required in order for autocomplete to work *@
             <input type="hidden" class="field" id="street_number" disabled="true" />
             <input type="hidden" class="field" id="route" disabled="true" />
             
             <div class="form-group" style="margin: 2% 0% 5% 0%">
                 <label>Street address</label>
-                <input id="autocomplete" name="Address" class="form-control form-control-lg" placeholder="What is the street address of your facility?" onFocus="geolocate() " type="text" />
+                @*<input id="autocomplete" name="Address" class="form-control form-control-lg" placeholder="What is the street address of your facility?" onFocus="geolocate() " type="text" />*@
+                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control form-control-lg", @placeholder = "What is the street address of your facility ?", @onFocus = "geolocate()", @id = "autocomplete"} })
                 @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
             </div>
 
             <div class="form-group" style="margin: 5% 0% 5% 0%">
                 <label>City</label>
-                <input class="field form-control form-control-lg" name="City" id="locality"  placeholder = "What city is your facility located in?" />
+                @*<input class="field form-control form-control-lg" name="City" id="locality" placeholder="What city is your facility located in?" />*@
+                @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control form-control-lg field", @placeholder = "What city is your facility located in?", @id = "locality" } })
                 @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
             </div>
 
             <div class="form-group" style="margin: 5% 0% 5% 0%">
                 <label>Province</label>
-                <input class="field form-control form-control-lg" name="Province" id="administrative_area_level_1" placeholder = "What province is your facility located in?"/>
+                @*<input class="field form-control form-control-lg" name="Province" id="administrative_area_level_1" placeholder="What province is your facility located in?" />*@
+                @Html.EditorFor(model => model.Province, new { htmlAttributes = new { @class = "form-control form-control-lg field", @placeholder = "What province is your facility located in?", @id = "administrative_area_level_1" } })
                 @Html.ValidationMessageFor(model => model.Province, "", new { @class = "text-danger" })
             </div>
 
             <div class="form-group" style="margin: 5% 0% 5% 0%">
                 <label>Postal code</label>
-                <input class="field form-control form-control-lg" name="PostalCode" id="postal_code" placeholder = "What is your facility's postal code?"/>
+                @*<input class="field form-control form-control-lg" name="PostalCode" id="postal_code" placeholder="What is your facility's postal code?" />*@
+                @Html.EditorFor(model => model.PostalCode, new { htmlAttributes = new { @class = "form-control form-control-lg field", @placeholder = "What is your facility's postal code?", @id = "postal_code" } })
                 @Html.ValidationMessageFor(model => model.PostalCode, "", new { @class = "text-danger" })
             </div>
 
             <div class="form-group" style="margin: 5% 0% 5% 0%">
                 <label>Country</label>
-                <input class="field form-control form-control-lg" name="Country" id="country" placeholder = "What country is your facility located in?"/>
+                @*<input class="field form-control form-control-lg" name="Country" id="country" placeholder="What country is your facility located in?" />*@
+                @Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control form-control-lg field", @placeholder = "What country is your facility located in?", @id = "country" } })
                 @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
             </div>
 
             <div class="form-group" style="text-align:center">
-                <button value="Back" type="button" onclick="location.href='@Url.Action("RegisterFacility", Model)'" class="btn btn-danger" style="margin-right: 5%">Back</button>
+                <button value="Back" type="button" onclick="location.href='@Url.Action("RegisterFacilityAddressBack", Model)'" class="btn btn-danger" style="margin-right: 5%">Back</button>
                 <input type="submit" value="Next" class="btn btn-primary" style="margin-left: 5%" />
             </div>
         </div>
