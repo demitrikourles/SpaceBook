@@ -516,7 +516,7 @@ namespace SpaceBook.Controllers
         }
 
         [HttpGet]
-        public ActionResult RegisterFacility(Facility facilityParam)
+        public ActionResult RegisterFacility()
         {
             return View("~/Views/Home/RegisterFacility/Info.cshtml");
         }
@@ -600,12 +600,11 @@ namespace SpaceBook.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    //Facility newFacility = new Facility();
                     newFacility.Name = facilityParam.Name;
                     //newFacility.StartTime = facilityParam.StartTime;
                     //newFacility.EndTime = facilityParam.EndTime;
                     //newFacility.HourlyRate = facilityParam.HourlyRate;
-                    newFacility.Description = facilityParam.Description; //Not on postVenue form yet
+                    newFacility.Description = facilityParam.Description;
                     newFacility.Email = facilityParam.Email;
                     newFacility.Phone = facilityParam.Phone;
                     newFacility.Address = facilityParam.Address;
