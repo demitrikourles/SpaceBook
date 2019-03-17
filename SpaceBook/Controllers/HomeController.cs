@@ -63,8 +63,7 @@ namespace SpaceBook.Controllers
 
         public ActionResult ViewFacilityAvailability(Int32 id) 
         {
-            Session["selectStart"] = true;
-            Session["selectEnd"] = false;
+            
             Session["FacilityID"] = id.ToString();
 
             DateTime refMonday = DateTime.Now.AddDays((DayOfWeek.Monday - DateTime.Now.DayOfWeek));
@@ -164,8 +163,6 @@ namespace SpaceBook.Controllers
                     context.SaveChanges();
 
                     Session["bookingID"] = newBooking.Id.ToString();
-                    Session["selectStart"] = false;
-                    Session["selectEnd"] = true;
 
                     return true;
                 }
@@ -188,8 +185,6 @@ namespace SpaceBook.Controllers
 
                     context.SaveChanges();
 
-                    Session["selectStart"] = false;
-                    Session["selectEnd"] = false;
                     Session["bookingID"] = "";
 
                     Int32 FacID = Convert.ToInt32(Session["FacilityID"]);
