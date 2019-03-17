@@ -103,6 +103,8 @@ namespace SpaceBook.Controllers
         {
             using (var context = new SpaceBookEntities1()) 
             {
+                var errors = ModelState.Where(x => x.Value.Errors.Any())
+                .Select(x => new { x.Key, x.Value.Errors });
                 Facility newFacility = new Facility();
                 if (ModelState.IsValid) 
                 {
@@ -299,36 +301,54 @@ namespace SpaceBook.Controllers
             }
         }
 
+
         [HttpGet]
-        public ActionResult RegisterFacility(Facility facilityParam)
+        public ActionResult RegisterFacility()
         {
-            return View("~/Views/Home/RegisterFacility/Info.cshtml", facilityParam);
+            return View("~/Views/Home/RegisterFacility/Info.cshtml");
         }
 
-        public ActionResult RegisterFacilityInfo(Facility facilityParam)
+        public ActionResult RegisterFacilityInfo(RegisterFacilityViewModel facilityParam)
         {
-            //be sure to validate contact info here in the future
-            return View("~/Views/Home/RegisterFacility/Address.cshtml", facilityParam);
+            if (ModelState.IsValidField("Name") && ModelState.IsValidField("Description") && ModelState.IsValidField("Email") && ModelState.IsValidField("Phone"))
+            {
+                ModelState.Clear();
+                return View("~/Views/Home/RegisterFacility/Address.cshtml", facilityParam);
+            }
+            else
+            {
+                return View("~/Views/Home/RegisterFacility/Info.cshtml", facilityParam);
+            }
         }
 
-        public ActionResult RegisterFacilityAddress(Facility facilityParam)
+        public ActionResult RegisterFacilityAddress(RegisterFacilityViewModel facilityParam)
         {
-            //be sure to validate contact info here in the future
-            return View("~/Views/Home/RegisterFacility/Hours.cshtml", facilityParam);
+            if (ModelState.IsValidField("Address") && ModelState.IsValidField("City") && ModelState.IsValidField("PostalCode") && ModelState.IsValidField("Province") && ModelState.IsValidField("Country"))
+            {
+                ModelState.Clear();
+                return View("~/Views/Home/RegisterFacility/Hours.cshtml", facilityParam);
+            }
+            else
+            {
+                return View("~/Views/Home/RegisterFacility/Address.cshtml", facilityParam);
+            }
         }
 
         [HttpPost]
-        public ActionResult RegisterFacilityComplete(Facility facilityParam)
+        public ActionResult RegisterFacilityComplete(RegisterFacilityViewModel facilityParam)
         {
             using (var context = new SpaceBookEntities1())
             {
                 Facility newFacility = new Facility();
+                var errors = ModelState.Where(x => x.Value.Errors.Any())
+                .Select(x => new { x.Key, x.Value.Errors });
                 if (ModelState.IsValid)
                 {
+                    //Facility newFacility = new Facility();
                     newFacility.Name = facilityParam.Name;
-                    newFacility.StartTime = facilityParam.StartTime;
-                    newFacility.EndTime = facilityParam.EndTime;
-                    newFacility.HourlyRate = facilityParam.HourlyRate;
+                    //newFacility.StartTime = facilityParam.StartTime;
+                    //newFacility.EndTime = facilityParam.EndTime;
+                    //newFacility.HourlyRate = facilityParam.HourlyRate;
                     newFacility.Description = facilityParam.Description; //Not on postVenue form yet
                     newFacility.Email = facilityParam.Email;
                     newFacility.Phone = facilityParam.Phone;
@@ -355,7 +375,7 @@ namespace SpaceBook.Controllers
                         newFacilityTime.FacilityId = newFacility.Id;
                         newFacilityTime.StartTime = interval;
                         newFacilityTime.Day = x;
-                        newFacilityTime.Rate = facilityParam.HourlyRate;
+                        //newFacilityTime.Rate = facilityParam.HourlyRate;
                         newFacilityTime.IsAvailable = true;
 
                         if ((interval < newFacility.StartTime) || (interval >= newFacility.EndTime))
