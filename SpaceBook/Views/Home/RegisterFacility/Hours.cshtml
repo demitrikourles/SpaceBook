@@ -151,6 +151,11 @@
         newStartAndEndTime("friday");
         newStartAndEndTime("saturday");
         newStartAndEndTime("sunday");
+
+        $('input').keydown(function (e) {
+            e.preventDefault();
+            return false;
+        });
     });
 
     function removeThis(_this) {
@@ -158,6 +163,7 @@
     };
 
     function newStartAndEndTime(day) {
+        
         var formRowDiv = document.createElement('div');
         formRowDiv.className = "form-row";
         formRowDiv.style.margin = "2% 0% 2% 0%";
@@ -169,6 +175,15 @@
         startTimeInput.type = "text";
         startTimeInput.className = "form-control timepicker";
         startTimeInput.classList.add(day + "Starts");
+        startTimeInput.onkeypress = false;
+        if (document.getElementById(day + "HoursContainer").childElementCount < 1)
+        {
+            startTimeInput.value = "09:00 AM"
+        }
+        else {
+            startTimeInput.value = increaseTimeByOneHour(document.getElementsByClassName(day + "Ends").item(document.getElementsByClassName(day + "Ends").length - 1).value);
+        }
+        
 
         var dashDiv = document.createElement('div');
         dashDiv.className = "col col-1";
@@ -184,6 +199,13 @@
         endTimeInput.type = "text";
         endTimeInput.className = "form-control timepicker";
         endTimeInput.classList.add(day + "Ends");
+        endTimeInput.onkeypress = false;
+        if (document.getElementById(day + "HoursContainer").childElementCount < 1) {
+            endTimeInput.value = "05:00 PM"
+        }
+        else {
+            endTimeInput.value = increaseTimeByOneHour(startTimeInput.value);
+        }
 
         var deleteButtonDiv = document.createElement('div');
         deleteButtonDiv.className = "col col-1";
@@ -299,6 +321,30 @@
         return true; // return false to cancel form action
     });
 
+    function increaseTimeByOneHour(timeStr) {
+        var splitedTimeStr = timeStr.split(':');
+        var hours = parseInt(splitedTimeStr[0]);
+        //var meridiem = splitedTimeStr[1].split("pm")[1];
+        //var minutes = splitedTimeStr[1].split(" ")[0];
+        var minutes = splitedTimeStr[1].match(/[a-z]+|[^a-z]+/gi)[0]
+        var meridiem = splitedTimeStr[1].match(/[a-z]+|[^a-z]+/gi)[1]
+        var nextHours = (hours + 1);
+        var nextMeridiem;
+        if (hours >= 11) {
+            if (meridiem.toLowerCase() == "am") {
+                nextMeridiem = "pm";
+            } else if (meridiem.toLowerCase() == "pm") {
+                nextMeridiem = "am";
+            }
+            if (nextHours > 12) {
+                nextHours = nextHours - 12;
+            }
+
+        } else {
+            nextMeridiem = meridiem;
+        }
+        return nextHours + ":" + minutes + nextMeridiem;
+    }
 
 </script>
 
