@@ -3,7 +3,7 @@
 @{
     ViewBag.Title = "Register Your Facility";
 }
-<h2 style="margin: 2% 0% 2% 0%" align="center">Register your Facility</h2>
+<h1 style="margin: 2% 0% 2% 0%" align="center">Register Your Facility</h1>
 
 <div class="row justify-content-center" style="margin: 2% 0% 2% 0%">
     <div class="col-8">
@@ -22,15 +22,15 @@
 
     <div class="row justify-content-center">
         <div class="col-6">
-
+            <h4 style="margin: 0% 0% 5% 0%" align="center">Facility Address details</h4>
             @* **Note** These two hidden inputs are required in order for autocomplete to work *@
             <input type="hidden" class="field" id="street_number" disabled="true" />
             <input type="hidden" class="field" id="route" disabled="true" />
-            
+
             <div class="form-group" style="margin: 2% 0% 5% 0%">
                 <label>Street address</label>
                 @*<input id="autocomplete" name="Address" class="form-control form-control-lg" placeholder="What is the street address of your facility?" onFocus="geolocate() " type="text" />*@
-                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control form-control-lg", @placeholder = "What is the street address of your facility ?", @onFocus = "geolocate()", @id = "autocomplete"} })
+                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control form-control-lg", @placeholder = "What is the street address of your facility ?", @onFocus = "geolocate()", @id = "autocomplete" } })
                 @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
             </div>
 
