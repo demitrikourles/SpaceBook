@@ -4,7 +4,7 @@
 
     ViewBag.Title = "Regsiter your facility";
 }
-<h2 style="margin: 2% 0% 2% 0%" align="center">Register your Facility</h2>
+<h1 style="margin: 2% 0% 2% 0%" align="center">Register your Facility</h1>
 
 <div class="row justify-content-center" style="margin: 2% 0% 2% 0%">
     <div class="col-8">
@@ -21,83 +21,83 @@
 {
     <div class="row justify-content-center">
         <div class="col-6">
-
-            <div class="form-group" style="margin: 5% 0% 5% 0%">
-                <div class="">
+            <h4 style="margin: 0% 0% 5% 0%" align="center">Facility Availability</h4>
+            <div class="form-group" style="margin: 0% 0% 0% 0%">
+                <div class="" style="float: left">
                     <h6>Monday</h6>
                 </div>
-                <div id="mondayHoursContainer"></div>
+                <div id="mondayHoursContainer" class="offset-2"></div>
+                <div style="clear: left">
+                    <button type="button" onclick="newStartAndEndTime('monday')" class="btn btn-sm btn-success">Add +</button>
+                </div>
             </div>
-            <div>
-                <button type="button" onclick="newStartAndEndTime('monday')" class="btn btn-sm btn-success">Add +</button>
-                <hr />
-            </div>
+            <hr />
 
-            <div class="form-group" style="margin: 5% 0% 5% 0%">
-                <div class="">
+            <div class="form-group" style="margin: 0% 0% 0% 0%">
+                <div class="" style="float: left">
                     <h6 id="dis">Tuesday</h6>
                 </div>
-                <div id="tuesdayHoursContainer"></div>
+                <div id="tuesdayHoursContainer" class="offset-2"></div>
+                <div style="clear: left">
+                    <button type="button" onclick="newStartAndEndTime('tuesday')" class="btn btn-sm btn-success">Add +</button>
+                </div>
             </div>
-            <div>
-                <button type="button" onclick="newStartAndEndTime('tuesday')" class="btn btn-sm btn-success">Add +</button>
-                <hr />
-            </div>
+            <hr />
 
-            <div class="form-group" style="margin: 5% 0% 5% 0%">
-                <div class="">
+            <div class="form-group" style="margin: 0% 0% 0% 0%">
+                <div class="" style="float: left">
                     <h6>Wednesday</h6>
                 </div>
-                <div id="wednesdayHoursContainer"></div>
+                <div id="wednesdayHoursContainer" class="offset-2"></div>
+                <div style="clear: left">
+                    <button type="button" onclick="newStartAndEndTime('wednesday')" class="btn btn-sm btn-success">Add +</button>
+                </div>
             </div>
-            <div>
-                <button type="button" onclick="newStartAndEndTime('wednesday')" class="btn btn-sm btn-success">Add +</button>
-                <hr />
-            </div>
+            <hr />
 
-            <div class="form-group" style="margin: 5% 0% 5% 0%">
-                <div class="">
+            <div class="form-group" style="margin: 0% 0% 0% 0%">
+                <div class="" style="float: left">
                     <h6>Thursday</h6>
                 </div>
-                <div id="thursdayHoursContainer"></div>
+                <div id="thursdayHoursContainer" class="offset-2"></div>
+                <div style="clear: left">
+                    <button type="button" onclick="newStartAndEndTime('thursday')" class="btn btn-sm btn-success">Add +</button>
+                </div>
             </div>
-            <div>
-                <button type="button" onclick="newStartAndEndTime('thursday')" class="btn btn-sm btn-success">Add +</button>
-                <hr />
-            </div>
+            <hr />
 
-            <div class="form-group" style="margin: 5% 0% 5% 0%">
-                <div class="">
+            <div class="form-group" style="margin: 0% 0% 0% 0%">
+                <div class="" style="float: left">
                     <h6>Friday</h6>
                 </div>
-                <div id="fridayHoursContainer"></div>
+                <div id="fridayHoursContainer" class="offset-2"></div>
+                <div style="clear: left">
+                    <button type="button" onclick="newStartAndEndTime('friday')" class="btn btn-sm btn-success">Add +</button>
+                </div>
             </div>
-            <div>
-                <button type="button" onclick="newStartAndEndTime('friday')" class="btn btn-sm btn-success">Add +</button>
-                <hr />
-            </div>
+            <hr />
 
-            <div class="form-group" style="margin: 5% 0% 5% 0%">
-                <div class="">
+            <div class="form-group" style="margin: 0% 0% 0% 0%">
+                <div class="" style="float: left">
                     <h6>Saturday</h6>
                 </div>
-                <div id="saturdayHoursContainer"></div>
+                <div id="saturdayHoursContainer" class="offset-2"></div>
+                <div style="clear: left">
+                    <button type="button" onclick="newStartAndEndTime('saturday')" class="btn btn-sm btn-success">Add +</button>
+                </div>
             </div>
-            <div>
-                <button type="button" onclick="newStartAndEndTime('saturday')" class="btn btn-sm btn-success">Add +</button>
-                <hr />
-            </div>
+            <hr />
 
-            <div class="form-group" style="margin: 5% 0% 5% 0%">
-                <div class="">
+            <div class="form-group" style="margin: 0% 0% 0% 0%">
+                <div class="" style="float: left">
                     <h6>Sunday</h6>
                 </div>
-                <div id="sundayHoursContainer"></div>
+                <div id="sundayHoursContainer" class="offset-2"></div>
+                <div style="clear: left">
+                    <button type="button" onclick="newStartAndEndTime('sunday')" class="btn btn-sm btn-success">Add +</button>
+                </div>
             </div>
-            <div>
-                <button type="button" onclick="newStartAndEndTime('sunday')" class="btn btn-sm btn-success">Add +</button>
-                <hr />
-            </div>
+            <hr />
 
             <input type="hidden" id="monStart" name="monStart" value="" />
             <input type="hidden" id="tueStart" name="tueStart" value="" />
@@ -166,7 +166,7 @@
         
         var formRowDiv = document.createElement('div');
         formRowDiv.className = "form-row";
-        formRowDiv.style.margin = "2% 0% 2% 0%";
+        formRowDiv.style.margin = "1% 0% 1% 0%";
 
         var startTimeDiv = document.createElement('div');
         startTimeDiv.className = "col col-3 offset-2";

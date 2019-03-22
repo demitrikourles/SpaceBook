@@ -18,9 +18,12 @@ namespace SpaceBook.ViewModels
         public string Address { get; set; }
 
         [Required(ErrorMessage = "Please enter a facility email.")]
+        [EmailAddress(ErrorMessage = "Invalid Email Address")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Please enter a facility phone number.")]
+        [DataType(DataType.PhoneNumber, ErrorMessage = "Invalid Phone Number")]
+        [RegularExpression(@"^([0-9]{10})$", ErrorMessage = "Invalid Phone Number.")]
         public string Phone { get; set; }
 
         [Required(ErrorMessage = "Please enter the city that your facilitiy is located in.")]
