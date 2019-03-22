@@ -22,7 +22,7 @@
                 <p><span class="fa fa-phone fa-fw"></span>@Model.Phone</p>
                 <p><span class="fa fa-envelope fa-fw"></span>@Model.Email</p>
                 <hr />
-                <button type="button" onclick="location.href='@Url.Action("ViewFacilityAvailability", new { Id = Model.Id })'" class="btn btn-primary"><span class="fa fa-calendar fa-fw"></span> View Availability</button>
+                <button type="button" onclick="location.href='@Url.Action("ViewFacilityAvailability", new { facilityId = Model.Id, weekIncr = 0 })'" class="btn btn-primary"><span class="fa fa-calendar fa-fw"></span> View Availability</button>
             </div>
             <div class="card-footer">
                 <small class="text-muted">**Last booked date text**</small>

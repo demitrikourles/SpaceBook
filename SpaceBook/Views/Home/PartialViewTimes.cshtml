@@ -1,163 +1,366 @@
-﻿@model IEnumerable<SpaceBook.Models.FacilityTime>
+﻿@model SpaceBook.ViewModels.facilityTimesAndBookingsViewModel
+
 <h3>Time Slots</h3>
 <div class="col-md-6">
-        @if (Model.Count() > 0)
-        {
-            <table style="float:left" class="table table-striped col-md-2 table-sm">
-                @for (int x = 0; x < (Model.Count() > 8 ? 8 : Model.Count()); x++)
-                {
-                    <tr>
-                        @if (Model.ElementAtOrDefault(x).IsAvailable == true)
-                        {
-                            <td>
-                                <button href="#" class="bookTime btn btn-sm btn-primary"
-                                        data-time="@Model.ElementAtOrDefault(x).StartTime"
-                                        data-facilityId="@Model.ElementAtOrDefault(x).FacilityId"
-                                        data-ftId="@Model.ElementAtOrDefault(x).Id">
-                                    @Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)
-                                </button>
-                            </td>
-                        }
-                        else
-                        {
-                            <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
-                        }
-                    </tr>
-                }
-            </table>
-        }
+    @if (Model.times.Count() > 0)
+    {
+        <table style="float:left" class="table table-striped col-md-2 table-sm">
+            @for (int x = 0; x < (Model.times.Count() > 8 ? 8 : Model.times.Count()); x++)
+            {
+                var disableIt = "0";
+                var isIntersecting = "0";
+                var beforeCurrentDayTime = "0";
 
-        @if (Model.Count() > 8)
-        {
-            <table style="float:left" class="table table-striped col-md-2 table-sm ">
-                @for (int x = 8; x < (Model.Count() > 16 ? 16 : Model.Count()); x++)
+                //checks if timeslot has already passed compared to the current time
+                beforeCurrentDayTime = Html.Action("isBeforeCurrentDayTime", "Home", new { time = Model.times.ElementAtOrDefault(x) }).ToString();
+                if (beforeCurrentDayTime == "1")
                 {
-                    <tr>
-                        @if (Model.ElementAtOrDefault(x).IsAvailable == true)
-                        {
-                            <td>
-                                <button href="#" class="bookTime btn btn-sm btn-primary"
-                                        data-time="@Model.ElementAtOrDefault(x).StartTime"
-                                        data-facilityId="@Model.ElementAtOrDefault(x).FacilityId"
-                                        data-ftId="@Model.ElementAtOrDefault(x).Id">
-                                    @Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)
-                                </button>
-                            </td>
-                        }
-                        else
-                        {
-                            <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
-                        }
-                    </tr>
+                    disableIt = "1";
                 }
-            </table>
-        }
 
-        @if (Model.Count() > 16)
-        {
-            <table style="float:left" class="table table-striped col-md-2 table-sm ">
-                @for (int x = 16; x < (Model.Count() > 24 ? 24 : Model.Count()); x++)
+                if (disableIt == "0")
                 {
-                    <tr>
-                        @if (Model.ElementAtOrDefault(x).IsAvailable == true)
-                        {
-                            <td>
-                                <button href="#" class="bookTime btn btn-sm btn-primary"
-                                        data-time="@Model.ElementAtOrDefault(x).StartTime"
-                                        data-facilityId="@Model.ElementAtOrDefault(x).FacilityId"
-                                        data-ftId="@Model.ElementAtOrDefault(x).Id">
-                                    @Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)
-                                </button>
-                            </td>
-                        }
-                        else
-                        {
-                            <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
-                        }
-                    </tr>
-                }
-            </table>
-        }
+                    //checks each booking for the current facility in the selected week
+                    for (int y = 0; y < Model.bookings.Count(); y++)
+                    {
 
-        @if (Model.Count() > 24)
-        {
-            <table style="float:left" class="table table-striped col-md-2 table-sm ">
-                @for (int x = 24; x < (Model.Count() > 32 ? 32 : Model.Count()); x++)
-                {
-                    <tr>
-                        @if (Model.ElementAtOrDefault(x).IsAvailable == true)
-                        {
-                            <td>
-                                <button href="#" class="bookTime btn btn-sm btn-primary"
-                                        data-time="@Model.ElementAtOrDefault(x).StartTime"
-                                        data-facilityId="@Model.ElementAtOrDefault(x).FacilityId"
-                                        data-ftId="@Model.ElementAtOrDefault(x).Id">
-                                    @Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)
-                                </button>
-                            </td>
-                        }
-                        else
-                        {
-                            <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
-                        }
-                    </tr>
-                }
-            </table>
-        }
+                        //checks if booking intersects with current time slot
+                        isIntersecting = Html.Action("getIntersection", "Home",
+                        new { booking = Model.bookings.ElementAtOrDefault(y), time = Model.times.ElementAtOrDefault(x) }).ToString();
 
-        @if (Model.Count() > 32)
-        {
-            <table style="float:left" class="table table-striped col-md-2 table-sm ">
-                @for (int x = 32; x < (Model.Count() > 40 ? 40 : Model.Count()); x++)
-                {
-                    <tr>
-                        @if (Model.ElementAtOrDefault(x).IsAvailable == true)
+                        //if a booking exists during the timeslot, disable the button
+                        if (isIntersecting == "1")
                         {
-                            <td>
-                                <button href="#" class="bookTime btn btn-sm btn-primary"
-                                        data-time="@Model.ElementAtOrDefault(x).StartTime"
-                                        data-facilityId="@Model.ElementAtOrDefault(x).FacilityId"
-                                        data-ftId="@Model.ElementAtOrDefault(x).Id"
-                                        data-dayOfWeek="@Model.ElementAtOrDefault(x).Day">
-                                    @Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)
-                                </button>
-                            </td>
+                            disableIt = "1";
+                            break;
                         }
                         else
                         {
-                            <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
+                            disableIt = "0";
                         }
-                    </tr>
+                    }
                 }
-            </table>
-        }
-        @if (Model.Count() > 40)
-        {
-            <table style="float:left" class="table table-striped col-md-2 table-sm ">
-                @for (int x = 40; x < (Model.Count() > 48 ? 48 : Model.Count()); x++)
+                <tr>
+                    @if (Model.times.ElementAtOrDefault(x).IsAvailable == true && disableIt == "0")
+                    { //generates enabled button if the timeslot is free
+                        <td>
+                            <button href="#" class="bookTime btn btn-sm btn-primary"
+                                    data-time="@Model.times.ElementAtOrDefault(x).StartTime"
+                                    data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
+                                    data-rate="@Model.times.ElementAtOrDefault(x).Rate"
+                                    data-ftID="@Model.times.ElementAtOrDefault(x).Id">
+                                @Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
+                            </button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)</button></td>
+                    }
+                </tr>
+            }
+        </table>
+    }
+
+    @if (Model.times.Count() > 8)
+    {
+        <table style="float:left" class="table table-striped col-md-2 table-sm ">
+            @for (int x = 8; x < (Model.times.Count() > 16 ? 16 : Model.times.Count()); x++)
+            {
+                var disableIt = "0";
+                var isIntersecting = "0";
+                var beforeCurrentDayTime = "0";
+
+                //checks if timeslot has already passed
+                beforeCurrentDayTime = Html.Action("isBeforeCurrentDayTime", "Home", new { time = Model.times.ElementAtOrDefault(x) }).ToString();
+                if (beforeCurrentDayTime == "1")
                 {
-                    <tr>
-                        @if (Model.ElementAtOrDefault(x).IsAvailable == true)
+                    disableIt = "1";
+                }
+
+                if (disableIt == "0")
+                {
+                    //checks each booking for the current facility in the selected week
+                    for (int y = 0; y < Model.bookings.Count(); y++)
+                    {
+
+                        //checks if booking intersects with current time slot
+                        isIntersecting = Html.Action("getIntersection", "Home",
+                        new { booking = Model.bookings.ElementAtOrDefault(y), time = Model.times.ElementAtOrDefault(x) }).ToString();
+
+                        //if a booking exists during the timeslot, disable the button
+                        if (isIntersecting == "1")
                         {
-                            <td>
-                                <button href="#" class="bookTime btn btn-sm btn-primary"
-                                        data-time="@Model.ElementAtOrDefault(x).StartTime"
-                                        data-facilityId="@Model.ElementAtOrDefault(x).FacilityId"
-                                        data-ftId="@Model.ElementAtOrDefault(x).Id"
-                                        data-dayOfWeek="@Model.ElementAtOrDefault(x).Day">
-                                    @Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)
-                                </button>
-                            </td>
+                            disableIt = "1";
+                            break;
                         }
                         else
                         {
-                            <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.ElementAtOrDefault(x).StartTime)</button></td>
+                            disableIt = "0";
                         }
-                    </tr>
+                    }
                 }
-            </table>
-        }
-    </div>
+                <tr>
+                    @if (Model.times.ElementAtOrDefault(x).IsAvailable == true && disableIt == "0")
+                    { //generates enabled button if the timeslot is free
+                        <td>
+                            <button href="#" class="bookTime btn btn-sm btn-primary"
+                                    data-time="@Model.times.ElementAtOrDefault(x).StartTime"
+                                    data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
+                                    data-rate="@Model.times.ElementAtOrDefault(x).Rate"
+                                    data-ftID="@Model.times.ElementAtOrDefault(x).Id">
+                                @Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
+                            </button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)</button></td>
+                    }
+                </tr>
+            }
+        </table>
+    }
+
+    @if (Model.times.Count() > 16)
+    {
+        <table style="float:left" class="table table-striped col-md-2 table-sm ">
+            @for (int x = 16; x < (Model.times.Count() > 24 ? 24 : Model.times.Count()); x++)
+            {
+                var disableIt = "0";
+                var isIntersecting = "0";
+                var beforeCurrentDayTime = "0";
+
+                //checks if timeslot has already passed
+                beforeCurrentDayTime = Html.Action("isBeforeCurrentDayTime", "Home", new { time = Model.times.ElementAtOrDefault(x) }).ToString();
+                if (beforeCurrentDayTime == "1")
+                {
+                    disableIt = "1";
+                }
+
+                if (disableIt == "0")
+                {
+                    //checks each booking for the current facility in the selected week
+                    for (int y = 0; y < Model.bookings.Count(); y++)
+                    {
+
+                        //checks if booking intersects with current time slot
+                        isIntersecting = Html.Action("getIntersection", "Home",
+                        new { booking = Model.bookings.ElementAtOrDefault(y), time = Model.times.ElementAtOrDefault(x) }).ToString();
+
+                        //if a booking exists during the timeslot, disable the button
+                        if (isIntersecting == "1")
+                        {
+                            disableIt = "1";
+                            break;
+                        }
+                        else
+                        {
+                            disableIt = "0";
+                        }
+                    }
+                }
+                <tr>
+                    @if (Model.times.ElementAtOrDefault(x).IsAvailable == true && disableIt == "0")
+                    { //generates enabled button if the timeslot is free
+                        <td>
+                            <button href="#" class="bookTime btn btn-sm btn-primary"
+                                    data-time="@Model.times.ElementAtOrDefault(x).StartTime"
+                                    data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
+                                    data-rate="@Model.times.ElementAtOrDefault(x).Rate"
+                                    data-ftID="@Model.times.ElementAtOrDefault(x).Id">
+                                @Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
+                            </button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)</button></td>
+                    }
+                </tr>
+            }
+        </table>
+    }
+
+    @if (Model.times.Count() > 24)
+    {
+        <table style="float:left" class="table table-striped col-md-2 table-sm ">
+            @for (int x = 24; x < (Model.times.Count() > 32 ? 32 : Model.times.Count()); x++)
+            {
+                var disableIt = "0";
+                var isIntersecting = "0";
+                var beforeCurrentDayTime = "0";
+
+                //checks if timeslot has already passed
+                beforeCurrentDayTime = Html.Action("isBeforeCurrentDayTime", "Home", new { time = Model.times.ElementAtOrDefault(x) }).ToString();
+                if (beforeCurrentDayTime == "1")
+                {
+                    disableIt = "1";
+                }
+
+                if (disableIt == "0")
+                {
+                    //checks each booking for the current facility in the selected week
+                    for (int y = 0; y < Model.bookings.Count(); y++)
+                    {
+
+                        //checks if booking intersects with current time slot
+                        isIntersecting = Html.Action("getIntersection", "Home",
+                        new { booking = Model.bookings.ElementAtOrDefault(y), time = Model.times.ElementAtOrDefault(x) }).ToString();
+
+                        //if a booking exists during the timeslot, disable the button
+                        if (isIntersecting == "1")
+                        {
+                            disableIt = "1";
+                            break;
+                        }
+                        else
+                        {
+                            disableIt = "0";
+                        }
+                    }
+                }
+                <tr>
+                    @if (Model.times.ElementAtOrDefault(x).IsAvailable == true && disableIt == "0")
+                    { //generates enabled button if the timeslot is free
+                        <td>
+                            <button href="#" class="bookTime btn btn-sm btn-primary"
+                                    data-time="@Model.times.ElementAtOrDefault(x).StartTime"
+                                    data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
+                                    data-rate="@Model.times.ElementAtOrDefault(x).Rate"
+                                    data-ftID="@Model.times.ElementAtOrDefault(x).Id">
+                                @Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
+                            </button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)</button></td>
+                    }
+                </tr>
+            }
+        </table>
+    }
+
+    @if (Model.times.Count() > 32)
+    {
+        <table style="float:left" class="table table-striped col-md-2 table-sm ">
+            @for (int x = 32; x < (Model.times.Count() > 40 ? 40 : Model.times.Count()); x++)
+            {
+                var disableIt = "0";
+                var isIntersecting = "0";
+                var beforeCurrentDayTime = "0";
+
+                //checks if timeslot has already passed
+                beforeCurrentDayTime = Html.Action("isBeforeCurrentDayTime", "Home", new { time = Model.times.ElementAtOrDefault(x) }).ToString();
+                if (beforeCurrentDayTime == "1")
+                {
+                    disableIt = "1";
+                }
+
+                if (disableIt == "0")
+                {
+                    //checks each booking for the current facility in the selected week
+                    for (int y = 0; y < Model.bookings.Count(); y++)
+                    {
+
+                        //checks if booking intersects with current time slot
+                        isIntersecting = Html.Action("getIntersection", "Home",
+                        new { booking = Model.bookings.ElementAtOrDefault(y), time = Model.times.ElementAtOrDefault(x) }).ToString();
+
+                        //if a booking exists during the timeslot, disable the button
+                        if (isIntersecting == "1")
+                        {
+                            disableIt = "1";
+                            break;
+                        }
+                        else
+                        {
+                            disableIt = "0";
+                        }
+                    }
+                }
+                <tr>
+                    @if (Model.times.ElementAtOrDefault(x).IsAvailable == true && disableIt == "0")
+                    { //generates enabled button if the timeslot is free
+                        <td>
+                            <button href="#" class="bookTime btn btn-sm btn-primary"
+                                    data-time="@Model.times.ElementAtOrDefault(x).StartTime"
+                                    data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
+                                    data-rate="@Model.times.ElementAtOrDefault(x).Rate"
+                                    data-ftID="@Model.times.ElementAtOrDefault(x).Id">
+                                @Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
+                            </button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)</button></td>
+                    }
+                </tr>
+            }
+        </table>
+    }
+    @if (Model.times.Count() > 40)
+    {
+        <table style="float:left" class="table table-striped col-md-2 table-sm ">
+            @for (int x = 40; x < (Model.times.Count() > 48 ? 48 : Model.times.Count()); x++)
+            {
+                var disableIt = "0";
+                var isIntersecting = "0";
+                var beforeCurrentDayTime = "0";
+
+                //checks if timeslot has already passed
+                beforeCurrentDayTime = Html.Action("isBeforeCurrentDayTime", "Home", new { time = Model.times.ElementAtOrDefault(x) }).ToString();
+                if (beforeCurrentDayTime == "1")
+                {
+                    disableIt = "1";
+                }
+
+                if (disableIt == "0")
+                {
+                    //checks each booking for the current facility in the selected week
+                    for (int y = 0; y < Model.bookings.Count(); y++)
+                    {
+
+                        //checks if booking intersects with current time slot
+                        isIntersecting = Html.Action("getIntersection", "Home",
+                        new { booking = Model.bookings.ElementAtOrDefault(y), time = Model.times.ElementAtOrDefault(x) }).ToString();
+
+                        //if a booking exists during the timeslot, disable the button
+                        if (isIntersecting == "1")
+                        {
+                            disableIt = "1";
+                            break;
+                        }
+                        else
+                        {
+                            disableIt = "0";
+                        }
+                    }
+                }
+                <tr>
+                    @if (Model.times.ElementAtOrDefault(x).IsAvailable == true && disableIt == "0")
+                    { //generates enabled button if the timeslot is free
+                        <td>
+                            <button href="#" class="bookTime btn btn-sm btn-primary"
+                                    data-time="@Model.times.ElementAtOrDefault(x).StartTime"
+                                    data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
+                                    data-rate="@Model.times.ElementAtOrDefault(x).Rate"
+                                    data-ftID="@Model.times.ElementAtOrDefault(x).Id">
+                                @Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
+                            </button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)</button></td>
+                    }
+                </tr>
+            }
+        </table>
+    }
+</div>
 
 <div>
     <h3>Start Time: </h3>
@@ -165,8 +368,10 @@
     <button href="#" disabled="disabled" id="confirmStart" class="confirmStart btn btn-sm btn-primary">Confirm Start</button>
     <h3>End Time: </h3>
     <p id="end">Choose End Time</p>
+    <h3>Cost: </h3>
+    <p id="cost">-</p>
     <button href="#" disabled="disabled" id="confirmEnd" class="confirmEnd btn btn-sm btn-primary">Confirm End</button>
-    <button href="#" disabled="disabled" id="cancelBooking" class="cancelBooking btn btn-sm btn-primary">Cancel</button>
+    @Html.ActionLink("Cancel", "ViewFacility", new { id = Model.times.FirstOrDefault().FacilityId }, new { @class = "cancelBooking btn btn-sm btn-primary", @style = "color:white", @id = "cancelBooking" })
     <button href="#" disabled="disabled" id="submitBooking" class="submitBooking btn btn-sm btn-primary">Submit</button>
 
 </div>
@@ -176,36 +381,59 @@
     $(function () {
         $('.bookTime').click(function () {
 
+            $('.bookTime').css("background-color", "#007bff");
+
             var $buttonClicked = $(this);
             var confirmStartDisabled = $('#confirmStart').is(':disabled');
             var confirmEndDisabled = $('#confirmEnd').is(':disabled');
             var timesConfirmedDisabled = $('#submitBooking').is(':disabled');
+
+            $buttonClicked.css("background-color", "green");
             var time = $buttonClicked.attr('data-time');
+            var timeEnd = $buttonClicked.attr('data-timeEnd');
 
-            $.ajax({
-                data: {
-                    time: time,
-                    confirmStartDisabled: confirmStartDisabled,
-                    confirmEndDisabled: confirmEndDisabled,
-                    timesConfirmedDisabled: timesConfirmedDisabled
-                },
-                success: function (partialView) {
-                    //checks for the initial state of the page (before any time slots have been selected)
-                    if (confirmStartDisabled == true && confirmEndDisabled == true
-                        && timesConfirmedDisabled == true) {
-                        $('#confirmStart').attr('disabled', false);
-                        $('#start').text(time);
+            //checks for the initial state of the page (before any time slots have been selected)
+            if (confirmStartDisabled == true && confirmEndDisabled == true
+                && timesConfirmedDisabled == true) {
+                $('#cancelBooking').attr('disabled', false);
+                $('#confirmStart').attr('disabled', false);
+                $('#start').text(time);
+                $('#end').text(timeEnd);
+            }
+            //checks whether the user is choosing the start or end time of the booking
+            //for choosing the start time
+            else if (confirmStartDisabled == false && confirmEndDisabled == true) {
+                $('#cancelBooking').attr('disabled', false);
+                $('#start').text(time);
+                $('#end').text(timeEnd);
+            }
+            //for choosing the end time
+            else if (confirmStartDisabled == true && confirmEndDisabled == false) {
+                $('#cancelBooking').attr('disabled', false);
+                $('#end').text(timeEnd);
+
+                $('.bookTime').each(function (i) {
+                    var time = $(this).attr('data-time');
+
+                    //Once the starting time slot is found, iterates through until the end time slot is found, coloring the buttons that are part of the booking green
+                    if (time == $('#start').text()) {
+                        $('.bookTime').each(function (j) {
+                            if (j < i) return true;
+
+                            var timeEnd = $(this).attr('data-timeEnd');
+                            $(this).css("background-color", "green");
+
+                            if (timeEnd == $('#end').text())
+                                return false;
+                        });
+                        return false;
                     }
-                    //checks whether the user is choosing the start or end time of the booking
-                    else if (confirmStartDisabled == false && confirmEndDisabled == true)
-                        $('#start').text(time);
-                    else if (confirmStartDisabled == true && confirmEndDisabled == false)
-                        $('#end').text(time);
-                }
+                });
 
-            });
+            }
 
         });
+
     });
 
 </script>
@@ -214,19 +442,18 @@
     $(function () {
         $('#confirmStart').click(function () {
 
-            var $buttonClicked = $(this);
+            //disables confirm start button, enables confirm end button
             $('#confirmStart').attr('disabled', true);
             $('#confirmEnd').attr('disabled', false);
-            var StartTime = $('#start').text();
 
-            $.ajax({
-                url: '/Home/confirmStart',
-                type: 'POST',
-                data: {
-                    StartTime: StartTime
-                },
-                success: function (partialView) {
-                }
+            //iterates through all the bookTime buttons, diabling all of them up to the selected start time slot
+            $('.bookTime').each(function () {
+                var time = $(this).attr('data-time');
+
+                $(this).attr('disabled', true);
+
+                if (time == $('#start').text())
+                    return false;
             });
 
         });
@@ -239,18 +466,40 @@
     $(function () {
         $('#confirmEnd').click(function () {
 
-            var $buttonClicked = $(this);
+            //enables the submit button and disables all other buttons
             $('#confirmStart').attr('disabled', true);
             $('#confirmEnd').attr('disabled', true);
+            $('#submitBooking').attr('disabled', false);
+            $('.bookTime').attr('disabled', true);
+
+        });
+    });
+
+</script>
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('#submitBooking').click(function () {
+
+            var StartTime = $('#start').text();
             var EndTime = $('#end').text();
 
+            //submits booking for insertion into the db
+            $('#submitBooking').attr('disabled', true);
+            var cost = "20.00";
             $.ajax({
-                url: '/Home/confirmEnd',
+                url: '/Home/makeBooking',
                 type: 'POST',
                 data: {
-                    EndTime: EndTime
+                    StartTime: StartTime,
+                    EndTime: EndTime,
+                    cost: cost
                 },
-                success: function (partialView) {
+                success: function () {
+                    //returns user to the facility view page upon submission
+                    var url = '@Url.Action("ViewFacility", "Home", new { id = Model.times.ElementAtOrDefault(0).FacilityId})';
+                    window.location.href = url;
                 }
             });
 

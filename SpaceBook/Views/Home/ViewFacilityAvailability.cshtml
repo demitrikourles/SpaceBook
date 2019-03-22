@@ -1,43 +1,190 @@
-﻿@model IEnumerable<SpaceBook.Models.FacilityTime>
+﻿@model SpaceBook.ViewModels.facilityTimesAndBookingsViewModel
 
 <br />
 
-<h2>@Model.FirstOrDefault().Facility.Name</h2>
+<h2>@Model.times.FirstOrDefault().Facility.Name</h2>
+<div class="container">
+    <div class="row">
+        @{
+            //gets the current day of the week
+            int day_of_week_now = (int)DateTime.Now.DayOfWeek == 0 ? 7 : (int)DateTime.Now.DayOfWeek;
+            //this version of the day of the week is used in the javascript below
+            var day_of_week_now_string = day_of_week_now.ToString();
 
-<table class="table">
-    <tr>
-        <th>
-            <button href="#" class="showTimes btn btn-primary" data-facilityID="@Model.FirstOrDefault().FacilityId" data-day="1">Monday</button>
-            <button href="#" class="showTimes btn btn-primary" data-facilityID="@Model.FirstOrDefault().FacilityId" data-day="2">Tuesday</button>
-            <button href="#" class="showTimes btn btn-primary" data-facilityID="@Model.FirstOrDefault().FacilityId" data-day="3">Wednesday</button>
-            <button href="#" class="showTimes btn btn-primary" data-facilityID="@Model.FirstOrDefault().FacilityId" data-day="4">Thursday</button>
-            <button href="#" class="showTimes btn btn-primary" data-facilityID="@Model.FirstOrDefault().FacilityId" data-day="5">Friday</button>
-            <button href="#" class="showTimes btn btn-primary" data-facilityID="@Model.FirstOrDefault().FacilityId" data-day="6">Saturday</button>
-            <button href="#" class="showTimes btn btn-primary" data-facilityID="@Model.FirstOrDefault().FacilityId" data-day="7">Sunday</button>
-        </th>
-    </tr>
-</table>
+            //day_of_week_now_string = "@Html.Raw(HttpUtility.JavaScriptStringEncode(day_of_week_now_string))";
+            //uses DateTime.Now to get the current week's monday
+            DateTime refMonday = DateTime.Now.AddDays((Convert.ToInt32(DayOfWeek.Monday) - day_of_week_now));
+            refMonday = new DateTime(refMonday.Year, refMonday.Month, refMonday.Day, 0, 0, 0);
 
-<div id="showPartialView" style="display:none">
-    @Html.Partial("PartialViewTimes", Model)
+
+            //comparison checks if the selected week is before or equal to the current week (Compare <= 0)
+            //Compare = 0 -> equal, Compare < 0 -> t1 is earlier than t2, Compare > 0 -> t1 is later than t2
+            var isCurrentWeek = (bool)(DateTime.Compare(Model.selectedWeek, refMonday) <= 0);
+            //this version of the current week comparison result is used in the javascript below
+            var isCurrentWeekString = (Convert.ToInt32(isCurrentWeek)).ToString();
+
+            //disables the "prev" button if it is the current week since you cannot make bookings in the past
+            if (isCurrentWeek)
+            {
+                <button href="#" disabled="disabled" id="weekNavPrev" class="weekNav btn btn-primary"><</button>
+
+            }
+            else
+            {
+                @Html.ActionLink("<", "ViewFacilityAvailability", new { facilityId = Model.times.FirstOrDefault().FacilityId, weekIncr = -1 }, new { @class = "weekNav btn btn-primary", @style = "color:white", @id = "weekNavPrev" })
+
+            }
+        }
+        <div class="col-md-3">
+            <div>
+                <h4 class="align-content-center" id="currentWeekText">
+                    Week of:
+                    @Model.selectedWeek.Month.ToString()/@Model.selectedWeek.Day.ToString()/@Model.selectedWeek.Year.ToString()
+                </h4>
+            </div>
+        </div>
+        @Html.ActionLink(">", "ViewFacilityAvailability", new { facilityId = Model.times.FirstOrDefault().FacilityId, weekIncr = 1 }, new { @class = "weekNav btn btn-primary", @style = "color:white", @id = "weekNavNext" })
+    </div>
+</div>
+<div class="col justify-content-center">
+    <table class="table">
+        <tr>
+            <th>
+                @if (1 < day_of_week_now && DateTime.Compare(Model.selectedWeek, refMonday) <= 0)
+                {
+                    <button href="#" disabled="disabled" id="Monday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="1">Monday</button>
+                }
+                else
+                {
+                    <button href="#" background-color="red" id="Monday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="1">Monday</button>
+                }
+                @if (2 < day_of_week_now && DateTime.Compare(Model.selectedWeek, refMonday) <= 0)
+                {
+                    <button href="#" disabled="disabled" id="Tuesday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="2">Tuesday</button>
+                }
+                else
+                {
+                    <button href="#" id="Tuesday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="2">Tuesday</button>
+                }
+                @if (3 < day_of_week_now && DateTime.Compare(Model.selectedWeek, refMonday) <= 0)
+                {
+                    <button href="#" disabled="disabled" id="Wednesday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="3">Wednesday</button>
+                }
+                else
+                {
+                    <button href="#" id="Wednesday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="3">Wednesday</button>
+                }
+                @if (4 < day_of_week_now && DateTime.Compare(Model.selectedWeek, refMonday) <= 0)
+                {
+                    <button href="#" disabled="disabled" id="Thursday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="4">Thursday</button>
+                }
+                else
+                {
+                    <button href="#" id="Thursday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="4">Thursday</button>
+                }
+                @if (5 < day_of_week_now && DateTime.Compare(Model.selectedWeek, refMonday) <= 0)
+                {
+                    <button href="#" disabled="disabled" id="Friday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="5">Friday</button>
+                }
+                else
+                {
+                    <button href="#" id="Friday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="5">Friday</button>
+                }
+                @if (6 < day_of_week_now && DateTime.Compare(Model.selectedWeek, refMonday) <= 0)
+                {
+                    <button href="#" disabled="disabled" id="Saturday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="6">Saturday</button>
+                }
+                else
+                {
+                    <button href="#" id="Saturday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="6">Saturday</button>
+                }
+                @if (7 == day_of_week_now)
+                {
+                    <button href="#" id="Sunday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="7">Sunday</button>
+                }
+                else
+                {
+                    <button href="#" id="Sunday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="7">Sunday</button>
+                }
+            </th>
+        </tr>
+    </table>
+    <div class="col justify-content-center" id="showPartialView">
+        @if (DateTime.Compare(Model.selectedWeek, refMonday) == 0)
+        {
+            //if the current week is the same as the selected week, the partial view for the current date will be generated
+            @Html.Action("PartialViewTimes", "Home", new { day = day_of_week_now, facilityId = Model.times.FirstOrDefault().FacilityId })
+        }
+        else
+        {
+            //if the current week is not the same as the selected week, the partial view for the selected week's Monday will be generated
+            @Html.Action("PartialViewTimes", "Home", new { day = 1, facilityId = Model.times.FirstOrDefault().FacilityId })
+        }
+    </div>
 </div>
 
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
     $(function () {
         $('.showTimes').click(function () {
+
             var $buttonClicked = $(this);
+
+            //selection is indicated by button color so the focus indicator is removed
+            $buttonClicked.blur();
+
+            //resets all weekday buttons to their original color
+            $('.showTimes').css("background-color", "#007bff");
+            //changes the selected button color to red
+            $buttonClicked.css("background-color", "red");
+
             var day = $buttonClicked.attr('data-day');
             var facilityId = $buttonClicked.attr('data-facilityId');
+
             $.ajax({
                 url: '@Url.Action("PartialViewTimes")',
                 type: 'GET',
-                data: { day: day, facilityId : facilityId },
+                data: { day: day, facilityId : facilityId},
                 success: function (partialView) {
                     $('#showPartialView').html(partialView);
                     $('#showPartialView').show();
                 }
             });
+
+        });
+    });
+</script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(document).ready(function () {
+
+            //stores c# values found at the time of the page loading
+            var day_comp = @day_of_week_now_string;
+            var isCurrentWeek_comp = @isCurrentWeekString;
+
+            //resets all weekday buttons to their original color
+            $('.showTimes').css("background-color", "#007bff");
+            //if the current week is not the same as the selected week, Monday will be highlighted by default
+            if (isCurrentWeek_comp == "0")
+                $('#Monday').css("background-color", "red");
+            //If the current week is also the same as the selected week, the button highlighted will correspond to the current day
+            else if (isCurrentWeek_comp == "1") {
+                if(day_comp == "1")
+                    $('#Monday').css("background-color", "red");
+                else if (day_comp == "2")
+                    $('#Tuesday').css("background-color", "red");
+                else if (day_comp == "3")
+                    $('#Wednesday').css("background-color", "red");
+                else if (day_comp == "4")
+                    $('#Thursday').css("background-color", "red");
+                else if (day_comp == "5")
+                    $('#Friday').css("background-color", "red");
+                else if (day_comp == "6")
+                    $('#Saturday').css("background-color", "red");
+                else if (day_comp == "7")
+                    $('#Sunday').css("background-color", "red");
+            }
         });
     });
 </script>
