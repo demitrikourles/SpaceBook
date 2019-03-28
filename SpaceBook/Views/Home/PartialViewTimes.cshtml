@@ -447,13 +447,23 @@
             $('#confirmEnd').attr('disabled', false);
 
             //iterates through all the bookTime buttons, diabling all of them up to the selected start time slot
-            $('.bookTime').each(function () {
+            $('.bookTime').each(function (i) {
                 var time = $(this).attr('data-time');
-
                 $(this).attr('disabled', true);
 
-                if (time == $('#start').text())
+                if (time == $('#start').text()) {
+                    //makes sure to enable the start time time slot incase the user only wants to book a half hour time
+                    $(this).attr('disabled', false);
+
+                    //Iterates through the remaining enabled buttons and updates their times to reflect the end time of each time slot
+                    $('.bookTime').each(function (j) {
+                        if (j <= i) return true;
+
+                        $(this).text($(this).attr('data-timeEnd'));
+                    });
+
                     return false;
+                }
             });
 
         });
