@@ -697,7 +697,7 @@ namespace SpaceBook.Controllers
                     
 
                     context.Facilities.Add(newFacility);
-                    //CreateTimeSlots(newFacility, dayList); //Creation of time slots
+                    CreateTimeSlots(newFacility, dayList); //Creation of time slots
                     context.SaveChanges();
 
                     Session["FacilityId"] = newFacility.Id;
