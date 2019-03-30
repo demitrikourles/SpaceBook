@@ -20,5 +20,6 @@ namespace SpaceBook.Models
     
         public virtual FacilityType FacilityType { get; set; }
         public virtual TagType TagType { get; set; }
+        public virtual Facility Facility { get; set; }
     }
 }

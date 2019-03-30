@@ -207,11 +207,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_TagAssignment_FacilityType">
-          <End Role="FacilityType" Type="Self.FacilityType" Multiplicity="1" />
+        <Association Name="FK_TagAssignment_Facility">
+          <End Role="Facility" Type="Self.Facility" Multiplicity="1" />
           <End Role="TagAssignment" Type="Self.TagAssignment" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="FacilityType">
+            <Principal Role="Facility">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="TagAssignment">
@@ -271,8 +271,8 @@
             <End Role="User" EntitySet="User" />
             <End Role="Review" EntitySet="Review" />
           </AssociationSet>
-          <AssociationSet Name="FK_TagAssignment_FacilityType" Association="Self.FK_TagAssignment_FacilityType">
-            <End Role="FacilityType" EntitySet="FacilityType" />
+          <AssociationSet Name="FK_TagAssignment_Facility" Association="Self.FK_TagAssignment_Facility">
+            <End Role="Facility" EntitySet="Facility" />
             <End Role="TagAssignment" EntitySet="TagAssignment" />
           </AssociationSet>
           <AssociationSet Name="FK_TagAssignment_TagType" Association="Self.FK_TagAssignment_TagType">
@@ -322,6 +322,7 @@
           <Property Name="Province" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="FacilityTimes" Relationship="SpaceBookModel.FK_FacilityTime_Facility" FromRole="Facility" ToRole="FacilityTime" />
+          <NavigationProperty Name="TagAssignments" Relationship="SpaceBookModel.FK_TagAssignment_Facility" FromRole="Facility" ToRole="TagAssignment" />
         </EntityType>
         <EntityType Name="FacilityType">
           <Key>
@@ -373,6 +374,7 @@
           <Property Name="FacilityId" Type="Int32" Nullable="false" />
           <NavigationProperty Name="FacilityType" Relationship="Self.FK_TagAssignment_FacilityType" FromRole="TagAssignment" ToRole="FacilityType" />
           <NavigationProperty Name="TagType" Relationship="Self.FK_TagAssignment_TagType" FromRole="TagAssignment" ToRole="TagType" />
+          <NavigationProperty Name="Facility" Relationship="SpaceBookModel.FK_TagAssignment_Facility" FromRole="TagAssignment" ToRole="Facility" />
         </EntityType>
         <EntityType Name="TagType">
           <Key>
@@ -538,6 +540,10 @@
             <End Role="Facility" EntitySet="Facilities" />
             <End Role="FacilityTime" EntitySet="FacilityTimes" />
           </AssociationSet>
+          <AssociationSet Name="FK_TagAssignment_Facility" Association="SpaceBookModel.FK_TagAssignment_Facility">
+            <End Role="Facility" EntitySet="Facilities" />
+            <End Role="TagAssignment" EntitySet="TagAssignments" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="FacilityTime">
           <Key>
@@ -573,6 +579,18 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="FacilityTime">
+              <PropertyRef Name="FacilityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TagAssignment_Facility">
+          <End Type="SpaceBookModel.Facility" Role="Facility" Multiplicity="1" />
+          <End Type="SpaceBookModel.TagAssignment" Role="TagAssignment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Facility">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="TagAssignment">
               <PropertyRef Name="FacilityId" />
             </Dependent>
           </ReferentialConstraint>

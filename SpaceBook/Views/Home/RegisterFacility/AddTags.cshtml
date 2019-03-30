@@ -1,0 +1,57 @@
+﻿@model IEnumerable<SpaceBook.Models.TagType>
+
+@{
+    ViewBag.Title = "AddTags";
+}
+
+<h1 style="margin: 2% 0% 2% 0%" align="center">Facility Successfully Registered</h1>
+
+<div class="row justify-content-center" style="margin: 2% 0% 2% 0%">
+    <div class="col-8">
+        <div class="progress" style="height: 25px;">
+            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0"
+                 aria-valuemin="0" aria-valuemax="100" style="width:100%">
+                Add Tags (Optional)
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("RegisterFacilityAddTags", "Home", FormMethod.Post, new { id = "addTagsForm" })) {
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <p style="margin: 0% 0% 5% 0%" align="center">Select tags to assign to your facility, or click Finish to continue to home</p>
+            @foreach (var item in Model) {
+            <div class="form-group">
+                <label style="display:inline-block; width: 75px">@Html.DisplayFor(modelItem => item.Name) </label>
+                <input style="vertical-align:middle" type="checkbox" class="custom-switch col-md-5 boxes">
+            </div>
+            }
+            <hr />
+
+            <div class="form-group" style="text-align:center">
+                <input type="submit" value="Finish" class="btn btn-primary" style="margin-left: 5%" />
+            </div>
+
+            <input type="hidden" id="checkedTags" name="checkedTags" value="" />
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+
+    var tags = [];
+
+    $('#addTagsForm').submit(function () {
+        var x = document.getElementsByClassName("boxes");
+        for (var i = 0; i < x.length; i++) {
+            tags.push(x[i].checked);
+        }
+
+        $('#checkedTags').val(tags);
+        return true;
+    });
+</script>
+
+
+

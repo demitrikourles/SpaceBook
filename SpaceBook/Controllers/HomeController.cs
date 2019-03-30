@@ -694,12 +694,42 @@ namespace SpaceBook.Controllers
                     newFacility.Country = facilityParam.Country;
                     newFacility.ActiveFlag = true;
                     newFacility.Type = 1; //Need to set up types
+                    
 
                     context.Facilities.Add(newFacility);
-                    CreateTimeSlots(newFacility, dayList); //Creation of time slots
+                    //CreateTimeSlots(newFacility, dayList); //Creation of time slots
                     context.SaveChanges();
+
+                    Session["FacilityId"] = newFacility.Id;
+
+                    List <TagType> viewTypes = context.TagTypes.ToList();
+                    return View("~/Views/Home/RegisterFacility/AddTags.cshtml", viewTypes);
                 }
 
+                return RedirectToAction("index");
+            }
+        }
+
+        public ActionResult RegisterFacilityAddTags() 
+        {
+            using (var context = new SpaceBookEntities1()) 
+            {
+                var facilityId = Convert.ToInt32(Session["FacilityId"]);
+                List<string> tagIsCheckedList = Request.Form["checkedTags"].Split(',').ToList<string>();
+                List<TagType> Tags = context.TagTypes.ToList();
+
+                for (int i = 0; i < tagIsCheckedList.Count; i++) 
+                {
+                    if (tagIsCheckedList[i] == "true") {
+                        TagAssignment newTagAssignment = new TagAssignment();
+                        newTagAssignment.FacilityId = facilityId;
+                        newTagAssignment.TagId = Tags[i].Id;
+
+                        context.TagAssignments.Add(newTagAssignment);
+                    }
+                }
+
+                context.SaveChanges();
                 return RedirectToAction("index");
             }
         }
