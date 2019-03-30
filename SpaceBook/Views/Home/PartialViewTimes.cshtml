@@ -49,7 +49,7 @@
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
                                     data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
-                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value
+                                    data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
                                     data-available="available">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                             </button>
@@ -63,7 +63,7 @@
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
                                     data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
-                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value>
+                                    data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                             </button>
                         </td>
@@ -120,7 +120,7 @@
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
                                     data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
-                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value
+                                    data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
                                     data-available="available">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                             </button>
@@ -134,7 +134,7 @@
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
                                     data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
-                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value>
+                                    data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                             </button>
                         </td>
@@ -191,7 +191,7 @@
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
                                     data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
-                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value
+                                    data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
                                     data-available="available">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                             </button>
@@ -205,7 +205,7 @@
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
                                     data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
-                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value>
+                                    data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                             </button>
                         </td>
@@ -262,7 +262,7 @@
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
                                     data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
-                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value
+                                    data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
                                     data-available="available">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                             </button>
@@ -276,7 +276,7 @@
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
                                     data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
-                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value>
+                                    data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                             </button>
                         </td>
@@ -333,7 +333,7 @@
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
                                     data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
-                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value
+                                    data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
                                     data-available="available">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                             </button>
@@ -347,7 +347,7 @@
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
                                     data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
-                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value>
+                                    data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                             </button>
                         </td>
@@ -403,7 +403,7 @@
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
                                     data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
-                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value
+                                    data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
                                     data-available="available">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                             </button>
@@ -417,7 +417,7 @@
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
                                     data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
-                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value>
+                                    data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                             </button>
                         </td>
@@ -435,7 +435,7 @@
     <h3>End Time: </h3>
     <p id="end">Choose End Time</p>
     <h3>Cost: </h3>
-    <p id="cost">-</p>
+    <p id="cost" data-totalCost="0.00">-</p>
     <button href="#" disabled="disabled" id="confirmEnd" data-realEndTime="ConfirmEnd" class="confirmEnd btn btn-sm btn-primary">Confirm End</button>
     @Html.ActionLink("Cancel", "ViewFacility", new { id = Model.times.FirstOrDefault().FacilityId }, new { @class = "cancelBooking btn btn-sm btn-primary", @style = "color:white", @id = "cancelBooking" })
     <button href="#" disabled="disabled" id="submitBooking" class="submitBooking btn btn-sm btn-primary">Submit</button>
@@ -468,6 +468,10 @@
                 $('#start').attr("data-realStartTime", $(this).attr('data-time'));
                 $('#end').text(timeEnd);
                 $('#end').attr("data-realEndTime", $(this).attr('data-timeEnd'));
+
+                //sets the cost to the rate of the selected timeslot
+                $('#cost').text($(this).attr('data-rate'));
+                $('#cost').attr('data-totalCost', $(this).attr('data-rate'));
             }
             //checks whether the user is choosing the start or end time of the booking
             //for choosing the start time
@@ -477,6 +481,10 @@
                 $('#start').attr("data-realStartTime", $(this).attr('data-time'));
                 $('#end').text(timeEnd);
                 $('#end').attr("data-realEndTime", $(this).attr('data-timeEnd'));
+
+                //sets the cost to the rate of the selected timeslot
+                $('#cost').text($(this).attr('data-rate'));
+                $('#cost').attr('data-totalCost', $(this).attr('data-rate'));
             }
             //for choosing the end time
             else if (confirmStartDisabled == true && confirmEndDisabled == false) {
@@ -484,10 +492,14 @@
                 $('#end').text(timeEnd);
                 $('#end').attr("data-realEndTime", $(this).attr('data-timeEnd'));
 
+                //resets the cost of the booking
+                $('#cost').attr('data-totalCost', "0.00");
+
                 $('.bookTime').each(function (i) {
                     var time = $(this).attr('data-time');
 
                     //Once the starting time slot is found, iterates through until the end time slot is found, coloring the buttons that are part of the booking green
+                    //also calculates the total cost of the booking given the selected time
                     if (time == $('#start').attr("data-realStartTime")) {
                         $('.bookTime').each(function (j) {
                             if (j < i) return true;
@@ -495,6 +507,21 @@
                             var timeEnd = $(this).attr('data-timeEnd');
                             $(this).css("background-color", "green");
 
+                            //updates the cost of the booking
+
+                            //gets the rate of the current time slot
+                            var timeSlotRate = $(this).attr('data-rate');
+                            //gets the current total cost of the booking
+                            var totalCost = $('#cost').attr('data-totalCost');
+                            //adds the rate of the time slot to the total cost of the booking
+                            var floatCost = (parseFloat(totalCost, 10) + parseFloat(timeSlotRate, 10));
+
+                            //sets the totalCost data attribute of the cost to string representing a float with 2 decimal places and updates the text
+                            totalCost = floatCost.toFixed(2).toString();
+                            $('#cost').text(totalCost.toString());
+                            $('#cost').attr('data-totalCost', totalCost.toString());
+
+                            //once the currently selected end time of the booking is reached, stop colouring time slots green and exit
                             if (timeEnd == $('#end').attr("data-realEndTime"))
                                 return false;
                         });
@@ -565,10 +592,9 @@
 
             var StartTime = $('#start').attr('data-realStartTime');
             var EndTime = $('#end').attr('data-realEndTime');
-
+            var cost = $('#cost').attr('data-totalCost');
             //submits booking for insertion into the db
             $('#submitBooking').attr('disabled', true);
-            var cost = "20.00";
             $.ajax({
                 url: '/Home/makeBooking',
                 type: 'POST',
