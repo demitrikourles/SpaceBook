@@ -42,20 +42,31 @@
                 }
                 <tr>
                     @if (Model.times.ElementAtOrDefault(x).IsAvailable == true && disableIt == "0")
-                    { //generates enabled button if the timeslot is free
+                    { //generates enabled button if the timeslot is free Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
                         <td>
                             <button href="#" class="bookTime btn btn-sm btn-primary"
                                     data-time="@Model.times.ElementAtOrDefault(x).StartTime"
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
-                                    data-rate="@Model.times.ElementAtOrDefault(x).Rate"
-                                    data-ftID="@Model.times.ElementAtOrDefault(x).Id">
-                                @Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
+                                    data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value
+                                    data-available="available">
+                                @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                             </button>
                         </td>
                     }
                     else
                     {
-                        <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)</button></td>
+                        <td>
+                            <button disabled href="#" class="bookTime btn btn-sm btn-primary"
+                                    data-time="@Model.times.ElementAtOrDefault(x).StartTime"
+                                    data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
+                                    data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value>
+                                @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
+                            </button>
+                        </td>
                     }
                 </tr>
             }
@@ -102,20 +113,31 @@
                 }
                 <tr>
                     @if (Model.times.ElementAtOrDefault(x).IsAvailable == true && disableIt == "0")
-                    { //generates enabled button if the timeslot is free
+                    { //generates enabled button if the timeslot is free Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
                         <td>
                             <button href="#" class="bookTime btn btn-sm btn-primary"
                                     data-time="@Model.times.ElementAtOrDefault(x).StartTime"
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
-                                    data-rate="@Model.times.ElementAtOrDefault(x).Rate"
-                                    data-ftID="@Model.times.ElementAtOrDefault(x).Id">
-                                @Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
+                                    data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value
+                                    data-available="available">
+                                @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                             </button>
                         </td>
                     }
                     else
                     {
-                        <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)</button></td>
+                        <td>
+                            <button disabled href="#" class="bookTime btn btn-sm btn-primary"
+                                    data-time="@Model.times.ElementAtOrDefault(x).StartTime"
+                                    data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
+                                    data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value>
+                                @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
+                            </button>
+                        </td>
                     }
                 </tr>
             }
@@ -162,20 +184,31 @@
                 }
                 <tr>
                     @if (Model.times.ElementAtOrDefault(x).IsAvailable == true && disableIt == "0")
-                    { //generates enabled button if the timeslot is free
+                    { //generates enabled button if the timeslot is free Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
                         <td>
                             <button href="#" class="bookTime btn btn-sm btn-primary"
                                     data-time="@Model.times.ElementAtOrDefault(x).StartTime"
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
-                                    data-rate="@Model.times.ElementAtOrDefault(x).Rate"
-                                    data-ftID="@Model.times.ElementAtOrDefault(x).Id">
-                                @Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
+                                    data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value
+                                    data-available="available">
+                                @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                             </button>
                         </td>
                     }
                     else
                     {
-                        <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)</button></td>
+                        <td>
+                            <button disabled href="#" class="bookTime btn btn-sm btn-primary"
+                                    data-time="@Model.times.ElementAtOrDefault(x).StartTime"
+                                    data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
+                                    data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value>
+                                @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
+                            </button>
+                        </td>
                     }
                 </tr>
             }
@@ -222,20 +255,31 @@
                 }
                 <tr>
                     @if (Model.times.ElementAtOrDefault(x).IsAvailable == true && disableIt == "0")
-                    { //generates enabled button if the timeslot is free
+                    { //generates enabled button if the timeslot is free Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
                         <td>
                             <button href="#" class="bookTime btn btn-sm btn-primary"
                                     data-time="@Model.times.ElementAtOrDefault(x).StartTime"
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
-                                    data-rate="@Model.times.ElementAtOrDefault(x).Rate"
-                                    data-ftID="@Model.times.ElementAtOrDefault(x).Id">
-                                @Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
+                                    data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value
+                                    data-available="available">
+                                @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                             </button>
                         </td>
                     }
                     else
                     {
-                        <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)</button></td>
+                        <td>
+                            <button disabled href="#" class="bookTime btn btn-sm btn-primary"
+                                    data-time="@Model.times.ElementAtOrDefault(x).StartTime"
+                                    data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
+                                    data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value>
+                                @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
+                            </button>
+                        </td>
                     }
                 </tr>
             }
@@ -282,20 +326,31 @@
                 }
                 <tr>
                     @if (Model.times.ElementAtOrDefault(x).IsAvailable == true && disableIt == "0")
-                    { //generates enabled button if the timeslot is free
+                    { //generates enabled button if the timeslot is free Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
                         <td>
                             <button href="#" class="bookTime btn btn-sm btn-primary"
                                     data-time="@Model.times.ElementAtOrDefault(x).StartTime"
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
-                                    data-rate="@Model.times.ElementAtOrDefault(x).Rate"
-                                    data-ftID="@Model.times.ElementAtOrDefault(x).Id">
-                                @Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
+                                    data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value
+                                    data-available="available">
+                                @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                             </button>
                         </td>
                     }
                     else
                     {
-                        <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)</button></td>
+                        <td>
+                            <button disabled href="#" class="bookTime btn btn-sm btn-primary"
+                                    data-time="@Model.times.ElementAtOrDefault(x).StartTime"
+                                    data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
+                                    data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value>
+                                @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
+                            </button>
+                        </td>
                     }
                 </tr>
             }
@@ -341,20 +396,31 @@
                 }
                 <tr>
                     @if (Model.times.ElementAtOrDefault(x).IsAvailable == true && disableIt == "0")
-                    { //generates enabled button if the timeslot is free
+                    { //generates enabled button if the timeslot is free Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
                         <td>
                             <button href="#" class="bookTime btn btn-sm btn-primary"
                                     data-time="@Model.times.ElementAtOrDefault(x).StartTime"
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
-                                    data-rate="@Model.times.ElementAtOrDefault(x).Rate"
-                                    data-ftID="@Model.times.ElementAtOrDefault(x).Id">
-                                @Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
+                                    data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value
+                                    data-available="available">
+                                @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                             </button>
                         </td>
                     }
                     else
                     {
-                        <td><button disabled href="#" class="btn btn-sm btn-primary">@Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)</button></td>
+                        <td>
+                            <button disabled href="#" class="bookTime btn btn-sm btn-primary"
+                                    data-time="@Model.times.ElementAtOrDefault(x).StartTime"
+                                    data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
+                                    data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-rate=@Model.times.ElementAtOrDefault(x).Rate.Value>
+                                @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
+                            </button>
+                        </td>
                     }
                 </tr>
             }
@@ -365,12 +431,12 @@
 <div>
     <h3>Start Time: </h3>
     <p id="start">Choose Start Time</p>
-    <button href="#" disabled="disabled" id="confirmStart" class="confirmStart btn btn-sm btn-primary">Confirm Start</button>
+    <button href="#" disabled="disabled" id="confirmStart" data-realStartTime="ConfirmStart" class="confirmStart btn btn-sm btn-primary">Confirm Start</button>
     <h3>End Time: </h3>
     <p id="end">Choose End Time</p>
     <h3>Cost: </h3>
     <p id="cost">-</p>
-    <button href="#" disabled="disabled" id="confirmEnd" class="confirmEnd btn btn-sm btn-primary">Confirm End</button>
+    <button href="#" disabled="disabled" id="confirmEnd" data-realEndTime="ConfirmEnd" class="confirmEnd btn btn-sm btn-primary">Confirm End</button>
     @Html.ActionLink("Cancel", "ViewFacility", new { id = Model.times.FirstOrDefault().FacilityId }, new { @class = "cancelBooking btn btn-sm btn-primary", @style = "color:white", @id = "cancelBooking" })
     <button href="#" disabled="disabled" id="submitBooking" class="submitBooking btn btn-sm btn-primary">Submit</button>
 
@@ -389,41 +455,47 @@
             var timesConfirmedDisabled = $('#submitBooking').is(':disabled');
 
             $buttonClicked.css("background-color", "green");
-            var time = $buttonClicked.attr('data-time');
-            var timeEnd = $buttonClicked.attr('data-timeEnd');
+            var time = $buttonClicked.attr('data-timeStartAdjusted');
+            var timeEnd = $buttonClicked.attr('data-timeEndAdjusted');
 
             //checks for the initial state of the page (before any time slots have been selected)
             if (confirmStartDisabled == true && confirmEndDisabled == true
                 && timesConfirmedDisabled == true) {
                 $('#cancelBooking').attr('disabled', false);
                 $('#confirmStart').attr('disabled', false);
+
                 $('#start').text(time);
+                $('#start').attr("data-realStartTime", $(this).attr('data-time'));
                 $('#end').text(timeEnd);
+                $('#end').attr("data-realEndTime", $(this).attr('data-timeEnd'));
             }
             //checks whether the user is choosing the start or end time of the booking
             //for choosing the start time
             else if (confirmStartDisabled == false && confirmEndDisabled == true) {
                 $('#cancelBooking').attr('disabled', false);
                 $('#start').text(time);
+                $('#start').attr("data-realStartTime", $(this).attr('data-time'));
                 $('#end').text(timeEnd);
+                $('#end').attr("data-realEndTime", $(this).attr('data-timeEnd'));
             }
             //for choosing the end time
             else if (confirmStartDisabled == true && confirmEndDisabled == false) {
                 $('#cancelBooking').attr('disabled', false);
                 $('#end').text(timeEnd);
+                $('#end').attr("data-realEndTime", $(this).attr('data-timeEnd'));
 
                 $('.bookTime').each(function (i) {
                     var time = $(this).attr('data-time');
 
                     //Once the starting time slot is found, iterates through until the end time slot is found, coloring the buttons that are part of the booking green
-                    if (time == $('#start').text()) {
+                    if (time == $('#start').attr("data-realStartTime")) {
                         $('.bookTime').each(function (j) {
                             if (j < i) return true;
 
                             var timeEnd = $(this).attr('data-timeEnd');
                             $(this).css("background-color", "green");
 
-                            if (timeEnd == $('#end').text())
+                            if (timeEnd == $('#end').attr("data-realEndTime"))
                                 return false;
                         });
                         return false;
@@ -451,15 +523,14 @@
                 var time = $(this).attr('data-time');
                 $(this).attr('disabled', true);
 
-                if (time == $('#start').text()) {
+                if (time == $('#start').attr('data-realStartTime')) {
                     //makes sure to enable the start time time slot incase the user only wants to book a half hour time
                     $(this).attr('disabled', false);
 
                     //Iterates through the remaining enabled buttons and updates their times to reflect the end time of each time slot
                     $('.bookTime').each(function (j) {
                         if (j <= i) return true;
-
-                        $(this).text($(this).attr('data-timeEnd'));
+                        $(this).text($(this).attr('data-timeEndAdjusted'));
                     });
 
                     return false;
@@ -492,8 +563,8 @@
     $(function () {
         $('#submitBooking').click(function () {
 
-            var StartTime = $('#start').text();
-            var EndTime = $('#end').text();
+            var StartTime = $('#start').attr('data-realStartTime');
+            var EndTime = $('#end').attr('data-realEndTime');
 
             //submits booking for insertion into the db
             $('#submitBooking').attr('disabled', true);

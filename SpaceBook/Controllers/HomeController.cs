@@ -278,6 +278,37 @@ namespace SpaceBook.Controllers
             }
         }
 
+        //returns a timespan in 12 hour format as a string with AM/PM indicator
+        public string AdjustTime(TimeSpan time)
+        {
+            string modifiedTime = " ";
+
+            //if the hour is midnight 12 hours are added, assign AM to the time
+            if (time.Hours == 0)
+            {
+                time = time.Add(new TimeSpan(12, 0, 0));
+                modifiedTime = time.ToString("hh':'mm' AM'");
+            }
+            //if the hour is noon, assign PM to the time
+            else if(time.Hours == 12)
+            {
+                modifiedTime = time.ToString("hh':'mm' PM'");
+            }
+            //If the time is after noon, adjust by 12 hours and assign PM to the time
+            else if(time.Hours > 12)
+            {
+                time = time.Subtract(new TimeSpan(12, 0, 0));
+                modifiedTime = time.ToString("hh':'mm' PM'");
+            }
+            //If the time is before noon, use AM
+            else
+            {
+                modifiedTime = time.ToString("hh':'mm' AM'");
+            }
+
+            return modifiedTime;
+        }
+
         [HttpGet]
         public ActionResult PostVenue()
         {
