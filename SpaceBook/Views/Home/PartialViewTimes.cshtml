@@ -444,7 +444,7 @@
     <h3>Cost: </h3>
     <p id="cost" data-totalCost="0.00">-</p>
     <button href="#" disabled="disabled" id="confirmEnd" data-realEndTime="ConfirmEnd" class="confirmEnd btn btn-sm btn-primary">Confirm End</button>
-    @Html.ActionLink("Cancel", "ViewFacility", new { id = Model.times.FirstOrDefault().FacilityId }, new { @class = "cancelBooking btn btn-sm btn-primary", @style = "color:white", @id = "cancelBooking" })
+    @Html.ActionLink("Cancel", "ViewFacilityAvailability", new { facilityId = Model.times.FirstOrDefault().FacilityId, weekIncr = 0}, new { @class = "cancelBooking btn btn-sm btn-primary", @style = "color:white", @id = "cancelBooking" })
     <button href="#" disabled="disabled" id="submitBooking" class="submitBooking btn btn-sm btn-primary">Submit</button>
 
 </div>
