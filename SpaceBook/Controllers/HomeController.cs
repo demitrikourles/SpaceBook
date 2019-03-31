@@ -16,7 +16,8 @@ namespace SpaceBook.Controllers
         {
             using (var context = new SpaceBookEntities1())
             {
-                return View();
+                List<TagType> list= context.TagTypes.ToList();
+                return View(list);
             }
         }
 
@@ -34,21 +35,36 @@ namespace SpaceBook.Controllers
             return View();
         }
 
-        public ActionResult SearchResults()
+        [HttpPost]
+        public ActionResult SearchResultsName()
         {
             using (var context = new SpaceBookEntities1())
             {
-                var results = context.Facilities.Where(x => x.ActiveFlag == true).ToList();
-                if (results != null && results.Count > 0)
+                var results = new List<Facility>();
+                var nameString = Request.Form["nameInput"];
+                foreach (var item in context.Facilities.Where(x => x.ActiveFlag == true).ToList()) 
                 {
-                    //return View(results);
+                    if (item.Name.ToUpper().Contains(nameString.ToUpper()))
+                        results.Add(item);
                 }
-                return View(results);
+                return View("SearchResults", results);
+            }
+        }
 
-                //else 
-                //{
-                //    return View();
-                //}  
+        [HttpPost]
+        public ActionResult SearchResultsTags() 
+        {
+            using (var context = new SpaceBookEntities1()) {
+                var results = new List<Facility>();
+                var tagName = Request.Form["tagInput"];
+                var tag = context.TagTypes.Where(x => x.Name == tagName).FirstOrDefault();
+                var tagAssignments = context.TagAssignments.Where(x => x.TagId == tag.Id).ToList();
+
+                foreach (var item in tagAssignments) {
+                    results.Add(context.Facilities.Where(x => x.Id == item.FacilityId).FirstOrDefault());
+                }
+                
+                return View("SearchResults", results);
             }
         }
 
@@ -307,69 +323,6 @@ namespace SpaceBook.Controllers
             }
 
             return modifiedTime;
-        }
-
-        [HttpGet]
-        public ActionResult PostVenue()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public ActionResult PostVenue(Facility facilityParam)
-        {
-            using (var context = new SpaceBookEntities1())
-            {
-                var errors = ModelState.Where(x => x.Value.Errors.Any())
-                .Select(x => new { x.Key, x.Value.Errors });
-                Facility newFacility = new Facility();
-                if (ModelState.IsValid)
-                {
-                    newFacility.Name = facilityParam.Name;
-                    newFacility.StartTime = facilityParam.StartTime;
-                    newFacility.EndTime = facilityParam.EndTime;
-                    newFacility.HourlyRate = facilityParam.HourlyRate;
-                    newFacility.Description = facilityParam.Description; //Not on postVenue form yet
-                    newFacility.Email = facilityParam.Email;
-                    newFacility.Phone = facilityParam.Phone;
-                    newFacility.Address = facilityParam.Address;
-                    newFacility.PostalCode = facilityParam.PostalCode; //Not on postVenue form yet
-                    newFacility.City = facilityParam.City;
-                    newFacility.Province = facilityParam.Province;
-                    newFacility.Country = facilityParam.Country;
-                    newFacility.ActiveFlag = true;
-                    newFacility.Type = 1; //Need to set up types
-
-                    context.Facilities.Add(newFacility);
-                    context.SaveChanges();
-                }
-
-                //Creation of time slots
-                for (int x = 1; x < 8; x++) //x = day number
-                {
-                    TimeSpan interval = new TimeSpan(0, 0, 0);
-                    for (int y = 0; y < 48; y++)  //y = number of time slots to create per day
-                    {
-                        FacilityTime newFacilityTime = new FacilityTime();
-                        newFacilityTime.Facility = newFacility;
-                        newFacilityTime.FacilityId = newFacility.Id;
-                        newFacilityTime.StartTime = interval;
-                        newFacilityTime.Day = x;
-                        newFacilityTime.Rate = facilityParam.HourlyRate;
-                        newFacilityTime.IsAvailable = true;
-
-                        if ((interval < newFacility.StartTime) || (interval >= newFacility.EndTime))
-                        {
-                            newFacilityTime.IsAvailable = false;
-                        }
-
-                        context.FacilityTimes.Add(newFacilityTime);
-                        context.SaveChanges();
-                        interval = interval.Add(new TimeSpan(0, 30, 0));
-                    }
-                }
-                return RedirectToAction("index");
-            }
         }
 
         [HttpGet]
