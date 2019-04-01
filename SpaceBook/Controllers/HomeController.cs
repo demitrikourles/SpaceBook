@@ -639,21 +639,18 @@ namespace SpaceBook.Controllers
                 dayList.Add(sunList);
 
                 List<List<string>> rateList = new List<List<string>>();
-                dayList.Add(monRates);
-                dayList.Add(tueRates);
-                dayList.Add(wedRates);
-                dayList.Add(thuRates);
-                dayList.Add(friRates);
-                dayList.Add(satRates);
-                dayList.Add(sunRates);
+                rateList.Add(monRates);
+                rateList.Add(tueRates);
+                rateList.Add(wedRates);
+                rateList.Add(thuRates);
+                rateList.Add(friRates);
+                rateList.Add(satRates);
+                rateList.Add(sunRates);
 
 
                 if (ModelState.IsValid)
                 {
                     newFacility.Name = facilityParam.Name;
-                    //newFacility.StartTime = facilityParam.StartTime;
-                    //newFacility.EndTime = facilityParam.EndTime;
-                    //newFacility.HourlyRate = 20;//////****NOTE***** WE need to write code for hourlry rate input for each time slot
                     newFacility.Description = facilityParam.Description;
                     newFacility.Email = facilityParam.Email;
                     newFacility.Phone = facilityParam.Phone;
@@ -663,11 +660,11 @@ namespace SpaceBook.Controllers
                     newFacility.Province = facilityParam.Province;
                     newFacility.Country = facilityParam.Country;
                     newFacility.ActiveFlag = true;
-                    newFacility.Type = 1; //Need to set up types
+                    newFacility.Type = 1; //
                     
 
                     context.Facilities.Add(newFacility);
-                    CreateTimeSlots(newFacility, dayList); //Creation of time slots
+                    CreateTimeSlots(newFacility, dayList, rateList); //Creation of time slots
                     context.SaveChanges();
 
                     Session["FacilityId"] = newFacility.Id;
@@ -680,6 +677,61 @@ namespace SpaceBook.Controllers
             }
         }
 
+        public void CreateTimeSlots(Facility newFacility, List<List<string>> dayList, List<List<string>> rateList)
+        {
+            using (var context = new SpaceBookEntities1())
+            {
+                for (int day = 1; day < 8; day++)
+                {
+                    List<string> currDay = dayList[day - 1];
+                    List<string> currDayRate = rateList[day - 1];
+
+                    TimeSpan interval = new TimeSpan(0, 0, 0);
+                    for (int y = 0; y < 48; y++)  //y = number of time slots to create per day
+                    {
+                        FacilityTime newFacilityTime = new FacilityTime();
+                        newFacilityTime.Facility = newFacility;
+                        newFacilityTime.FacilityId = newFacility.Id;
+                        newFacilityTime.StartTime = interval;
+                        newFacilityTime.Day = day;
+                        newFacilityTime.Rate = 0;
+                        newFacilityTime.IsAvailable = false;
+
+                        for (int i = 0; i < currDay.Count / 2; i++)
+                        {
+                            string startString = currDay[i].Remove(currDay[i].Length - 2, 2) + " " + currDay[i].Substring(currDay[i].Length - 2).ToUpper();
+                            string endString = currDay[currDay.Count / 2 + i].Remove(currDay[currDay.Count / 2 + i].Length - 2, 2) + " " + currDay[currDay.Count / 2 + i].Substring(currDay[currDay.Count / 2 + i].Length - 2).ToUpper();
+
+                            TimeSpan start = DateTime.ParseExact(startString, "h:mm tt", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
+                            TimeSpan end = DateTime.ParseExact(endString, "h:mm tt", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
+
+                            double rate = 0;
+                            double halfRate = 0;
+                            if (currDayRate[i] != null && currDayRate[i] != "") {
+                                rate = Math.Round(Convert.ToDouble(currDayRate[i]), 3);
+                                halfRate = Math.Round(rate / 2, 3);
+                            }
+                                
+
+                            if ((interval >= start) && (interval < end))
+                            {
+                                newFacilityTime.IsAvailable = true;
+                                if (rate != 0)
+                                    newFacilityTime.Rate = (decimal)halfRate;
+
+                                break;
+                            }
+                        }
+
+                        context.FacilityTimes.Add(newFacilityTime);
+                        interval = interval.Add(new TimeSpan(0, 30, 0));
+                    }
+                }
+            }
+            return;
+        }
+
+        [HttpPost]
         public ActionResult RegisterFacilityAddTags() 
         {
             using (var context = new SpaceBookEntities1()) 
@@ -700,50 +752,8 @@ namespace SpaceBook.Controllers
                 }
 
                 context.SaveChanges();
-                return RedirectToAction("index");
+                return View("index", Tags);
             }
-        }
-
-        public void CreateTimeSlots(Facility newFacility, List<List<string>> dayList)
-        {
-            using (var context = new SpaceBookEntities1())
-            {
-                for (int day = 1; day < 8; day++)
-                {
-                    List<string> currDay = dayList[day - 1];
-
-                    TimeSpan interval = new TimeSpan(0, 0, 0);
-                    for (int y = 0; y < 48; y++)  //y = number of time slots to create per day
-                    {
-                        FacilityTime newFacilityTime = new FacilityTime();
-                        newFacilityTime.Facility = newFacility;
-                        newFacilityTime.FacilityId = newFacility.Id;
-                        newFacilityTime.StartTime = interval;
-                        newFacilityTime.Day = day;
-                        //newFacilityTime.Rate = newFacility.HourlyRate;
-                        newFacilityTime.IsAvailable = false;
-
-                        for (int i = 0; i < currDay.Count / 2; i++)
-                        {
-                            string startString = currDay[i].Remove(currDay[i].Length - 2, 2) + " " + currDay[i].Substring(currDay[i].Length - 2).ToUpper();
-                            string endString = currDay[currDay.Count / 2 + i].Remove(currDay[currDay.Count / 2 + i].Length - 2, 2) + " " + currDay[currDay.Count / 2 + i].Substring(currDay[currDay.Count / 2 + i].Length - 2).ToUpper();
-
-                            TimeSpan start = DateTime.ParseExact(startString, "h:mm tt", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
-                            TimeSpan end = DateTime.ParseExact(endString, "h:mm tt", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
-
-                            if ((interval >= start) && (interval < end))
-                            {
-                                newFacilityTime.IsAvailable = true;
-                                break;
-                            }
-                        }
-
-                        context.FacilityTimes.Add(newFacilityTime);
-                        interval = interval.Add(new TimeSpan(0, 30, 0));
-                    }
-                }
-            }
-            return;
         }
 
         public ActionResult ViewBookings(string greaterOrLess)
