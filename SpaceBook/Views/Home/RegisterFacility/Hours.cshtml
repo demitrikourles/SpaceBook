@@ -20,7 +20,7 @@
 @using (Html.BeginForm("RegisterFacilityComplete", "Home", Model, FormMethod.Post, new { id = "postVenueForm" }))
 {
     <div class="row justify-content-center">
-        <div class="col-6">
+        <div class="col-8">
             <h4 style="margin: 0% 0% 5% 0%" align="center">Facility Availability</h4>
             <div class="form-group" style="margin: 0% 0% 0% 0%">
                 <div class="" style="float: left">
@@ -115,6 +115,14 @@
             <input type="hidden" id="satEnd" name="satEnd" value="" />
             <input type="hidden" id="sunEnd" name="sunEnd" value="" />
 
+            <input type="hidden" id="monRate" name="monRate" value="" />
+            <input type="hidden" id="tueRate" name="tueRate" value="" />
+            <input type="hidden" id="wedRate" name="wedRate" value="" />
+            <input type="hidden" id="thuRate" name="thuRate" value="" />
+            <input type="hidden" id="friRate" name="friRate" value="" />
+            <input type="hidden" id="satRate" name="satRate" value="" />
+            <input type="hidden" id="sunRate" name="sunRate" value="" />
+
             <div class="form-group" style="text-align:center">
                 <button value="Back" type="button" onclick="location.href='@Url.Action("RegisterFacilityInfo", Model)'" class="btn btn-danger" style="margin-right: 5%">Back</button>
                 <input type="submit" value="Register" class="btn btn-primary" style="margin-left: 5%" />
@@ -139,6 +147,14 @@
     var friEndTimes = [];
     var satEndTimes = [];
     var sunEndTimes = [];
+
+    var monRates = [];
+    var tueRates = [];
+    var wedRates = [];
+    var thuRates = [];
+    var friRates = [];
+    var satRates = [];
+    var sunRates = [];
 </script>
 
 <script type="text/javascript">
@@ -152,11 +168,8 @@
         newStartAndEndTime("saturday");
         newStartAndEndTime("sunday");
 
-        $('input').keydown(function (e) {
-            e.preventDefault();
-            return false;
-        });
     });
+
 
     function removeThis(_this) {
         _this.parentNode.parentNode.remove();
@@ -169,7 +182,7 @@
         formRowDiv.style.margin = "1% 0% 1% 0%";
 
         var startTimeDiv = document.createElement('div');
-        startTimeDiv.className = "col col-3 offset-2";
+        startTimeDiv.className = "col col-2 offset-1";
 
         var startTimeInput = document.createElement('input');
         startTimeInput.type = "text";
@@ -186,14 +199,14 @@
         
 
         var dashDiv = document.createElement('div');
-        dashDiv.className = "col col-1";
+        dashDiv.className = "col";
 
         var dash = document.createElement('p');
         dash.style.textAlign = "center";
         dash.innerHTML = " - ";
 
         var endTimeDiv = document.createElement('div');
-        endTimeDiv.className = "col col-3";
+        endTimeDiv.className = "col col-2";
 
         var endTimeInput = document.createElement('input');
         endTimeInput.type = "text";
@@ -207,6 +220,22 @@
             endTimeInput.value = increaseTimeByOneHour(startTimeInput.value);
         }
 
+        var hourlyRateDiv = document.createElement('div');
+        hourlyRateDiv.className = "col col-3";
+
+        var hourlyRateLabelDiv = document.createElement('div');
+        hourlyRateLabelDiv.className = "";
+        hourlyRateLabelDiv.className = "offset-2";
+
+        var hourlyRateLabel = document.createElement('label');
+        hourlyRateLabel.innerText = "$"
+
+        var hourlyRateInput = document.createElement('input');
+        hourlyRateInput.type = "number";
+        hourlyRateInput.className = "form-control";
+        hourlyRateInput.classList.add(day + "Rates");
+        hourlyRateInput.placeholder = "Hourly rate"
+
         var deleteButtonDiv = document.createElement('div');
         deleteButtonDiv.className = "col col-1";
 
@@ -219,16 +248,25 @@
         formRowDiv.appendChild(startTimeDiv);
         formRowDiv.appendChild(dashDiv);
         formRowDiv.appendChild(endTimeDiv);
+        formRowDiv.appendChild(hourlyRateLabelDiv);
+        formRowDiv.appendChild(hourlyRateDiv);
         formRowDiv.appendChild(deleteButtonDiv);
 
         startTimeDiv.append(startTimeInput);
         dashDiv.appendChild(dash);
         endTimeDiv.appendChild(endTimeInput);
+        hourlyRateLabelDiv.appendChild(hourlyRateLabel);
+        hourlyRateDiv.appendChild(hourlyRateInput);
         deleteButtonDiv.appendChild(deleteButton);
         document.getElementById(day + "HoursContainer").appendChild(formRowDiv);
 
         $('.timepicker').timepicker({
             'step': 30,
+        });
+
+        $(".timepicker").keydown(function (e) {
+            e.preventDefault();
+            return false;
         });
     }
 
@@ -241,6 +279,10 @@
         for (var i = 0; i < classVar.length; i++) {
             monEndTimes.push(classVar.item(i).value);
         }
+        classVar = document.getElementsByClassName("mondayRates");
+        for (var i = 0; i < classVar.length; i++) {
+            monRates.push(classVar.item(i).value);
+        }
 
         classVar = document.getElementsByClassName("tuesdayStarts");
         for (var i = 0; i < classVar.length; i++) {
@@ -249,6 +291,10 @@
         classVar = document.getElementsByClassName("tuesdayEnds");
         for (var i = 0; i < classVar.length; i++) {
             tueEndTimes.push(classVar.item(i).value);
+        }
+        classVar = document.getElementsByClassName("tuesdayRates");
+        for (var i = 0; i < classVar.length; i++) {
+            tueRates.push(classVar.item(i).value);
         }
 
         classVar = document.getElementsByClassName("wednesdayStarts");
@@ -259,6 +305,10 @@
         for (var i = 0; i < classVar.length; i++) {
             wedEndTimes.push(classVar.item(i).value);
         }
+        classVar = document.getElementsByClassName("wednesdayRates");
+        for (var i = 0; i < classVar.length; i++) {
+            wedRates.push(classVar.item(i).value);
+        }
 
         classVar = document.getElementsByClassName("thursdayStarts");
         for (var i = 0; i < classVar.length; i++) {
@@ -267,6 +317,10 @@
         classVar = document.getElementsByClassName("thursdayEnds");
         for (var i = 0; i < classVar.length; i++) {
             thuEndTimes.push(classVar.item(i).value);
+        }
+        classVar = document.getElementsByClassName("thursdayRates");
+        for (var i = 0; i < classVar.length; i++) {
+            thuRates.push(classVar.item(i).value);
         }
 
         classVar = document.getElementsByClassName("fridayStarts");
@@ -277,6 +331,10 @@
         for (var i = 0; i < classVar.length; i++) {
             friEndTimes.push(classVar.item(i).value);
         }
+        classVar = document.getElementsByClassName("fridayRates");
+        for (var i = 0; i < classVar.length; i++) {
+            friRates.push(classVar.item(i).value);
+        }
 
         classVar = document.getElementsByClassName("saturdayStarts");
         for (var i = 0; i < classVar.length; i++) {
@@ -285,6 +343,10 @@
         classVar = document.getElementsByClassName("saturdayEnds");
         for (var i = 0; i < classVar.length; i++) {
             satEndTimes.push(classVar.item(i).value);
+        }
+        classVar = document.getElementsByClassName("saturdayRates");
+        for (var i = 0; i < classVar.length; i++) {
+            satRates.push(classVar.item(i).value);
         }
 
         classVar = document.getElementsByClassName("sundayStarts");
@@ -295,27 +357,38 @@
         for (var i = 0; i < classVar.length; i++) {
             sunEndTimes.push(classVar.item(i).value);
         }
+        classVar = document.getElementsByClassName("sundayRates");
+        for (var i = 0; i < classVar.length; i++) {
+            sunRates.push(classVar.item(i).value);
+        }
 
         $('#monStart').val(monStartTimes);
         $('#monEnd').val(monEndTimes);
+        $('#monRate').val(monRates);
 
         $('#tueStart').val(tueStartTimes);
         $('#tueEnd').val(tueEndTimes);
+        $('#tueRate').val(tueRates);
 
         $('#wedStart').val(wedStartTimes);
         $('#wedEnd').val(wedEndTimes);
+        $('#wedRate').val(wedRates);
 
         $('#thuStart').val(thuStartTimes);
         $('#thuEnd').val(thuEndTimes);
+        $('#thuRate').val(thuRates);
 
         $('#friStart').val(friStartTimes);
         $('#friEnd').val(friEndTimes);
+        $('#friRate').val(friRates);
 
         $('#satStart').val(satStartTimes);
         $('#satEnd').val(satEndTimes);
+        $('#satRate').val(satRates);
 
         $('#sunStart').val(sunStartTimes);
         $('#sunEnd').val(sunEndTimes);
+        $('#sunRate').val(sunRates);
 
 
         return true; // return false to cancel form action

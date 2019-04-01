@@ -650,24 +650,31 @@ namespace SpaceBook.Controllers
 
                 List<string> monList = Request.Form["monStart"].Split(',').ToList<string>();
                 monList.AddRange(Request.Form["monEnd"].Split(',').ToList<string>());
+                List<string> monRates = Request.Form["monRate"].Split(',').ToList<string>();
 
                 List<string> tueList = Request.Form["tueStart"].Split(',').ToList<string>();
                 tueList.AddRange(Request.Form["tueEnd"].Split(',').ToList<string>());
+                List<string> tueRates = Request.Form["tueRate"].Split(',').ToList<string>();
 
                 List<string> wedList = Request.Form["wedStart"].Split(',').ToList<string>();
                 wedList.AddRange(Request.Form["wedEnd"].Split(',').ToList<string>());
+                List<string> wedRates = Request.Form["wedRate"].Split(',').ToList<string>();
 
                 List<string> thuList = Request.Form["thuStart"].Split(',').ToList<string>();
                 thuList.AddRange(Request.Form["thuEnd"].Split(',').ToList<string>());
+                List<string> thuRates = Request.Form["thuRate"].Split(',').ToList<string>();
 
                 List<string> friList = Request.Form["friStart"].Split(',').ToList<string>();
                 friList.AddRange(Request.Form["friEnd"].Split(',').ToList<string>());
+                List<string> friRates = Request.Form["friRate"].Split(',').ToList<string>();
 
                 List<string> satList = Request.Form["satStart"].Split(',').ToList<string>();
                 satList.AddRange(Request.Form["satEnd"].Split(',').ToList<string>());
+                List<string> satRates = Request.Form["satRate"].Split(',').ToList<string>();
 
                 List<string> sunList = Request.Form["sunStart"].Split(',').ToList<string>();
                 sunList.AddRange(Request.Form["sunEnd"].Split(',').ToList<string>());
+                List<string> sunRates = Request.Form["sunRate"].Split(',').ToList<string>();
 
                 List<List<string>> dayList = new List<List<string>>();
                 dayList.Add(monList);
@@ -678,12 +685,22 @@ namespace SpaceBook.Controllers
                 dayList.Add(satList);
                 dayList.Add(sunList);
 
+                List<List<string>> rateList = new List<List<string>>();
+                dayList.Add(monRates);
+                dayList.Add(tueRates);
+                dayList.Add(wedRates);
+                dayList.Add(thuRates);
+                dayList.Add(friRates);
+                dayList.Add(satRates);
+                dayList.Add(sunRates);
+
+
                 if (ModelState.IsValid)
                 {
                     newFacility.Name = facilityParam.Name;
                     //newFacility.StartTime = facilityParam.StartTime;
                     //newFacility.EndTime = facilityParam.EndTime;
-                    //newFacility.HourlyRate = facilityParam.HourlyRate;
+                    //newFacility.HourlyRate = 20;//////****NOTE***** WE need to write code for hourlry rate input for each time slot
                     newFacility.Description = facilityParam.Description;
                     newFacility.Email = facilityParam.Email;
                     newFacility.Phone = facilityParam.Phone;
