@@ -18,6 +18,7 @@ namespace SpaceBook.Models
         public Booking()
         {
             this.FacilityTimes = new HashSet<FacilityTime>();
+            this.Reviews = new HashSet<Review>();
         }
     
         public int Id { get; set; }
@@ -33,5 +34,7 @@ namespace SpaceBook.Models
         public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FacilityTime> FacilityTimes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Review> Reviews { get; set; }
     }
 }

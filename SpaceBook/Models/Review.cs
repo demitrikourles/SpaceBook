@@ -20,8 +20,10 @@ namespace SpaceBook.Models
         public Nullable<int> Rating { get; set; }
         public string Comment { get; set; }
         public Nullable<bool> ActiveFlag { get; set; }
+        public int BookingId { get; set; }
     
         public virtual Facility Facility { get; set; }
         public virtual User User { get; set; }
+        public virtual Booking Booking { get; set; }
     }
 }

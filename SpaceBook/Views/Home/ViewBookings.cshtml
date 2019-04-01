@@ -4,33 +4,41 @@
     ViewBag.Title = "ViewBookings";
 }
 
-<h2>Your Bookings</h2>
-
+<h2 style="margin: 2% 0% 2% 0%">Your Bookings</h2>
 <p>
     Show: <a href="@Url.Action("ViewBookings")">All</a> | <a href="@Url.Action("ViewBookings", "Home", new { greaterOrLess = ">"})">Active</a> | <a href="@Url.Action("ViewBookings", "Home", new {greaterOrLess = "<"})">Completed</a>
 </p>
-@foreach (var item in Model) {
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <div class="col-md-3" style="float:left">
-                    <img class="card-img-top" src="\Content\Images\MosaicStadium.jpg" alt="Card image cap" style="height:100%; width:100%">
-                </div>
-                <h5 class="card-title">@item.Facility.Name</h5>
-                <p class="card-text">@item.StartDateTime.Value.ToString("dddd, dd MMMM yyyy hh:mm tt")</p>
-                <div class="card-footer" style="float:right">
-                    <small class="text-muted">@item.StartDateTime.Value.ToShortTimeString() - @item.EndDateTime.Value.ToShortTimeString()</small>
-                    <br />
-                    <small class="text-muted">$@Math.Round(item.Cost.Value, 2)</small>
-                    <br />
-                    <button type="button" onclick="location.href='@Url.Action("LeaveReview", new { Id = item.Id })'" class="btn btn-primary">Leave Review</button>
+<div class="col-12">
+@foreach (var item in Model)
+{
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="col-3" style="float:left">
+                        <img class="card-img-top" src="\Content\Images\MosaicStadium.jpg" alt="Card image cap" style="height:100%; width:100%">
+                    </div>
+                    <div class="col-6" style="float:left">
+                        <a href="@Url.Action("ViewFacility", "Home", new { id = item.FacilityId })">
+                            <h2>
+                                @item.Facility.Name
+                            </h2>
+                        </a>
+                        <p class="card-text">@item.StartDateTime.Value.ToString("dddd, dd MMMM yyyy")</p>
+                    </div>
+                    <div class="col-2" style="float:left">
+                        <small class="text-muted">@item.StartDateTime.Value.ToShortTimeString() - @item.EndDateTime.Value.ToShortTimeString()</small>
+                        <br />
+                        <small class="text-muted">$@Math.Round(item.Cost.Value, 2)</small>
+                        <br />
+                        <button style="margin-top:20%" type="button" onclick="location.href='@Url.Action("LeaveReview", new { Id = item.Id })'" class="btn btn-primary">Leave Review</button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<hr />
+    <hr />
 }
+</div>
 
- 
+

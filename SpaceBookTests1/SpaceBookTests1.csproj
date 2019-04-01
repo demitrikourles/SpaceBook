@@ -87,6 +87,7 @@
     <None Include="packages.config" />
     <None Include="Scripts\jquery-3.3.1.min.map" />
     <None Include="Scripts\jquery-3.3.1.slim.min.map" />
+    <None Include="Scripts\jquery.rateit.min.js.map" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SpaceBook\SpaceBook.csproj">
@@ -95,11 +96,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="content\delete.gif" />
+    <Content Include="content\rateit.css" />
+    <Content Include="content\star.gif" />
     <Content Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
+    <Content Include="Scripts\jquery.rateit.js" />
+    <Content Include="Scripts\jquery.rateit.min.js" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

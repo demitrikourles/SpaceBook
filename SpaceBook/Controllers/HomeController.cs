@@ -757,7 +757,11 @@ namespace SpaceBook.Controllers
                     var bookings = context.Bookings.Where(x => x.UserId == sessionID && x.Cancelled == false).ToList();
                     if (bookings.Count > 0)
                         foreach (var booking in bookings)
+                        {
                             booking.Facility.Name.FirstOrDefault();
+                            booking.EndDateTime = booking.EndDateTime.Value.AddMinutes(30);
+                        }
+              
 
                     if (user != null)
                     {
@@ -789,6 +793,37 @@ namespace SpaceBook.Controllers
             }
         }
 
+        public ActionResult LeaveReview(Int32 id)
+        {
+            using (var context = new SpaceBookEntities1())
+            {
+                ReviewViewModel model = new ReviewViewModel();
+                Booking booking = context.Bookings.Where(b => b.Id == id).FirstOrDefault();
+                model.FacilityID = booking.FacilityId;
+                model.UserID = booking.UserId;
+                model.BookingID = booking.Id;
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult LeaveReview(ReviewViewModel reviewParam)
+        {
+            using (var context = new SpaceBookEntities1())
+            {
+                Review review = new Review();
+                review.Rating = reviewParam.Rating;
+                review.Comment = reviewParam.Review;
+                review.BookingId = reviewParam.BookingID;
+                review.FacilityId = reviewParam.FacilityID;
+                review.UserId = reviewParam.UserID;
+                review.ActiveFlag = true;
+                context.Reviews.Add(review);
+                context.SaveChanges();
+                TempData["UserMessage"] = new MessageViewModel() { CssClassName = "alert-success", Message = "Your review has been submitted." };
+                return RedirectToAction("Index");
+            }
+        }
 
     }
 }

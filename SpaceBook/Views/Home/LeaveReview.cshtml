@@ -1,0 +1,112 @@
+﻿@model SpaceBook.ViewModels.ReviewViewModel
+@{
+                /**/
+
+                ViewBag.Title = "LeaveReview";
+}
+
+<h2 style="margin: 2% 0% 2% 0%">
+    Leave a Review</h2style="margin:>
+
+    @using (Html.BeginForm("LeaveReview", "Home", Model, FormMethod.Post, new { id = "reviewForm" }))
+    {
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <div class="form-group" style="margin: 15% 0% 5% 0%">
+                    <h4>Rating</h4>
+                    <div class="stars" data-rating="3" id="starRating">
+                        <span class="star">&nbsp;</span>
+                        <span class="star">&nbsp;</span>
+                        <span class="star">&nbsp;</span>
+                        <span class="star">&nbsp;</span>
+                        <span class="star">&nbsp;</span>
+                    </div>
+                    <input type="hidden" id="ratingInput" name="Rating" />
+                </div>
+                <div class="form-group" style="margin: 2% 0% 5% 0%">
+                    <h4>Review</h4>
+                    @Html.TextAreaFor(model => model.Review, new { @class = "form-control form-control-lg", @rows = "6", @placeholder = "Briefly describe your experience..." })
+                </div>
+                <input type="submit" value="Submit review" class="btn btn-primary" style="margin-left: 5%" />
+            </div>
+        </div>
+    }
+
+    <script>
+        var rating =3;
+        //initial setup
+        document.addEventListener('DOMContentLoaded', function () {
+            let stars = document.querySelectorAll('.star');
+            stars.forEach(function (star) {
+                star.addEventListener('click', setRating);
+            });
+
+            let rating = parseInt(document.querySelector('.stars').getAttribute('data-rating'));
+            let target = stars[rating - 1];
+            target.dispatchEvent(new MouseEvent('click'));
+        });
+        function setRating(ev) {
+            let span = ev.currentTarget;
+            let stars = document.querySelectorAll('.star');
+            let match = false;
+            let num = 0;
+            stars.forEach(function (star, index) {
+                if (match) {
+                    star.classList.remove('rated');
+                } else {
+                    star.classList.add('rated');
+                }
+                //are we currently looking at the span that was clicked
+                if (star === span) {
+                    match = true;
+                    num = index + 1;
+                }
+            });
+            rating = num;
+            document.querySelector('.stars').setAttribute('data-rating', num);
+        }
+
+        $('#reviewForm').submit(function () {
+            //var classVar = document.getElementsByClassName("mondayStarts");
+            //var rating = document.getElementById('ratingInput');
+            //rating.value = num;
+            document.getElementById('ratingInput').value = rating;
+            return true; // return false to cancel form action
+        });
+
+    </script>
+
+    <style>
+        .star {
+            color: goldenrod;
+            font-size: 2.0rem;
+            padding: 1%; /* space out the stars */
+        }
+
+            .star::before {
+                content: '\2606'; /* star outline */
+                cursor: pointer;
+            }
+
+            .star.rated::before {
+                /* the style for a selected star */
+                content: '\2605'; /* filled star */
+            }
+
+        .stars {
+            counter-reset: rateme 0;
+            font-size: 2.0rem;
+            font-weight: 900;
+        }
+
+        .star.rated {
+            counter-increment: rateme 1;
+        }
+
+        .stars::after {
+            content: counter(rateme) '/5';
+        }
+    </style>
+
+
+

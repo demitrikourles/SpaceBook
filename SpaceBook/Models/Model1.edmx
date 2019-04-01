@@ -83,6 +83,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserId" Type="int" Nullable="false" />
           <Property Name="FacilityId" Type="int" Nullable="false" />
+          <Property Name="BookingId" Type="int" Nullable="false" />
           <Property Name="Rating" Type="int" />
           <Property Name="Comment" Type="varchar(max)" />
           <Property Name="ActiveFlag" Type="bit" />
@@ -183,6 +184,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Review_Booking">
+          <End Role="Booking" Type="Self.Booking" Multiplicity="1" />
+          <End Role="Review" Type="Self.Review" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Booking">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Review">
+              <PropertyRef Name="BookingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Review_Facility">
           <End Role="Facility" Type="Self.Facility" Multiplicity="1" />
           <End Role="Review" Type="Self.Review" Multiplicity="*" />
@@ -263,6 +276,10 @@
             <End Role="User" EntitySet="User" />
             <End Role="Notification" EntitySet="Notification" />
           </AssociationSet>
+          <AssociationSet Name="FK_Review_Booking" Association="Self.FK_Review_Booking">
+            <End Role="Booking" EntitySet="Booking" />
+            <End Role="Review" EntitySet="Review" />
+          </AssociationSet>
           <AssociationSet Name="FK_Review_Facility" Association="Self.FK_Review_Facility">
             <End Role="Facility" EntitySet="Facility" />
             <End Role="Review" EntitySet="Review" />
@@ -299,6 +316,7 @@
           <NavigationProperty Name="Facility" Relationship="Self.FK_Booking_Facility" FromRole="Booking" ToRole="Facility" />
           <NavigationProperty Name="User" Relationship="Self.FK_Booking_User" FromRole="Booking" ToRole="User" />
           <NavigationProperty Name="FacilityTimes" Relationship="SpaceBookModel.FK_FacilityTime_Booking" FromRole="Booking" ToRole="FacilityTime" />
+          <NavigationProperty Name="Reviews" Relationship="SpaceBookModel.FK_Review_Booking" FromRole="Booking" ToRole="Review" />
         </EntityType>
         <EntityType Name="Facility">
           <Key>
@@ -364,6 +382,8 @@
           <Property Name="ActiveFlag" Type="Boolean" />
           <NavigationProperty Name="Facility" Relationship="Self.FK_Review_Facility" FromRole="Review" ToRole="Facility" />
           <NavigationProperty Name="User" Relationship="Self.FK_Review_User" FromRole="Review" ToRole="User" />
+          <Property Name="BookingId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Booking" Relationship="SpaceBookModel.FK_Review_Booking" FromRole="Review" ToRole="Booking" />
         </EntityType>
         <EntityType Name="TagAssignment">
           <Key>
@@ -544,6 +564,10 @@
             <End Role="Facility" EntitySet="Facilities" />
             <End Role="TagAssignment" EntitySet="TagAssignments" />
           </AssociationSet>
+          <AssociationSet Name="FK_Review_Booking" Association="SpaceBookModel.FK_Review_Booking">
+            <End Role="Booking" EntitySet="Bookings" />
+            <End Role="Review" EntitySet="Reviews" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="FacilityTime">
           <Key>
@@ -592,6 +616,18 @@
             </Principal>
             <Dependent Role="TagAssignment">
               <PropertyRef Name="FacilityId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Review_Booking">
+          <End Type="SpaceBookModel.Booking" Role="Booking" Multiplicity="1" />
+          <End Type="SpaceBookModel.Review" Role="Review" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Booking">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Review">
+              <PropertyRef Name="BookingId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -668,6 +704,7 @@
           <EntitySetMapping Name="Reviews">
             <EntityTypeMapping TypeName="SpaceBookModel.Review">
               <MappingFragment StoreEntitySet="Review">
+                <ScalarProperty Name="BookingId" ColumnName="BookingId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="FacilityId" ColumnName="FacilityId" />

@@ -26,6 +26,7 @@
         <AssociationConnector Association="SpaceBookModel.FK_FacilityTime_Booking" />
         <AssociationConnector Association="SpaceBookModel.FK_FacilityTime_Facility" />
         <AssociationConnector Association="SpaceBookModel.FK_TagAssignment_Facility" />
+        <AssociationConnector Association="SpaceBookModel.FK_Review_Booking" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
