@@ -1,0 +1,159 @@
+﻿@model SpaceBook.ViewModels.RegisterFacilityViewModel
+
+@{
+    ViewBag.Title = "Edit Your Facility";
+}
+<h1 style="margin: 2% 0% 2% 0%" align="center">Edit Your Facility</h1>
+
+<div class="row justify-content-center" style="margin: 2% 0% 2% 0%">
+    <div class="col-8">
+        <div class="progress" style="height: 25px;">
+            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0"
+                 aria-valuemin="0" aria-valuemax="100" style="width:100%">
+                Address Details - Step 2 of 2
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@using (Html.BeginForm("EditFacilityComplete", "Home", Model, FormMethod.Post, new { id = "postVenueForm" })) {
+
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <h4 style="margin: 0% 0% 5% 0%" align="center">Facility Address details</h4>
+            @* **Note** These two hidden inputs are required in order for autocomplete to work *@
+            <input type="hidden" class="field" id="street_number" disabled="true" />
+            <input type="hidden" class="field" id="route" disabled="true" />
+
+            <div class="form-group" style="margin: 2% 0% 5% 0%">
+                <label>Street address</label>
+                @*<input id="autocomplete" name="Address" class="form-control form-control-lg" placeholder="What is the street address of your facility?" onFocus="geolocate() " type="text" />*@
+                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control form-control-lg", @placeholder = "What is the street address of your facility ?", @onFocus = "geolocate()", @id = "autocomplete" } })
+                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group" style="margin: 5% 0% 5% 0%">
+                <label>City</label>
+                @*<input class="field form-control form-control-lg" name="City" id="locality" placeholder="What city is your facility located in?" />*@
+                @Html.EditorFor(model => model.City, new { htmlAttributes = new { @class = "form-control form-control-lg field", @placeholder = "What city is your facility located in?", @id = "locality" } })
+                @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group" style="margin: 5% 0% 5% 0%">
+                <label>Province</label>
+                @*<input class="field form-control form-control-lg" name="Province" id="administrative_area_level_1" placeholder="What province is your facility located in?" />*@
+                @Html.EditorFor(model => model.Province, new { htmlAttributes = new { @class = "form-control form-control-lg field", @placeholder = "What province is your facility located in?", @id = "administrative_area_level_1" } })
+                @Html.ValidationMessageFor(model => model.Province, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group" style="margin: 5% 0% 5% 0%">
+                <label>Postal code</label>
+                @*<input class="field form-control form-control-lg" name="PostalCode" id="postal_code" placeholder="What is your facility's postal code?" />*@
+                @Html.EditorFor(model => model.PostalCode, new { htmlAttributes = new { @class = "form-control form-control-lg field", @placeholder = "What is your facility's postal code?", @id = "postal_code" } })
+                @Html.ValidationMessageFor(model => model.PostalCode, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group" style="margin: 5% 0% 5% 0%">
+                <label>Country</label>
+                @*<input class="field form-control form-control-lg" name="Country" id="country" placeholder="What country is your facility located in?" />*@
+                @Html.EditorFor(model => model.Country, new { htmlAttributes = new { @class = "form-control form-control-lg field", @placeholder = "What country is your facility located in?", @id = "country" } })
+                @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group" style="text-align:center">
+                <button value="Back" type="button" onclick="location.href='@Url.Action("EditFacilityAddressBack", Model)'" class="btn btn-danger" style="margin-right: 5%">Back</button>
+                <input type="submit" value="Finish" class="btn btn-primary" style="margin-left: 5%" />
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    // This sample uses the Autocomplete widget to help the user select a
+    // place, then it retrieves the address components associated with that
+    // place, and then it populates the form fields with those details.
+    // This sample requires the Places library. Include the libraries=places
+    // parameter when you first load the API. For example:
+    // <script
+    // src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBR9_xAyCUpr188a96Y4zT2ZdCvD0NUVX0&libraries=places">
+
+    var placeSearch, autocomplete;
+
+    var componentForm = {
+        street_number: 'short_name',
+        route: 'long_name',
+        locality: 'long_name',
+        administrative_area_level_1: 'short_name',
+        country: 'long_name',
+        postal_code: 'short_name'
+    };
+
+    function initAutocomplete() {
+        // Create the autocomplete object, restricting the search predictions to
+        // geographical location types.
+        autocomplete = new google.maps.places.Autocomplete(
+            document.getElementById('autocomplete'), { types: ['geocode'] });
+
+        // Avoid paying for data that you don't need by restricting the set of
+        // place fields that are returned to just the address components.
+        autocomplete.setFields('address_components');
+
+        // When the user selects an address from the drop-down, populate the
+        // address fields in the form.
+        autocomplete.addListener('place_changed', fillInAddress);
+    }
+
+    function fillInAddress() {
+        // Get the place details from the autocomplete object.
+        var place = autocomplete.getPlace();
+
+        for (var component in componentForm) {
+            document.getElementById(component).value = '';
+            document.getElementById(component).disabled = false;
+        }
+
+
+        //Wrote this code block below so that the address components street_number and route  could be combined
+        var streetNumber = '';
+        var route = '';
+        if (componentForm['street_number'])
+            streetNumber = place.address_components[0][componentForm['street_number']]
+        if (componentForm['route'])
+            route = place.address_components[1][componentForm['route']]
+
+        document.getElementById('autocomplete').value = streetNumber + " " + route;
+
+
+
+        // Get each component of the address from the place details,
+        // and then fill-in the corresponding field on the form.
+        //NOTE: i changed the initial i value from 0 to 2
+        // this is because we are combinining the first 2 components
+        for (var i = 2; i < place.address_components.length; i++) {
+            var addressType = place.address_components[i].types[0];
+            if (componentForm[addressType]) {
+                var val = place.address_components[i][componentForm[addressType]];
+                document.getElementById(addressType).value = val;
+            }
+        }
+    }
+
+    // Bias the autocomplete object to the user's geographical location,
+    // as supplied by the browser's 'navigator.geolocation' object.
+    function geolocate() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var geolocation = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+                var circle = new google.maps.Circle(
+                    { center: geolocation, radius: position.coords.accuracy });
+                autocomplete.setBounds(circle.getBounds());
+            });
+        }
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBR9_xAyCUpr188a96Y4zT2ZdCvD0NUVX0&libraries=places&callback=initAutocomplete"
+        async defer></script>

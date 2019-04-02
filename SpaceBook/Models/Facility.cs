@@ -38,6 +38,7 @@ namespace SpaceBook.Models
         public string PostalCode { get; set; }
         public string Province { get; set; }
         public string Country { get; set; }
+        public Nullable<int> OwnerId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Booking> Bookings { get; set; }
@@ -47,5 +48,6 @@ namespace SpaceBook.Models
         public virtual ICollection<FacilityTime> FacilityTimes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TagAssignment> TagAssignments { get; set; }
+        public virtual User User { get; set; }
     }
 }

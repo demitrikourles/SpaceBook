@@ -384,6 +384,10 @@
     <Content Include="Views\Home\RegisterFacility\AddTags.cshtml" />
     <Content Include="Views\Home\LeaveReview.cshtml" />
     <Content Include="Views\Home\ForgotPassword.cshtml" />
+    <Content Include="Views\Home\OwnerFacilities.cshtml" />
+    <Content Include="Views\Home\EditFacilityInfo.cshtml" />
+    <Content Include="Views\Home\EditFacilityAddress.cshtml" />
+    <Content Include="Views\Home\EditFacilityHours.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -23,6 +23,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OwnerId" Type="int" />
           <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="100" />
           <Property Name="Phone" Type="varchar" MaxLength="15" />
@@ -148,6 +149,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Facility_User">
+          <End Role="User" Type="Self.User" Multiplicity="0..1" />
+          <End Role="Facility" Type="Self.Facility" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Facility">
+              <PropertyRef Name="OwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_FacilityTime_Booking">
           <End Role="Booking" Type="Self.Booking" Multiplicity="0..1" />
           <End Role="FacilityTime" Type="Self.FacilityTime" Multiplicity="*" />
@@ -264,6 +277,10 @@
             <End Role="User" EntitySet="User" />
             <End Role="Booking" EntitySet="Booking" />
           </AssociationSet>
+          <AssociationSet Name="FK_Facility_User" Association="Self.FK_Facility_User">
+            <End Role="User" EntitySet="User" />
+            <End Role="Facility" EntitySet="Facility" />
+          </AssociationSet>
           <AssociationSet Name="FK_FacilityTime_Booking" Association="Self.FK_FacilityTime_Booking">
             <End Role="Booking" EntitySet="Booking" />
             <End Role="FacilityTime" EntitySet="FacilityTime" />
@@ -341,6 +358,8 @@
           <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="FacilityTimes" Relationship="SpaceBookModel.FK_FacilityTime_Facility" FromRole="Facility" ToRole="FacilityTime" />
           <NavigationProperty Name="TagAssignments" Relationship="SpaceBookModel.FK_TagAssignment_Facility" FromRole="Facility" ToRole="TagAssignment" />
+          <Property Name="OwnerId" Type="Int32" />
+          <NavigationProperty Name="User" Relationship="SpaceBookModel.FK_Facility_User" FromRole="Facility" ToRole="User" />
         </EntityType>
         <EntityType Name="FacilityType">
           <Key>
@@ -420,6 +439,7 @@
           <Property Name="FirstName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="LastName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ProfilePicFilename" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Facilities" Relationship="SpaceBookModel.FK_Facility_User" FromRole="User" ToRole="Facility" />
         </EntityType>
         <EntityType Name="UserType">
           <Key>
@@ -568,6 +588,10 @@
             <End Role="Booking" EntitySet="Bookings" />
             <End Role="Review" EntitySet="Reviews" />
           </AssociationSet>
+          <AssociationSet Name="FK_Facility_User" Association="SpaceBookModel.FK_Facility_User">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Facility" EntitySet="Facilities" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="FacilityTime">
           <Key>
@@ -631,6 +655,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Facility_User">
+          <End Type="SpaceBookModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="SpaceBookModel.Facility" Role="Facility" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Facility">
+              <PropertyRef Name="OwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -654,6 +690,7 @@
           <EntitySetMapping Name="Facilities">
             <EntityTypeMapping TypeName="SpaceBookModel.Facility">
               <MappingFragment StoreEntitySet="Facility">
+                <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
                 <ScalarProperty Name="Country" ColumnName="Country" />
                 <ScalarProperty Name="Province" ColumnName="Province" />
                 <ScalarProperty Name="PostalCode" ColumnName="PostalCode" />

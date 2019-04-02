@@ -2,26 +2,25 @@
 @{
     /**/
 
-    ViewBag.Title = "Regsiter your facility";
+    ViewBag.Title = "Edit your facility";
 }
 
 
-<h1 style="margin: 2% 0% 2% 0%" align="center">Regsiter your Facility</h1>
+<h1 style="margin: 2% 0% 2% 0%" align="center">Edit your Facility</h1>
 
 <div class="row justify-content-center" style="margin: 2% 0% 2% 0%">
     <div class="col-8">
         <div class="progress" style="height: 25px;">
             <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0"
-                 aria-valuemin="0" aria-valuemax="100" style="width:33.33%">
-                Contact Info - Step 1 of 3
+                 aria-valuemin="0" aria-valuemax="100" style="width:50%">
+                Contact Info - Step 1 of 2
             </div>
         </div>
     </div>
 </div>
 
 
-@using (Html.BeginForm("RegisterFacilityInfo", "Home", Model, FormMethod.Post, new { id = "postVenueForm" }))
-{
+@using (Html.BeginForm("EditFacilityAddress", "Home", Model, FormMethod.Post, new { id = "editVenueForm" })) {
 
     <div class="row justify-content-center">
         <div class="col-6">

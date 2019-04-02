@@ -8,6 +8,8 @@ namespace SpaceBook.ViewModels
 {
     public class RegisterFacilityViewModel
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "Please enter a facility name.")]
         public string Name { get; set; }
 
@@ -25,6 +27,11 @@ namespace SpaceBook.ViewModels
         [DataType(DataType.PhoneNumber, ErrorMessage = "Invalid Phone Number")]
         [RegularExpression(@"^([0-9]{10})$", ErrorMessage = "Invalid Phone Number.")]
         public string Phone { get; set; }
+
+        [Required(ErrorMessage = "Please enter a default hourly rate.")]
+        [DataType(DataType.Currency)]
+        [RegularExpression(@"^[0-9]+(\.[0-9]{1,2})?$", ErrorMessage = "Invalid amount.")]
+        public double DefaultHourlyRate { get; set; }
 
         [Required(ErrorMessage = "Please enter the city that your facilitiy is located in.")]
         public string City { get; set; }

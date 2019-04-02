@@ -686,7 +686,7 @@ namespace SpaceBook.Controllers
 
         public ActionResult RegisterFacilityInfo(RegisterFacilityViewModel facilityParam)
         {
-            if (ModelState.IsValidField("Name") && ModelState.IsValidField("Description") && ModelState.IsValidField("Email") && ModelState.IsValidField("Phone"))
+            if (ModelState.IsValidField("Name") && ModelState.IsValidField("Description") && ModelState.IsValidField("Email") && ModelState.IsValidField("Phone") && ModelState.IsValidField("DefaultHourlyRate"))
             {
                 ModelState.Clear();
                 return View("~/Views/Home/RegisterFacility/Address.cshtml", facilityParam);
@@ -722,6 +722,7 @@ namespace SpaceBook.Controllers
             using (var context = new SpaceBookEntities1())
             {
                 Facility newFacility = new Facility();
+                newFacility.OwnerId = Convert.ToInt32(Session["UserID"]);
 
                 List<string> monList = Request.Form["monStart"].Split(',').ToList<string>();
                 monList.AddRange(Request.Form["monEnd"].Split(',').ToList<string>());
@@ -783,6 +784,7 @@ namespace SpaceBook.Controllers
                     newFacility.Country = facilityParam.Country;
                     newFacility.ActiveFlag = true;
                     newFacility.Type = 1; //
+                    newFacility.HourlyRate = (decimal)facilityParam.DefaultHourlyRate;
 
 
                     context.Facilities.Add(newFacility);
@@ -818,9 +820,12 @@ namespace SpaceBook.Controllers
                         newFacilityTime.Day = day;
                         newFacilityTime.Rate = 0;
                         newFacilityTime.IsAvailable = false;
-
+                        
                         for (int i = 0; i < currDay.Count / 2; i++)
                         {
+                            if (currDay[i] == "")
+                                continue;
+
                             string startString = currDay[i].Remove(currDay[i].Length - 2, 2) + " " + currDay[i].Substring(currDay[i].Length - 2).ToUpper();
                             string endString = currDay[currDay.Count / 2 + i].Remove(currDay[currDay.Count / 2 + i].Length - 2, 2) + " " + currDay[currDay.Count / 2 + i].Substring(currDay[currDay.Count / 2 + i].Length - 2).ToUpper();
 
@@ -880,6 +885,241 @@ namespace SpaceBook.Controllers
             }
         }
 
+        public ActionResult EditFacilityInfo(Int32 id) 
+        {
+            if (Session["UserID"] != null) 
+            {
+                using (var context = new SpaceBookEntities1()) 
+                {
+                    RegisterFacilityViewModel facViewModel = new RegisterFacilityViewModel();
+                    Facility fac = context.Facilities.Where(x => x.Id == id).FirstOrDefault();
+                    if (fac != null) 
+                    {
+                        facViewModel.Name = fac.Name;
+                        facViewModel.Description = fac.Description;
+                        facViewModel.Email = fac.Email;
+                        facViewModel.Phone = fac.Phone;
+                        facViewModel.DefaultHourlyRate = (double)fac.HourlyRate;
+
+                        facViewModel.Address = fac.Address;
+                        facViewModel.City = fac.City;
+                        facViewModel.Province = fac.Province;
+                        facViewModel.PostalCode = fac.PostalCode;
+                        facViewModel.Country = fac.Country;
+                        facViewModel.Id = id;
+
+                        return View("EditFacilityInfo", facViewModel);
+                    }
+
+                }
+            }
+            return RedirectToAction("Login");
+        }
+
+        public ActionResult EditFacilityAddress(RegisterFacilityViewModel facilityParam) 
+        {
+            if (ModelState.IsValidField("Name") && ModelState.IsValidField("Description") && ModelState.IsValidField("Email") && ModelState.IsValidField("Phone") && ModelState.IsValidField("DefaultHourlyRate")) 
+            {
+                ModelState.Clear();
+                return View("EditFacilityAddress", facilityParam);
+            }
+            else 
+            {
+                return View("~/Views/Home/EditFacility/Info.cshtml", facilityParam);
+            }
+        }
+
+
+        public ActionResult EditFacilityComplete(RegisterFacilityViewModel facilityParam) 
+        {
+            using (var context = new SpaceBookEntities1()) 
+            {
+                Facility record = context.Facilities.Where(x => x.Id == facilityParam.Id).FirstOrDefault();
+                record.Name = facilityParam.Name;
+                record.Description = facilityParam.Description;
+                record.Email = facilityParam.Email;
+                record.Phone = facilityParam.Phone;
+                record.HourlyRate = (decimal)facilityParam.DefaultHourlyRate;
+
+                record.Address = facilityParam.Address;
+                record.City = facilityParam.City;
+                record.Province = facilityParam.Province;
+                record.PostalCode = facilityParam.PostalCode;
+                record.Country = facilityParam.Country;
+
+                context.SaveChanges();
+
+                var userID = Convert.ToInt32(Session["UserID"]);
+                List<Facility> ownersFacilities = context.Facilities.Where(x => x.OwnerId == userID && x.ActiveFlag == true).ToList();
+                return View("OwnerFacilities", ownersFacilities);
+            }
+        }
+
+        public ActionResult EditFacilityAddressBack(RegisterFacilityViewModel facilityParam) 
+        {
+            return View("EditFacilityInfo", facilityParam);
+        }
+
+        public ActionResult EditFacilityHours(Int32 id) 
+        {
+            using (var context = new SpaceBookEntities1()) 
+            {
+                RegisterFacilityViewModel facilityParam = new RegisterFacilityViewModel();
+                facilityParam.DefaultHourlyRate = (double)context.Facilities.Where(x => x.Id == id).FirstOrDefault().HourlyRate;
+                facilityParam.Id = context.Facilities.Where(x => x.Id == id).FirstOrDefault().Id;
+                return View("EditFacilityHours", facilityParam);
+            }
+                
+        }
+
+        [HttpPost]
+        public ActionResult EditFacilityHoursComplete(RegisterFacilityViewModel facilityParam) 
+        {
+            using (var context = new SpaceBookEntities1()) {
+
+                List<string> monList = Request.Form["monStart"].Split(',').ToList<string>();
+                monList.AddRange(Request.Form["monEnd"].Split(',').ToList<string>());
+                List<string> monRates = Request.Form["monRate"].Split(',').ToList<string>();
+
+                List<string> tueList = Request.Form["tueStart"].Split(',').ToList<string>();
+                tueList.AddRange(Request.Form["tueEnd"].Split(',').ToList<string>());
+                List<string> tueRates = Request.Form["tueRate"].Split(',').ToList<string>();
+
+                List<string> wedList = Request.Form["wedStart"].Split(',').ToList<string>();
+                wedList.AddRange(Request.Form["wedEnd"].Split(',').ToList<string>());
+                List<string> wedRates = Request.Form["wedRate"].Split(',').ToList<string>();
+
+                List<string> thuList = Request.Form["thuStart"].Split(',').ToList<string>();
+                thuList.AddRange(Request.Form["thuEnd"].Split(',').ToList<string>());
+                List<string> thuRates = Request.Form["thuRate"].Split(',').ToList<string>();
+
+                List<string> friList = Request.Form["friStart"].Split(',').ToList<string>();
+                friList.AddRange(Request.Form["friEnd"].Split(',').ToList<string>());
+                List<string> friRates = Request.Form["friRate"].Split(',').ToList<string>();
+
+                List<string> satList = Request.Form["satStart"].Split(',').ToList<string>();
+                satList.AddRange(Request.Form["satEnd"].Split(',').ToList<string>());
+                List<string> satRates = Request.Form["satRate"].Split(',').ToList<string>();
+
+                List<string> sunList = Request.Form["sunStart"].Split(',').ToList<string>();
+                sunList.AddRange(Request.Form["sunEnd"].Split(',').ToList<string>());
+                List<string> sunRates = Request.Form["sunRate"].Split(',').ToList<string>();
+
+                List<List<string>> dayList = new List<List<string>>();
+                dayList.Add(monList);
+                dayList.Add(tueList);
+                dayList.Add(wedList);
+                dayList.Add(thuList);
+                dayList.Add(friList);
+                dayList.Add(satList);
+                dayList.Add(sunList);
+
+                List<List<string>> rateList = new List<List<string>>();
+                rateList.Add(monRates);
+                rateList.Add(tueRates);
+                rateList.Add(wedRates);
+                rateList.Add(thuRates);
+                rateList.Add(friRates);
+                rateList.Add(satRates);
+                rateList.Add(sunRates);
+
+                EditTimeSlots(facilityParam.Id, dayList, rateList);
+
+                var userID = Convert.ToInt32(Session["UserID"]);
+                List<Facility> ownersFacilities = context.Facilities.Where(x => x.OwnerId == userID && x.ActiveFlag == true).ToList();
+                return View("OwnerFacilities", ownersFacilities);
+            }
+        }
+
+        public void EditTimeSlots(int id, List<List<string>> dayList, List<List<string>> rateList) 
+        {
+            using (var context = new SpaceBookEntities1())
+            {
+                List<FacilityTime> FacilityTimeList = context.FacilityTimes.Where(x => x.FacilityId == id).ToList();
+                int iterator = 0;
+
+                for (int day = 1; day < 8; day++)
+                {
+                    List<string> currDay = dayList[day - 1];
+                    List<string> currDayRate = rateList[day - 1];
+
+                    TimeSpan interval = new TimeSpan(0, 0, 0);
+                    for (int y = 0; y < 48; y++)  //y = number of time slots to create per day
+                    {
+                        //FacilityTimeList[iterator].StartTime = interval;
+                        //FacilityTimeList[iterator].Day = day;
+                        FacilityTimeList[iterator].Rate = 0;
+                        FacilityTimeList[iterator].IsAvailable = false;
+
+                        for (int i = 0; i < currDay.Count / 2; i++)
+                        {
+                            if (currDay[i] == "")
+                                continue;
+
+                            string startString = currDay[i].Remove(currDay[i].Length - 2, 2) + " " + currDay[i].Substring(currDay[i].Length - 2).ToUpper();
+                            string endString = currDay[currDay.Count / 2 + i].Remove(currDay[currDay.Count / 2 + i].Length - 2, 2) + " " + currDay[currDay.Count / 2 + i].Substring(currDay[currDay.Count / 2 + i].Length - 2).ToUpper();
+
+                            TimeSpan start = DateTime.ParseExact(startString, "h:mm tt", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
+                            TimeSpan end = DateTime.ParseExact(endString, "h:mm tt", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
+
+                            double rate = 0;
+                            double halfRate = 0;
+                            if (currDayRate[i] != null && currDayRate[i] != "")
+                            {
+                                rate = Math.Round(Convert.ToDouble(currDayRate[i]), 3);
+                                halfRate = Math.Round(rate / 2, 3);
+                            }
+
+
+                            if ((interval >= start) && (interval < end))
+                            {
+                                FacilityTimeList[iterator].IsAvailable = true;
+
+                                if (rate != 0)
+                                    FacilityTimeList[iterator].Rate = (decimal)halfRate;
+
+                                break;
+                            }
+                        }
+                        
+                        iterator++;
+                        interval = interval.Add(new TimeSpan(0, 30, 0));
+                    }
+                }
+                context.SaveChanges();
+            }
+            return;
+        }
+
+        public ActionResult UnactivateFacility(bool confirm, Int32 id) {
+            using (var context = new SpaceBookEntities1()) 
+            {
+                Facility fac = context.Facilities.Where(x => x.Id == id).FirstOrDefault();
+                if (fac != null) {
+                    fac.ActiveFlag = false;
+                    context.SaveChanges();
+                }
+
+                var userID = Convert.ToInt32(Session["UserID"]);
+                List<Facility> ownersFacilities = context.Facilities.Where(x => x.OwnerId == userID && x.ActiveFlag == true).ToList();
+                return View("OwnerFacilities", ownersFacilities);
+            }
+        }
+
+        public ActionResult ViewOwnerFacilities() 
+        {
+            if (Session["UserID"] != null) 
+            {
+                using (var context = new SpaceBookEntities1()) 
+                {
+                    var userID = Convert.ToInt32(Session["UserID"]);
+                    List<Facility> ownersFacilities = context.Facilities.Where(x => x.OwnerId == userID && x.ActiveFlag == true).ToList();
+                    return View("OwnerFacilities", ownersFacilities);
+                }
+            }
+            return RedirectToAction("Login");
+        }
+
         public ActionResult ViewBookings(string filter)
         {
             using (var context = new SpaceBookEntities1())
@@ -911,6 +1151,57 @@ namespace SpaceBook.Controllers
                             foreach (Booking item in bookings.ToList())
                             {
                                 if (item.EndDateTime > DateTime.Now)
+                                {
+                                    bookings.Remove(item);
+                                }
+                            }
+
+                        return View("ViewBookings", bookings);
+                    }
+                }
+                //if the user is not logged in, return to the login view
+                return RedirectToAction("Login");
+            }
+        }
+
+        public ActionResult OwnerViewBookings(string filter) 
+        {
+            using (var context = new SpaceBookEntities1()) 
+            {
+                if (Session["UserID"] != null) {
+                    var userId = Convert.ToInt32(Session["UserID"]);
+                    var user = context.Users.Where(u => u.Id == userId && u.ActiveFlag == true).FirstOrDefault();
+                    List<Facility> fac = context.Facilities.Where(x => x.OwnerId == userId && x.ActiveFlag == true).ToList();
+                    var bookings = new List<Booking>();
+
+                    for (int i = 0; i < fac.Count; i++) 
+                    {
+                        Booking owners = context.Bookings.Where(x => x.FacilityId == fac[i].Id).FirstOrDefault();
+                        if (owners != null)
+                            bookings.Add(owners);
+                    }
+                        
+                    if (bookings.Count > 0)
+                        foreach (var booking in bookings) {
+                            booking.Facility.Name.FirstOrDefault();
+                            booking.EndDateTime = booking.EndDateTime.Value.AddMinutes(30);
+                        }
+
+                    if (user != null) 
+                    {
+                        if (filter == "upcoming")
+                            foreach (Booking item in bookings.ToList()) 
+                            {
+                                if (item.EndDateTime <= DateTime.Now) 
+                                {
+                                    bookings.Remove(item);
+                                }
+                            }
+
+                        else if (filter == "completed")
+                            foreach (Booking item in bookings.ToList()) 
+                            {
+                                if (item.EndDateTime > DateTime.Now) 
                                 {
                                     bookings.Remove(item);
                                 }

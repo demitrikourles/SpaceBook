@@ -1,23 +1,22 @@
 ﻿@model SpaceBook.ViewModels.RegisterFacilityViewModel
 @{
-    ViewBag.Title = "Regsiter your facility";
+    ViewBag.Title = "Edit your facility";
     double rate = Model.DefaultHourlyRate;
 }
-<h1 style="margin: 2% 0% 2% 0%" align="center">Register your Facility</h1>
+<h1 style="margin: 2% 0% 2% 0%" align="center">Edit your Facility</h1>
 
 <div class="row justify-content-center" style="margin: 2% 0% 2% 0%">
     <div class="col-8">
         <div class="progress" style="height: 25px;">
             <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0"
                  aria-valuemin="0" aria-valuemax="100" style="width:100%">
-                Availability - Step 3 of 3
+                Availability - Step 1 of 1
             </div>
         </div>
     </div>
 </div>
 
-@using (Html.BeginForm("RegisterFacilityComplete", "Home", Model, FormMethod.Post, new { id = "postVenueForm" }))
-{
+@using (Html.BeginForm("EditFacilityHoursComplete", "Home", Model, FormMethod.Post, new { id = "editVenueForm" })) {
     <div class="row justify-content-center">
         <div class="col-8">
             <h4 style="margin: 0% 0% 5% 0%" align="center">Facility Availability</h4>
@@ -177,7 +176,7 @@
     };
 
     function newStartAndEndTime(day) {
-        
+
         var formRowDiv = document.createElement('div');
         formRowDiv.className = "form-row";
         formRowDiv.style.margin = "1% 0% 1% 0%";
@@ -197,7 +196,7 @@
         else {
             startTimeInput.value = increaseTimeByOneHour(document.getElementsByClassName(day + "Ends").item(document.getElementsByClassName(day + "Ends").length - 1).value);
         }
-        
+
 
         var dashDiv = document.createElement('div');
         dashDiv.className = "col";
@@ -246,7 +245,7 @@
         deleteButton.className = "close";
         deleteButton.innerHTML = "&times;";
         deleteButton.onclick = function () { removeThis(this) };
-        
+
         formRowDiv.appendChild(startTimeDiv);
         formRowDiv.appendChild(dashDiv);
         formRowDiv.appendChild(endTimeDiv);
@@ -272,7 +271,7 @@
         });
     }
 
-    $('#postVenueForm').submit(function () {
+    $('#editVenueForm').submit(function () {
         var classVar = document.getElementsByClassName("mondayStarts");
         for (var i = 0; i < classVar.length; i++) {
             monStartTimes.push(classVar.item(i).value);
@@ -422,6 +421,7 @@
     }
 
 </script>
+
 
 
 

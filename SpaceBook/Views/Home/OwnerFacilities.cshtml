@@ -1,0 +1,50 @@
+﻿@model IEnumerable<SpaceBook.Models.Facility>
+@{
+    ViewBag.Title = "OwnerFacilities";
+}
+
+<br />
+
+<h2>Your Facilities</h2>
+
+<div class="row">
+    @foreach (var result in Model) {
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">@Html.DisplayFor(modelResult => result.Name)</h5>
+                    <p class="card-text">@Html.DisplayFor(modelResult => result.Description)</p>
+                    <button type="button" onclick="location.href='@Url.Action("ViewFacility", new { Id = result.Id })'" class="btn btn-primary btn-sm">View Facility</button>
+                    <br />
+                    <button type="button" onclick="location.href='@Url.Action("EditFacilityInfo", new { Id = result.Id })'" class="btn btn-primary btn-sm" style="margin-top:2%">Edit Facility Info</button>
+                    <button type="button" onclick="location.href='@Url.Action("EditFacilityHours", new { Id = result.Id })'" class="btn btn-primary btn-sm" style="margin-top:2%">Edit Facility Hours</button>
+                    
+                </div>
+                <div class="card-footer text-right">
+                    @*<button type="button" onclick="location.href='@Url.Action("UnactivateFacility", new { Id = result.Id })'" class="btn btn-danger" style="margin-top:2%">Delete Facility</button>*@
+                    <button class="btn btn-danger" style="margin-top:2%; color:white">
+                        @Html.ActionLink("Delete Facility", "UnactivateFacility", "Home",
+                        new { confirm = true, id = result.Id},
+                        new { onclick = "return confirm('Are you sure you want to delete this facility?')", @class = "btn-danger" })
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (Model.Count() < 1) {
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <h6 class="card-title">You do not have any registered facilities</h6>
+                    <button type="button" onclick="location.href='@Url.Action("Index")'" class="btn btn-link">Return Home</button>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>
+<br />
+
+
+
