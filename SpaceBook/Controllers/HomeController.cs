@@ -7,6 +7,7 @@ using SpaceBook.Models;
 using SpaceBook.ViewModels;
 using SpaceBook.Models.MetaData;
 using System.IO;
+using System.Data.Entity;
 
 namespace SpaceBook.Controllers
 {
@@ -72,8 +73,12 @@ namespace SpaceBook.Controllers
         {
             using (var context = new SpaceBookEntities1())
             {
-                var facility = context.Facilities.Where(x => x.Id == id).FirstOrDefault();
-
+                var facility = context.Facilities.Include(x => x.Reviews).Where(x => x.Id == id).FirstOrDefault();
+                foreach(var review in facility.Reviews)
+                {
+                    review.User.FirstName.First();
+                    review.User.LastName.First();
+                }
                 return View(facility);
             }
         }
@@ -756,7 +761,7 @@ namespace SpaceBook.Controllers
             }
         }
 
-        public ActionResult ViewBookings(string greaterOrLess)
+        public ActionResult ViewBookings(string filter)
         {
             using (var context = new SpaceBookEntities1())
             {
@@ -764,32 +769,29 @@ namespace SpaceBook.Controllers
                 {
                     var sessionID = Convert.ToInt32(Session["UserID"]);
                     var user = context.Users.Where(u => u.Id == sessionID && u.ActiveFlag == true).FirstOrDefault();
-                    var bookings = context.Bookings.Where(x => x.UserId == sessionID && x.Cancelled == false).ToList();
+                    //var bookings = context.Bookings.Where(x => x.UserId == sessionID && x.Cancelled == false).ToList();
+                    var bookings = context.Bookings.Include(b => b.Reviews).Where(x => x.UserId == sessionID && x.Cancelled == false).ToList();
                     if (bookings.Count > 0)
                         foreach (var booking in bookings)
                         {
                             booking.Facility.Name.FirstOrDefault();
                             booking.EndDateTime = booking.EndDateTime.Value.AddMinutes(30);
                         }
-              
-
                     if (user != null)
                     {
-                        if (greaterOrLess == ">")
+                        if (filter == "upcoming")
                             foreach (Booking item in bookings.ToList())
                             {
-                                //confirm this logic 
-                                if (((TimeSpan)(DateTime.Today - item.StartDateTime)).Days > 30)
+                                if (item.EndDateTime <= DateTime.Now)
                                 {
                                     bookings.Remove(item);
                                 }
                             }
 
-                        else if (greaterOrLess == "<")
+                        else if (filter == "completed")
                             foreach (Booking item in bookings.ToList())
                             {
-                                //confirm this logic 
-                                if (((TimeSpan)(DateTime.Today - item.StartDateTime)).Days < 30)
+                                if (item.EndDateTime > DateTime.Now)
                                 {
                                     bookings.Remove(item);
                                 }

@@ -25,7 +25,7 @@
                 <button type="button" onclick="location.href='@Url.Action("ViewFacilityAvailability", new { facilityId = Model.Id, weekIncr = 0 })'" class="btn btn-primary"><span class="fa fa-calendar fa-fw"></span> View Availability</button>
             </div>
             <div class="card-footer">
-                <small class="text-muted">**Last booked date text**</small>
+
             </div>
         </div>
     </div>
@@ -34,5 +34,105 @@
     </div>
 </div>
 
+<!--The div element for the map -->
+<div id="map"></div>
 
 
+<div class="col-12">
+    <h2>Reviews (@Model.Reviews.Count)</h2>
+    @foreach (var review in Model.Reviews)
+    {
+    <div class="row">
+        <div class="col-3">
+            <p>@review.User.FirstName</p>
+            <p>@review.User.LastName</p>
+        </div>
+        <div class="col-6">
+            <p>@review.Comment</p>
+        </div>
+        <div class="col-3">
+            @{
+                var stars = review.Rating;
+                for (int i = 0; i < 5; i++)
+                {
+                    if (stars > 0)
+                    {
+                        <span class="star rated">&nbsp;</span>
+                    }
+                    else
+                    {
+                        <span class="star">&nbsp;</span>
+                    }
+                    stars = stars - 1;
+                };
+            }
+        </div>
+    </div>
+    }
+</div>
+
+
+<script>
+    var geocoder;
+    var map;
+    var address = "@Model.Address" + ", " + "@Model.City" + ", " + "@Model.Country";
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: { lat: -34.397, lng: 150.644 }
+        });
+        geocoder = new google.maps.Geocoder();
+        codeAddress(geocoder, map);
+    }
+
+    function codeAddress(geocoder, map) {
+        geocoder.geocode({ 'address': address }, function (results, status) {
+            if (status === 'OK') {
+                map.setCenter(results[0].geometry.location);
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
+</script>
+<!--Load the API from the specified URL
+* The async attribute allows the browser to render the page while the API loads
+* The key parameter will contain your own API key (which is not needed for this tutorial)
+* The callback parameter executes the initMap() function
+-->
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDDt9cCaqhDgIHJ4YkqLwMh6VvuTCWDdtw&callback=initMap">
+</script>
+
+
+<style>
+
+    /* Set the size of the div element that contains the map */
+    #map {
+        height: 400px; /* The height is 400 pixels */
+        width: 100%; /* The width is the width of the web page */
+    }
+
+    .star {
+        color: goldenrod;
+        font-size: 1.5rem;
+    }
+
+        .star::before {
+            content: '\2606'; /* star outline */
+            cursor: pointer;
+        }
+
+        .star.rated::before {
+            /* the style for a selected star */
+            content: '\2605'; /* filled star */
+        }
+
+    .star.rated {
+        counter-increment: rateme 1;
+    }
+</style>
