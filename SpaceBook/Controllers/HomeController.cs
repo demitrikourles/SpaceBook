@@ -7,6 +7,8 @@ using SpaceBook.Models;
 using SpaceBook.ViewModels;
 using SpaceBook.Models.MetaData;
 using System.IO;
+using System.Net;
+using System.Net.Mail;
 
 namespace SpaceBook.Controllers
 {
@@ -16,7 +18,7 @@ namespace SpaceBook.Controllers
         {
             using (var context = new SpaceBookEntities1())
             {
-                List<TagType> list= context.TagTypes.ToList();
+                List<TagType> list = context.TagTypes.ToList();
                 return View(list);
             }
         }
@@ -42,7 +44,7 @@ namespace SpaceBook.Controllers
             {
                 var results = new List<Facility>();
                 var nameString = Request.Form["nameInput"];
-                foreach (var item in context.Facilities.Where(x => x.ActiveFlag == true).ToList()) 
+                foreach (var item in context.Facilities.Where(x => x.ActiveFlag == true).ToList())
                 {
                     if (item.Name.ToUpper().Contains(nameString.ToUpper()))
                         results.Add(item);
@@ -52,18 +54,20 @@ namespace SpaceBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult SearchResultsTags() 
+        public ActionResult SearchResultsTags()
         {
-            using (var context = new SpaceBookEntities1()) {
+            using (var context = new SpaceBookEntities1())
+            {
                 var results = new List<Facility>();
                 var tagName = Request.Form["tagInput"];
                 var tag = context.TagTypes.Where(x => x.Name == tagName).FirstOrDefault();
                 var tagAssignments = context.TagAssignments.Where(x => x.TagId == tag.Id).ToList();
 
-                foreach (var item in tagAssignments) {
+                foreach (var item in tagAssignments)
+                {
                     results.Add(context.Facilities.Where(x => x.Id == item.FacilityId).FirstOrDefault());
                 }
-                
+
                 return View("SearchResults", results);
             }
         }
@@ -77,13 +81,11 @@ namespace SpaceBook.Controllers
                 return View(facility);
             }
         }
-        
+
         [HttpGet]
         //Week increment is 0 (new booking attempt), 1(load next week on current booking attempt), or -1(load previous week on current booking attempt)
         public ActionResult ViewFacilityAvailability(Int32 facilityId, int weekIncr)
         {
-           
-
             using (var context = new SpaceBookEntities1())
             {
                 //Sets the current week's monday using DateTime.Now as reference
@@ -149,9 +151,9 @@ namespace SpaceBook.Controllers
             }
         }
 
+        [HttpGet]
         public ActionResult PartialViewTimes(int day, int facilityId)
         {
-
             //updates the day of the week session according to which day button was pressed
             Session["DayofWeek"] = day.ToString();
 
@@ -229,15 +231,15 @@ namespace SpaceBook.Controllers
             refMonday = new DateTime(refMonday.Year, refMonday.Month, refMonday.Day, 0, 0, 0);
             //Gets the currently selected week monday
             DateTime selectedWeekMonday = DateTime.Parse(Session["SelectedWeekMonday"].ToString());
-            
+
             //Compare = 0 -> equal, Compare < 0 -> t1 is earlier than t2, Compare > 0 -> t1 is later than t2
             //If todays date and the selected date are not in the same week or earlier, return false
             var isWeekEarlier = DateTime.Compare(refMonday, selectedWeekMonday);
             if (isWeekEarlier < 0)
                 return "0";
-            else if(isWeekEarlier > 0)
+            else if (isWeekEarlier > 0)
                 return "1";
-            
+
             //gets day of current timeslot
             int day = time.Day.Value;
             //Compare = 0 -> equal, Compare < 0 -> t1 is earlier than t2, Compare > 0 -> t1 is later than t2
@@ -245,7 +247,7 @@ namespace SpaceBook.Controllers
 
             //checks if the selected day of the week is before today's day of the week
             //OR checks today's day is the current day and that the timeslot is earlier than(or at the same time as) the current time
-            if (day < day_of_week_now || (day == day_of_week_now && timeBefore >= 0) )
+            if (day < day_of_week_now || (day == day_of_week_now && timeBefore >= 0))
                 return "1";
 
             return "0";
@@ -306,12 +308,12 @@ namespace SpaceBook.Controllers
                 modifiedTime = time.ToString("hh':'mm' AM'");
             }
             //if the hour is noon, assign PM to the time
-            else if(time.Hours == 12)
+            else if (time.Hours == 12)
             {
                 modifiedTime = time.ToString("hh':'mm' PM'");
             }
             //If the time is after noon, adjust by 12 hours and assign PM to the time
-            else if(time.Hours > 12)
+            else if (time.Hours > 12)
             {
                 time = time.Subtract(new TimeSpan(12, 0, 0));
                 modifiedTime = time.ToString("hh':'mm' PM'");
@@ -358,6 +360,131 @@ namespace SpaceBook.Controllers
         public ActionResult Logout()
         {
             Session.Abandon();
+            return RedirectToAction("Login");
+        }
+
+        [HttpGet]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ForgotPassword(string email)
+        {
+            using (var context = new SpaceBookEntities1())
+            {
+                //if the email passed in is not null, find a user with corresponding 
+                if (!string.IsNullOrEmpty(email))
+                {
+                    //gets a user with the corresponding email
+                    var user = context.Users.Where(u => u.Email == email).FirstOrDefault();
+
+                    //if user with corresponding email exists
+                    if (user != null)
+                    {
+                        var sender_address = new MailAddress("spacebookapp@gmail.com", "SpaceBook"); //sets up the address the email will be sent from (spacebook address, spacebook name)
+                        string sender_password = "xdhvRxTVcxOt"; //sender password
+
+                        var receiver_address = new MailAddress(user.Email, user.FirstName); //sets up the address the email will be sent to (user address, user first name)
+
+                        string subject = "SpaceBook: Forgotten Password"; //subject of the email
+                        string body = ""; //Body of the message
+
+                        //temporary password
+                        string tempPassword = "";
+                        int pwd_length = 8;
+                        Random rand = new Random(); //random number genrator
+
+                        //generates random alphanumeric password
+                        for (int i = 0; i < pwd_length; i++)
+                        {
+                            //20% chance charcter is a number
+                            if (rand.Next(5) == 1)
+                            {
+                                tempPassword += (char)(rand.Next('9' - '0' + 1) + '0');
+                            }
+                            //otherwise, character is a letter
+                            else
+                            {
+                                //50% chance character is uppercase
+                                if (rand.Next(2) == 1)
+                                {
+                                    tempPassword += (char)(rand.Next('Z' - 'A' + 1) + 'A');
+                                }
+                                //otherwise, character is lowercase
+                                else
+                                {
+                                    tempPassword += (char)(rand.Next('z' - 'a' + 1) + 'a');
+                                }
+                            }
+                        }
+
+                        var path = Server.MapPath(@"~/Content/Email_Templates/forgotPassword.txt"); //need this so the project root folder is used
+                        try
+                        {
+                            using (StreamReader sr = new StreamReader(path, true))
+                            {
+                                body = "Hello " + user.FirstName + "," + '\n' + '\n'; //email greeting
+
+                                //reads the email template until the end of the file
+                                while (!sr.EndOfStream)
+                                {
+                                    body += sr.ReadLine() + '\n';
+                                }
+
+                                body += '\n' + "Temporary Password: " + tempPassword + '\n' + '\n'; //provides randomly generated temp password to the user
+
+                                //email end tag
+                                body += "Regards, " + '\n' + '\n';
+                                body += "SpaceBook Team" + '\n';
+                            }
+                        }
+                        //if the file cannot be opened, return to login
+                        catch
+                        {
+                            return RedirectToAction("Login");
+                        }
+
+                        try
+                        {
+                            //settings for using gmail smtp
+                            var smtp = new SmtpClient
+                            {
+                                Host = "smtp.gmail.com", //gmail smtp server
+                                Port = 587, //gmail smtp port
+                                EnableSsl = true, //uses SSL
+                                DeliveryMethod = SmtpDeliveryMethod.Network, //uses the network to deliver the message
+                                UseDefaultCredentials = false, //not using default credentials, using spacebookapp gmail account
+                                Credentials = new NetworkCredential(sender_address.Address, sender_password) //authenticates the sender
+                            };
+
+                            //composes message with the previously determined subject and body and sends it
+                            using (var message = new MailMessage(sender_address, receiver_address)
+                            {
+                                Subject = subject,
+                                Body = body
+                            })
+                            {
+                                smtp.Send(message); //sends email from sender to user
+                            }
+                        }
+                        //if the email cannot be sent, retunr to login
+                        catch
+                        {
+                            return RedirectToAction("Login");
+                        }
+
+                        //changes user password to the temporary password
+                        user.Password = tempPassword;
+
+                        context.SaveChanges();
+
+                    }
+
+                }
+            }
+
             return RedirectToAction("Login");
         }
 
@@ -487,21 +614,12 @@ namespace SpaceBook.Controllers
             //if ProfilePicFile is null, it will explicity request the file and assign it to ProfilePicFile
             ProfilePicFile = ProfilePicFile ?? Request.Files["ProfilePicFileName"];
 
-
             using (var context = new SpaceBookEntities1())
             {
                 var userID = Convert.ToInt32(Session["UserID"]);
                 User myUser = context.Users.Where(u => u.Id == userID).FirstOrDefault();
                 if (ModelState.IsValid)
                 {
-                    //Checks to see if all parameters have been filled out
-                    /*if (!string.IsNullOrEmpty(userParam.FirstName) &&
-                        !string.IsNullOrEmpty(userParam.LastName) &&
-                        !string.IsNullOrEmpty(userParam.Email) &&
-                        !string.IsNullOrEmpty(userParam.Phone) &&
-                        !string.IsNullOrEmpty(userParam.Password))
-                    {*/
-
                     //assigns form values to the user fields
                     //User ID is autoincremented so no need to assign that
                     if (userParam.FirstName != null)
@@ -552,7 +670,6 @@ namespace SpaceBook.Controllers
              * Triggered if the user fails to fill out all the fields before pressing the "Create" button.
              * This returns the user to the UserRegistration page to try again.
             */
-            //TempData["UserMessage"] = new MessageViewModel() { CssClassName = "alert-danger", Message = "You have not entered a value for all fields. Please try again" };
             return RedirectToAction("ViewUserProfile");
         }
 
@@ -661,7 +778,7 @@ namespace SpaceBook.Controllers
                     newFacility.Country = facilityParam.Country;
                     newFacility.ActiveFlag = true;
                     newFacility.Type = 1; //
-                    
+
 
                     context.Facilities.Add(newFacility);
                     CreateTimeSlots(newFacility, dayList, rateList); //Creation of time slots
@@ -669,7 +786,7 @@ namespace SpaceBook.Controllers
 
                     Session["FacilityId"] = newFacility.Id;
 
-                    List <TagType> viewTypes = context.TagTypes.ToList();
+                    List<TagType> viewTypes = context.TagTypes.ToList();
                     return View("~/Views/Home/RegisterFacility/AddTags.cshtml", viewTypes);
                 }
 
@@ -707,11 +824,12 @@ namespace SpaceBook.Controllers
 
                             double rate = 0;
                             double halfRate = 0;
-                            if (currDayRate[i] != null && currDayRate[i] != "") {
+                            if (currDayRate[i] != null && currDayRate[i] != "")
+                            {
                                 rate = Math.Round(Convert.ToDouble(currDayRate[i]), 3);
                                 halfRate = Math.Round(rate / 2, 3);
                             }
-                                
+
 
                             if ((interval >= start) && (interval < end))
                             {
@@ -732,17 +850,18 @@ namespace SpaceBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult RegisterFacilityAddTags() 
+        public ActionResult RegisterFacilityAddTags()
         {
-            using (var context = new SpaceBookEntities1()) 
+            using (var context = new SpaceBookEntities1())
             {
                 var facilityId = Convert.ToInt32(Session["FacilityId"]);
                 List<string> tagIsCheckedList = Request.Form["checkedTags"].Split(',').ToList<string>();
                 List<TagType> Tags = context.TagTypes.ToList();
 
-                for (int i = 0; i < tagIsCheckedList.Count; i++) 
+                for (int i = 0; i < tagIsCheckedList.Count; i++)
                 {
-                    if (tagIsCheckedList[i] == "true") {
+                    if (tagIsCheckedList[i] == "true")
+                    {
                         TagAssignment newTagAssignment = new TagAssignment();
                         newTagAssignment.FacilityId = facilityId;
                         newTagAssignment.TagId = Tags[i].Id;
@@ -771,7 +890,7 @@ namespace SpaceBook.Controllers
                             booking.Facility.Name.FirstOrDefault();
                             booking.EndDateTime = booking.EndDateTime.Value.AddMinutes(30);
                         }
-              
+
 
                     if (user != null)
                     {
