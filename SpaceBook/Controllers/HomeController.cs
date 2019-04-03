@@ -62,6 +62,9 @@ namespace SpaceBook.Controllers
                 var results = new List<Facility>();
                 var tagName = Request.Form["tagInput"];
                 var tag = context.TagTypes.Where(x => x.Name == tagName).FirstOrDefault();
+                if (tag == null)
+                    return View("SearchResults", results);
+
                 var tagAssignments = context.TagAssignments.Where(x => x.TagId == tag.Id).ToList();
 
                 foreach (var item in tagAssignments)
