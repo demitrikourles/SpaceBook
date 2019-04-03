@@ -126,6 +126,9 @@
                 <button value="Back" type="button" onclick="location.href='@Url.Action("RegisterFacilityInfo", Model)'" class="btn btn-danger" style="margin-right: 5%">Back</button>
                 <input type="submit" value="Register" class="btn btn-primary" style="margin-left: 5%" />
             </div>
+            <div id="errorMessage" style="text-align:center" class="text-danger">
+                <span>Please confirm there are no conflicting entries</span>
+            </div>
         </div>
     </div>
 }
@@ -155,6 +158,7 @@
     var satRates = [];
     var sunRates = [];
 
+    $("#errorMessage").hide();
     var defaultRate = @rate;
 </script>
 
@@ -392,9 +396,102 @@
         $('#sunEnd').val(sunEndTimes);
         $('#sunRate').val(sunRates);
 
-
-        return true; // return false to cancel form action
+        if (validateHours())
+            return true; // return false to cancel form action
+        else {
+            clearArrays();
+            $("#errorMessage").show();
+            return false;
+        }
     });
+
+    function validateHours() {
+        for (var i = 0; i < monStartTimes.length; i++) {
+            monStartTimes[i] = new Date(Date.parse(["2013/05/29 ", monStartTimes[i].slice(0, monStartTimes[i].length - 2), " ", monStartTimes[i].slice(monStartTimes[i].length - 2)].join('')));
+            monEndTimes[i] = new Date(Date.parse(["2013/05/29 ", monEndTimes[i].slice(0, monEndTimes[i].length - 2), " ", monEndTimes[i].slice(monEndTimes[i].length - 2)].join('')));
+        }
+        
+        for (var i = 0; i < tueStartTimes.length; i++) {
+            tueStartTimes[i] = new Date(Date.parse(["2013/05/29 ", tueStartTimes[i].slice(0, tueStartTimes[i].length - 2), " ", tueStartTimes[i].slice(tueStartTimes[i].length - 2)].join('')));
+            tueEndTimes[i] = new Date(Date.parse(["2013/05/29 ", tueEndTimes[i].slice(0, tueEndTimes[i].length - 2), " ", tueEndTimes[i].slice(tueEndTimes[i].length - 2)].join('')));
+        }
+
+        for (var i = 0; i < wedStartTimes.length; i++) {
+            wedStartTimes[i] = new Date(Date.parse(["2013/05/29 ", wedStartTimes[i].slice(0, wedStartTimes[i].length - 2), " ", wedStartTimes[i].slice(wedStartTimes[i].length - 2)].join('')));
+            wedEndTimes[i] = new Date(Date.parse(["2013/05/29 ", wedEndTimes[i].slice(0, wedEndTimes[i].length - 2), " ", wedEndTimes[i].slice(wedEndTimes[i].length - 2)].join('')));
+        }
+
+        for (var i = 0; i < thuStartTimes.length; i++) {
+            thuStartTimes[i] = new Date(Date.parse(["2013/05/29 ", thuStartTimes[i].slice(0, thuStartTimes[i].length - 2), " ", thuStartTimes[i].slice(thuStartTimes[i].length - 2)].join('')));
+            thuEndTimes[i] = new Date(Date.parse(["2013/05/29 ", thuEndTimes[i].slice(0, thuEndTimes[i].length - 2), " ", thuEndTimes[i].slice(thuEndTimes[i].length - 2)].join('')));
+        }
+
+        for (var i = 0; i < friStartTimes.length; i++) {
+            friStartTimes[i] = new Date(Date.parse(["2013/05/29 ", friStartTimes[i].slice(0, friStartTimes[i].length - 2), " ", friStartTimes[i].slice(friStartTimes[i].length - 2)].join('')));
+            friEndTimes[i] = new Date(Date.parse(["2013/05/29 ", friEndTimes[i].slice(0, friEndTimes[i].length - 2), " ", friEndTimes[i].slice(friEndTimes[i].length - 2)].join('')));
+        }
+
+        for (var i = 0; i < satStartTimes.length; i++) {
+            satStartTimes[i] = new Date(Date.parse(["2013/05/29 ", satStartTimes[i].slice(0, satStartTimes[i].length - 2), " ", satStartTimes[i].slice(satStartTimes[i].length - 2)].join('')));
+            satEndTimes[i] = new Date(Date.parse(["2013/05/29 ", satEndTimes[i].slice(0, satEndTimes[i].length - 2), " ", satEndTimes[i].slice(satEndTimes[i].length - 2)].join('')));
+        }
+
+        for (var i = 0; i < sunStartTimes.length; i++) {
+            sunStartTimes[i] = new Date(Date.parse(["2013/05/29 ", sunStartTimes[i].slice(0, sunStartTimes[i].length - 2), " ", sunStartTimes[i].slice(sunStartTimes[i].length - 2)].join('')));
+            sunEndTimes[i] = new Date(Date.parse(["2013/05/29 ", sunEndTimes[i].slice(0, sunEndTimes[i].length - 2), " ", sunEndTimes[i].slice(sunEndTimes[i].length - 2)].join('')));
+        }
+
+        //i = max number of hour row entries
+        for (var i = 0; i < 10; i++) {
+            //if a start time is greater than or equal to an end time.
+            if ((monStartTimes[i] >= monEndTimes[i]) || (tueStartTimes[i] >= tueEndTimes[i]) || (wedStartTimes[i] >= wedEndTimes[i])
+                || (thuStartTimes[i] >= thuEndTimes[i]) || (friStartTimes[i] >= friEndTimes[i]) || (satStartTimes[i] >= satEndTimes[i])
+                || (sunStartTimes[i] >= sunEndTimes[i]))
+                return false;
+
+            //if there are any duplicates in any list, return false
+            for (var j = 0; j < 10; j++) {
+                if (i == j)
+                    continue;
+
+                if (((monStartTimes[i] < monEndTimes[j]) && (monStartTimes[i] >= monStartTimes[j]) && monStartTimes[j] != "")
+                    || ((tueStartTimes[i] < tueEndTimes[j]) && (tueStartTimes[i] >= tueStartTimes[j]) && tueStartTimes[j] != "")
+                    || ((wedStartTimes[i] < wedEndTimes[j]) && (wedStartTimes[i] >= wedStartTimes[j]) && wedStartTimes[j] != "")
+                    || ((thuStartTimes[i] < thuEndTimes[j]) && (thuStartTimes[i] >= thuStartTimes[j]) && thuStartTimes[j] != "")
+                    || ((friStartTimes[i] < friEndTimes[j]) && (friStartTimes[i] >= friStartTimes[j]) && friStartTimes[j] != "")
+                    || ((satStartTimes[i] < satEndTimes[j]) && (satStartTimes[i] >= satStartTimes[j]) && satStartTimes[j] != "")
+                    || ((sunStartTimes[i] < sunEndTimes[j]) && (sunStartTimes[i] >= sunStartTimes[j]) && sunStartTimes[j] != ""))
+                    return false;
+            } 
+        }
+        return true;
+    }
+
+    function clearArrays() {
+        monStartTimes = [];
+        tueStartTimes = [];
+        wedStartTimes = [];
+        thuStartTimes = [];
+        friStartTimes = [];
+        satStartTimes = [];
+        sunStartTimes = [];
+
+        monEndTimes = [];
+        tueEndTimes = [];
+        wedEndTimes = [];
+        thuEndTimes = [];
+        friEndTimes = [];
+        satEndTimes = [];
+        sunEndTimes = [];
+
+        monRates = [];
+        tueRates = [];
+        wedRates = [];
+        thuRates = [];
+        friRates = [];
+        satRates = [];
+        sunRates = [];
+    }
 
     function increaseTimeByOneHour(timeStr) {
         var splitedTimeStr = timeStr.split(':');
