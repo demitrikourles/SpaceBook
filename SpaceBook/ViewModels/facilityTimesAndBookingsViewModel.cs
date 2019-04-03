@@ -10,7 +10,7 @@ namespace SpaceBook.ViewModels
     {
         public List <FacilityTime> times;
         public List <Booking> bookings;
-        public DateTime selectedWeek;
+        public DateTime selectedDateMonday;
 
         public facilityTimesAndBookingsViewModel(List<FacilityTime> times, List<Booking> bookings)
         {

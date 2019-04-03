@@ -12,7 +12,7 @@
                 var beforeCurrentDayTime = "0";
 
                 //checks if timeslot has already passed compared to the current time
-                beforeCurrentDayTime = Html.Action("isBeforeCurrentDayTime", "Home", new { time = Model.times.ElementAtOrDefault(x) }).ToString();
+                beforeCurrentDayTime = Html.Action("isBeforeCurrentDayTime", "Home", new { time = Model.times.ElementAtOrDefault(x), dateMondayString = Model.selectedDateMonday.ToString(), day_of_week = ((int)Model.times.FirstOrDefault().Day) }).ToString();
                 if (beforeCurrentDayTime == "1")
                 {
                     disableIt = "1";
@@ -26,7 +26,14 @@
 
                         //checks if booking intersects with current time slot
                         isIntersecting = Html.Action("getIntersection", "Home",
-                        new { booking = Model.bookings.ElementAtOrDefault(y), time = Model.times.ElementAtOrDefault(x) }).ToString();
+                        new
+                        {
+                            booking = Model.bookings.ElementAtOrDefault(y),
+                            time = Model.times.ElementAtOrDefault(x),
+                            dateMondayString = Model.selectedDateMonday.ToString(),
+                            day_of_week = ((int)Model.times.FirstOrDefault().Day)
+                        }).ToString();
+                        ;
 
                         //if a booking exists during the timeslot, disable the button
                         if (isIntersecting == "1")
@@ -43,18 +50,18 @@
                 <tr>
                     @if (Model.times.ElementAtOrDefault(x).IsAvailable == true && disableIt == "0")
                     { //generates enabled button if the timeslot is free Html.DisplayFor(modelItem => Model.times.ElementAtOrDefault(x).StartTime)
-                    <td>
-                        <button href="#" class="bookTime btn btn-sm btn-primary"
-                                data-time="@Model.times.ElementAtOrDefault(x).StartTime"
-                                data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
-                                data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
-                                data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
-                                data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
-                                data-available="available">
-                            @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
-                        </button>
-                        
-                    </td>
+                        <td>
+                            <button href="#" class="bookTime btn btn-sm btn-primary"
+                                    data-time="@Model.times.ElementAtOrDefault(x).StartTime"
+                                    data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
+                                    data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59)) }).ToString()"
+                                    data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
+                                    data-available="available">
+                                @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
+                            </button>
+
+                        </td>
                     }
                     else
                     {
@@ -63,7 +70,7 @@
                                     data-time="@Model.times.ElementAtOrDefault(x).StartTime"
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
-                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59)) }).ToString()"
                                     data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
                                     data-available="notAvailable">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
@@ -85,7 +92,7 @@
                 var beforeCurrentDayTime = "0";
 
                 //checks if timeslot has already passed
-                beforeCurrentDayTime = Html.Action("isBeforeCurrentDayTime", "Home", new { time = Model.times.ElementAtOrDefault(x) }).ToString();
+                beforeCurrentDayTime = Html.Action("isBeforeCurrentDayTime", "Home", new { time = Model.times.ElementAtOrDefault(x), dateMondayString = Model.selectedDateMonday.ToString(), day_of_week = ((int)Model.times.FirstOrDefault().Day) }).ToString();
                 if (beforeCurrentDayTime == "1")
                 {
                     disableIt = "1";
@@ -99,7 +106,13 @@
 
                         //checks if booking intersects with current time slot
                         isIntersecting = Html.Action("getIntersection", "Home",
-                        new { booking = Model.bookings.ElementAtOrDefault(y), time = Model.times.ElementAtOrDefault(x) }).ToString();
+                        new
+                        {
+                            booking = Model.bookings.ElementAtOrDefault(y),
+                            time = Model.times.ElementAtOrDefault(x),
+                            dateMondayString = Model.selectedDateMonday.ToString(),
+                            day_of_week = ((int)Model.times.FirstOrDefault().Day)
+                        }).ToString();
 
                         //if a booking exists during the timeslot, disable the button
                         if (isIntersecting == "1")
@@ -121,7 +134,7 @@
                                     data-time="@Model.times.ElementAtOrDefault(x).StartTime"
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
-                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59)) }).ToString()"
                                     data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
                                     data-available="available">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
@@ -135,7 +148,7 @@
                                     data-time="@Model.times.ElementAtOrDefault(x).StartTime"
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
-                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59)) }).ToString()"
                                     data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
                                     data-available="notAvailable">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
@@ -157,7 +170,7 @@
                 var beforeCurrentDayTime = "0";
 
                 //checks if timeslot has already passed
-                beforeCurrentDayTime = Html.Action("isBeforeCurrentDayTime", "Home", new { time = Model.times.ElementAtOrDefault(x) }).ToString();
+                beforeCurrentDayTime = Html.Action("isBeforeCurrentDayTime", "Home", new { time = Model.times.ElementAtOrDefault(x), dateMondayString = Model.selectedDateMonday.ToString(), day_of_week = ((int)Model.times.FirstOrDefault().Day) }).ToString();
                 if (beforeCurrentDayTime == "1")
                 {
                     disableIt = "1";
@@ -171,7 +184,13 @@
 
                         //checks if booking intersects with current time slot
                         isIntersecting = Html.Action("getIntersection", "Home",
-                        new { booking = Model.bookings.ElementAtOrDefault(y), time = Model.times.ElementAtOrDefault(x) }).ToString();
+                        new
+                        {
+                            booking = Model.bookings.ElementAtOrDefault(y),
+                            time = Model.times.ElementAtOrDefault(x),
+                            dateMondayString = Model.selectedDateMonday.ToString(),
+                            day_of_week = ((int)Model.times.FirstOrDefault().Day)
+                        }).ToString();
 
                         //if a booking exists during the timeslot, disable the button
                         if (isIntersecting == "1")
@@ -193,7 +212,7 @@
                                     data-time="@Model.times.ElementAtOrDefault(x).StartTime"
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
-                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59)) }).ToString()"
                                     data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
                                     data-available="available">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
@@ -207,7 +226,7 @@
                                     data-time="@Model.times.ElementAtOrDefault(x).StartTime"
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
-                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59)) }).ToString()"
                                     data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
                                     data-available="notAvailable">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
@@ -229,7 +248,7 @@
                 var beforeCurrentDayTime = "0";
 
                 //checks if timeslot has already passed
-                beforeCurrentDayTime = Html.Action("isBeforeCurrentDayTime", "Home", new { time = Model.times.ElementAtOrDefault(x) }).ToString();
+                beforeCurrentDayTime = Html.Action("isBeforeCurrentDayTime", "Home", new { time = Model.times.ElementAtOrDefault(x), dateMondayString = Model.selectedDateMonday.ToString(), day_of_week = ((int)Model.times.FirstOrDefault().Day) }).ToString();
                 if (beforeCurrentDayTime == "1")
                 {
                     disableIt = "1";
@@ -243,7 +262,13 @@
 
                         //checks if booking intersects with current time slot
                         isIntersecting = Html.Action("getIntersection", "Home",
-                        new { booking = Model.bookings.ElementAtOrDefault(y), time = Model.times.ElementAtOrDefault(x) }).ToString();
+                        new
+                        {
+                            booking = Model.bookings.ElementAtOrDefault(y),
+                            time = Model.times.ElementAtOrDefault(x),
+                            dateMondayString = Model.selectedDateMonday.ToString(),
+                            day_of_week = ((int)Model.times.FirstOrDefault().Day)
+                        }).ToString();
 
                         //if a booking exists during the timeslot, disable the button
                         if (isIntersecting == "1")
@@ -265,7 +290,7 @@
                                     data-time="@Model.times.ElementAtOrDefault(x).StartTime"
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
-                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59)) }).ToString()"
                                     data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
                                     data-available="available">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
@@ -279,7 +304,7 @@
                                     data-time="@Model.times.ElementAtOrDefault(x).StartTime"
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
-                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59)) }).ToString()"
                                     data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
                                     data-available="notAvailable">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
@@ -301,7 +326,7 @@
                 var beforeCurrentDayTime = "0";
 
                 //checks if timeslot has already passed
-                beforeCurrentDayTime = Html.Action("isBeforeCurrentDayTime", "Home", new { time = Model.times.ElementAtOrDefault(x) }).ToString();
+                beforeCurrentDayTime = Html.Action("isBeforeCurrentDayTime", "Home", new { time = Model.times.ElementAtOrDefault(x), dateMondayString = Model.selectedDateMonday.ToString(), day_of_week = ((int)Model.times.FirstOrDefault().Day) }).ToString();
                 if (beforeCurrentDayTime == "1")
                 {
                     disableIt = "1";
@@ -315,7 +340,13 @@
 
                         //checks if booking intersects with current time slot
                         isIntersecting = Html.Action("getIntersection", "Home",
-                        new { booking = Model.bookings.ElementAtOrDefault(y), time = Model.times.ElementAtOrDefault(x) }).ToString();
+                        new
+                        {
+                            booking = Model.bookings.ElementAtOrDefault(y),
+                            time = Model.times.ElementAtOrDefault(x),
+                            dateMondayString = Model.selectedDateMonday.ToString(),
+                            day_of_week = ((int)Model.times.FirstOrDefault().Day)
+                        }).ToString();
 
                         //if a booking exists during the timeslot, disable the button
                         if (isIntersecting == "1")
@@ -337,7 +368,7 @@
                                     data-time="@Model.times.ElementAtOrDefault(x).StartTime"
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
-                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59)) }).ToString()"
                                     data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
                                     data-available="available">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
@@ -351,7 +382,7 @@
                                     data-time="@Model.times.ElementAtOrDefault(x).StartTime"
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
-                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59)) }).ToString()"
                                     data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
                                     data-available="notAvailable">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
@@ -372,7 +403,7 @@
                 var beforeCurrentDayTime = "0";
 
                 //checks if timeslot has already passed
-                beforeCurrentDayTime = Html.Action("isBeforeCurrentDayTime", "Home", new { time = Model.times.ElementAtOrDefault(x) }).ToString();
+                beforeCurrentDayTime = Html.Action("isBeforeCurrentDayTime", "Home", new { time = Model.times.ElementAtOrDefault(x), dateMondayString = Model.selectedDateMonday.ToString(), day_of_week = ((int)Model.times.FirstOrDefault().Day) }).ToString();
                 if (beforeCurrentDayTime == "1")
                 {
                     disableIt = "1";
@@ -386,7 +417,13 @@
 
                         //checks if booking intersects with current time slot
                         isIntersecting = Html.Action("getIntersection", "Home",
-                        new { booking = Model.bookings.ElementAtOrDefault(y), time = Model.times.ElementAtOrDefault(x) }).ToString();
+                        new
+                        {
+                            booking = Model.bookings.ElementAtOrDefault(y),
+                            time = Model.times.ElementAtOrDefault(x),
+                            dateMondayString = Model.selectedDateMonday.ToString(),
+                            day_of_week = ((int)Model.times.FirstOrDefault().Day)
+                        }).ToString();
 
                         //if a booking exists during the timeslot, disable the button
                         if (isIntersecting == "1")
@@ -408,7 +445,7 @@
                                     data-time="@Model.times.ElementAtOrDefault(x).StartTime"
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
-                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59)) }).ToString()"
                                     data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
                                     data-available="available">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
@@ -422,7 +459,7 @@
                                     data-time="@Model.times.ElementAtOrDefault(x).StartTime"
                                     data-timeEnd="@Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))"
                                     data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
-                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59))}).ToString()"
+                                    data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59)) }).ToString()"
                                     data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
                                     data-available="notAvailable">
                                 @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
@@ -444,7 +481,10 @@
     <h3>Cost: </h3>
     <p id="cost" data-totalCost="0.00">-</p>
     <button href="#" disabled="disabled" id="confirmEnd" data-realEndTime="ConfirmEnd" class="confirmEnd btn btn-sm btn-primary">Confirm End</button>
-    @Html.ActionLink("Cancel", "ViewFacilityAvailability", new { facilityId = Model.times.FirstOrDefault().FacilityId, weekIncr = 0}, new { @class = "cancelBooking btn btn-sm btn-primary", @style = "color:white", @id = "cancelBooking" })
+    @Html.ActionLink("Cancel", "ViewFacilityAvailability", new { facilityId = Model.times.FirstOrDefault().FacilityId,
+    dateMondayString = Model.selectedDateMonday.ToString(),
+    day_of_week = ((int)Model.times.FirstOrDefault().Day)},
+    new { @class = "cancelBooking btn btn-sm btn-primary", @style = "color:white", @id = "cancelBooking" })
     <button href="#" disabled="disabled" id="submitBooking" class="submitBooking btn btn-sm btn-primary">Submit</button>
 
 </div>
@@ -612,10 +652,13 @@
 <script type="text/javascript">
     $(function () {
         $('#submitBooking').click(function () {
-
             var StartTime = $('#start').attr('data-realStartTime');
             var EndTime = $('#end').attr('data-realEndTime');
             var cost = $('#cost').attr('data-totalCost');
+            var dateMondayString = "@Model.selectedDateMonday.ToString()";
+            var day_of_week = @((int)Model.times.FirstOrDefault().Day.Value);
+            var facilityID = @Model.times.ElementAtOrDefault(0).FacilityId;
+
             //submits booking for insertion into the db
             $('#submitBooking').attr('disabled', true);
             $.ajax({
@@ -624,7 +667,10 @@
                 data: {
                     StartTime: StartTime,
                     EndTime: EndTime,
-                    cost: cost
+                    cost: cost,
+                    dateMondayString: dateMondayString,
+                    day_of_week: day_of_week,
+                    facilityID: facilityID
                 },
                 success: function () {
                     //returns user to the facility view page upon submission

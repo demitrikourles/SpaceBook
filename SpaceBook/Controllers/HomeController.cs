@@ -78,7 +78,7 @@ namespace SpaceBook.Controllers
             using (var context = new SpaceBookEntities1())
             {
                 var facility = context.Facilities.Include(x => x.Reviews).Where(x => x.Id == id).FirstOrDefault();
-                foreach(var review in facility.Reviews)
+                foreach (var review in facility.Reviews)
                 {
                     review.User.FirstName.First();
                     review.User.LastName.First();
@@ -88,45 +88,17 @@ namespace SpaceBook.Controllers
         }
 
         [HttpGet]
-        //Week increment is 0 (new booking attempt), 1(load next week on current booking attempt), or -1(load previous week on current booking attempt)
-        public ActionResult ViewFacilityAvailability(Int32 facilityId, int weekIncr)
+        public ActionResult ViewFacilityAvailability(Int32 facilityId, string dateMondayString)
         {
             using (var context = new SpaceBookEntities1())
             {
-                //Sets the current week's monday using DateTime.Now as reference
-                int day_of_week_now = (int)DateTime.Now.DayOfWeek == 0 ? 7 : (int)DateTime.Now.DayOfWeek;
-                DateTime refMonday = DateTime.Now.AddDays((Convert.ToInt32(DayOfWeek.Monday) - day_of_week_now));
-                refMonday = new DateTime(refMonday.Year, refMonday.Month, refMonday.Day, 0, 0, 0);
-                Session["TodayWeekMonday"] = refMonday.ToString();
-
-                //resets the day of the week to monday each time the page is reloaded
-                Session["DayofWeek"] = "1";
-
-                //Resets sessions if weekIncr = 0 because that means a new booking attempt has loaded
-                if (weekIncr == 0)
-                {
-                    //sets the currently selected week to the actual current week
-                    Session["SelectedWeekMonday"] = refMonday.ToString();
-                    Session["FacilityID"] = facilityId.ToString();
-                }
-
-                //Checks if only the week is being changed (facilityId = -1)
-                if (weekIncr != 0)
-                {
-                    //sets facility Id to current value stored in session["FacilityID"]
-                    facilityId = Convert.ToInt32(Session["FacilityID"].ToString());
-
-                    //weekIncr will either be 1 or -1
-                    //This will change the current week DateTime by +/- 7 days
-                    var selectedWeek = Session["SelectedWeekMonday"].ToString();
-                    selectedWeek = DateTime.Parse(selectedWeek).AddDays(weekIncr * 7).ToString();
-                    Session["SelectedWeekMonday"] = selectedWeek;
-                }
+                //gets the monday of the currently selected week
+                DateTime date = DateTime.Parse(dateMondayString);
 
                 //need to only pass in bookings from the same week
                 //gets the beginning and end of the weeks the user has selected
-                DateTime selectedWeekDateTime = DateTime.Parse(Session["SelectedWeekMonday"].ToString());
-                DateTime selectedWeekNext = selectedWeekDateTime.AddDays(6);
+                DateTime selectedWeekDateTime = date;
+                DateTime selectedWeekNext = date.AddDays(7);
 
                 //checks the following:
                 //booking is for the currently selcted facility
@@ -142,7 +114,7 @@ namespace SpaceBook.Controllers
                 var times = context.FacilityTimes.Where(x => x.FacilityId == facilityId).ToList().OrderBy(x => x.StartTime).ToList();
                 //passes relevant time slots and bookings to the view
                 var viewModel = new facilityTimesAndBookingsViewModel(times, bookings);
-                viewModel.selectedWeek = DateTime.Parse(Session["SelectedWeekMonday"].ToString());
+                viewModel.selectedDateMonday = date;
 
                 if (times.Count > 0)
                 {
@@ -157,17 +129,16 @@ namespace SpaceBook.Controllers
         }
 
         [HttpGet]
-        public ActionResult PartialViewTimes(int day, int facilityId)
+        public ActionResult PartialViewTimes(int day, int facilityId, string dateMondayString)
         {
-            //updates the day of the week session according to which day button was pressed
-            Session["DayofWeek"] = day.ToString();
-
             using (var context = new SpaceBookEntities1())
             {
+                //gets the currently selected week
+                DateTime date = DateTime.Parse(dateMondayString);
 
                 //need to only pass in bookings from the same week
-                DateTime selectedWeekDateTime = DateTime.Parse(Session["SelectedWeekMonday"].ToString());
-                DateTime selectedWeekNext = selectedWeekDateTime.AddDays(6);
+                DateTime selectedWeekDateTime = date;
+                DateTime selectedWeekNext = selectedWeekDateTime.AddDays(7);
 
                 //checks the following:
                 //booking is for the currently selcted facility
@@ -183,7 +154,7 @@ namespace SpaceBook.Controllers
                 //passes relevant time slots and bookings to the view
                 var times = context.FacilityTimes.Where(x => ((x.Day == day) && (x.FacilityId == facilityId))).ToList().OrderBy(x => x.StartTime).ToList();
                 var viewModel = new facilityTimesAndBookingsViewModel(times, bookings);
-                viewModel.selectedWeek = DateTime.Parse(Session["SelectedWeekMonday"].ToString());
+                viewModel.selectedDateMonday = date;
 
                 if (times.Count > 0)
                 {
@@ -199,10 +170,12 @@ namespace SpaceBook.Controllers
 
         //checks for an intersection bewtween time slots and bookings
         //It should have already been ensured that the time slot and booking occur in the same week
-        public string getIntersection(Booking booking, FacilityTime time)
+        public string getIntersection(Booking booking, FacilityTime time, string dateMondayString, int day_of_week)
         {
+            //gets the currently selected week
+            DateTime date = DateTime.Parse(dateMondayString);
+
             //finds the the day of the week of the booking and the date for the time slot
-            int day_of_week = Convert.ToInt32(Session["DayOfWeek"].ToString());
             int booking_day_of_week = (int)booking.StartDateTime.Value.DayOfWeek == 0 ? 7 : (int)booking.StartDateTime.Value.DayOfWeek;
             //checks if the booking and time slot are on the same day between a booking and time slot
             if (day_of_week != booking_day_of_week)
@@ -227,19 +200,20 @@ namespace SpaceBook.Controllers
         }
 
         //checks to see if a given timeslot is before today's date and time
-        public string isBeforeCurrentDayTime(FacilityTime time)
+        public string isBeforeCurrentDayTime(FacilityTime time, string dateMondayString, int day_of_week)
         {
+            //gets the currently selected week
+            DateTime date = DateTime.Parse(dateMondayString);
+
             //gets today's day of the week
             int day_of_week_now = (int)DateTime.Now.DayOfWeek == 0 ? 7 : (int)DateTime.Now.DayOfWeek;
             //Gets reference monday using DateTime.Now
             DateTime refMonday = DateTime.Now.AddDays((Convert.ToInt32(DayOfWeek.Monday) - day_of_week_now));
             refMonday = new DateTime(refMonday.Year, refMonday.Month, refMonday.Day, 0, 0, 0);
-            //Gets the currently selected week monday
-            DateTime selectedWeekMonday = DateTime.Parse(Session["SelectedWeekMonday"].ToString());
 
             //Compare = 0 -> equal, Compare < 0 -> t1 is earlier than t2, Compare > 0 -> t1 is later than t2
             //If todays date and the selected date are not in the same week or earlier, return false
-            var isWeekEarlier = DateTime.Compare(refMonday, selectedWeekMonday);
+            var isWeekEarlier = DateTime.Compare(refMonday, date);
             if (isWeekEarlier < 0)
                 return "0";
             else if (isWeekEarlier > 0)
@@ -259,26 +233,29 @@ namespace SpaceBook.Controllers
         }
 
         [HttpPost]
-        public bool makeBooking(String StartTime, String EndTime, String cost)
+        public bool makeBooking(String StartTime, String EndTime, String cost, string dateMondayString, int day_of_week, int facilityID)
         {
 
             using (var context = new SpaceBookEntities1())
             {
+                //gets the currently selected week
+                DateTime date = DateTime.Parse(dateMondayString);
+
                 Booking newBooking = new Booking();
                 if (ModelState.IsValid)
                 {
 
-                    //we are keeping track of facility and user id during the booking process so the values can be pulled from the sessions
+                    //we are keeping track of user id so the value can be pulled from the session
                     var uID = Convert.ToInt32(Session["UserID"]);
-                    var FacID = Convert.ToInt32(Session["FacilityID"]);
+                    var FacID = facilityID;
 
                     newBooking.UserId = uID;
                     newBooking.FacilityId = FacID;
                     newBooking.Cancelled = false;
 
                     //gets the date of the booking
-                    DateTime currentDate = DateTime.Parse(Session["SelectedWeekMonday"].ToString());
-                    currentDate = currentDate.AddDays(Convert.ToInt32(Session["DayofWeek"].ToString()) - Convert.ToInt32(DayOfWeek.Monday));
+                    DateTime currentDate = date;
+                    currentDate = currentDate.AddDays(day_of_week - 1);
 
                     //adds the time to the booking
                     DateTime StartTimeBooking = currentDate.Add(TimeSpan.Parse(StartTime));
@@ -820,7 +797,7 @@ namespace SpaceBook.Controllers
                         newFacilityTime.Day = day;
                         newFacilityTime.Rate = 0;
                         newFacilityTime.IsAvailable = false;
-                        
+
                         for (int i = 0; i < currDay.Count / 2; i++)
                         {
                             if (currDay[i] == "")
@@ -885,15 +862,15 @@ namespace SpaceBook.Controllers
             }
         }
 
-        public ActionResult EditFacilityInfo(Int32 id) 
+        public ActionResult EditFacilityInfo(Int32 id)
         {
-            if (Session["UserID"] != null) 
+            if (Session["UserID"] != null)
             {
-                using (var context = new SpaceBookEntities1()) 
+                using (var context = new SpaceBookEntities1())
                 {
                     RegisterFacilityViewModel facViewModel = new RegisterFacilityViewModel();
                     Facility fac = context.Facilities.Where(x => x.Id == id).FirstOrDefault();
-                    if (fac != null) 
+                    if (fac != null)
                     {
                         facViewModel.Name = fac.Name;
                         facViewModel.Description = fac.Description;
@@ -916,23 +893,23 @@ namespace SpaceBook.Controllers
             return RedirectToAction("Login");
         }
 
-        public ActionResult EditFacilityAddress(RegisterFacilityViewModel facilityParam) 
+        public ActionResult EditFacilityAddress(RegisterFacilityViewModel facilityParam)
         {
-            if (ModelState.IsValidField("Name") && ModelState.IsValidField("Description") && ModelState.IsValidField("Email") && ModelState.IsValidField("Phone") && ModelState.IsValidField("DefaultHourlyRate")) 
+            if (ModelState.IsValidField("Name") && ModelState.IsValidField("Description") && ModelState.IsValidField("Email") && ModelState.IsValidField("Phone") && ModelState.IsValidField("DefaultHourlyRate"))
             {
                 ModelState.Clear();
                 return View("EditFacilityAddress", facilityParam);
             }
-            else 
+            else
             {
                 return View("~/Views/Home/EditFacility/Info.cshtml", facilityParam);
             }
         }
 
 
-        public ActionResult EditFacilityComplete(RegisterFacilityViewModel facilityParam) 
+        public ActionResult EditFacilityComplete(RegisterFacilityViewModel facilityParam)
         {
-            using (var context = new SpaceBookEntities1()) 
+            using (var context = new SpaceBookEntities1())
             {
                 Facility record = context.Facilities.Where(x => x.Id == facilityParam.Id).FirstOrDefault();
                 record.Name = facilityParam.Name;
@@ -955,27 +932,28 @@ namespace SpaceBook.Controllers
             }
         }
 
-        public ActionResult EditFacilityAddressBack(RegisterFacilityViewModel facilityParam) 
+        public ActionResult EditFacilityAddressBack(RegisterFacilityViewModel facilityParam)
         {
             return View("EditFacilityInfo", facilityParam);
         }
 
-        public ActionResult EditFacilityHours(Int32 id) 
+        public ActionResult EditFacilityHours(Int32 id)
         {
-            using (var context = new SpaceBookEntities1()) 
+            using (var context = new SpaceBookEntities1())
             {
                 RegisterFacilityViewModel facilityParam = new RegisterFacilityViewModel();
                 facilityParam.DefaultHourlyRate = (double)context.Facilities.Where(x => x.Id == id).FirstOrDefault().HourlyRate;
                 facilityParam.Id = context.Facilities.Where(x => x.Id == id).FirstOrDefault().Id;
                 return View("EditFacilityHours", facilityParam);
             }
-                
+
         }
 
         [HttpPost]
-        public ActionResult EditFacilityHoursComplete(RegisterFacilityViewModel facilityParam) 
+        public ActionResult EditFacilityHoursComplete(RegisterFacilityViewModel facilityParam)
         {
-            using (var context = new SpaceBookEntities1()) {
+            using (var context = new SpaceBookEntities1())
+            {
 
                 List<string> monList = Request.Form["monStart"].Split(',').ToList<string>();
                 monList.AddRange(Request.Form["monEnd"].Split(',').ToList<string>());
@@ -1031,7 +1009,7 @@ namespace SpaceBook.Controllers
             }
         }
 
-        public void EditTimeSlots(int id, List<List<string>> dayList, List<List<string>> rateList) 
+        public void EditTimeSlots(int id, List<List<string>> dayList, List<List<string>> rateList)
         {
             using (var context = new SpaceBookEntities1())
             {
@@ -1081,7 +1059,7 @@ namespace SpaceBook.Controllers
                                 break;
                             }
                         }
-                        
+
                         iterator++;
                         interval = interval.Add(new TimeSpan(0, 30, 0));
                     }
@@ -1091,11 +1069,13 @@ namespace SpaceBook.Controllers
             return;
         }
 
-        public ActionResult UnactivateFacility(bool confirm, Int32 id) {
-            using (var context = new SpaceBookEntities1()) 
+        public ActionResult UnactivateFacility(bool confirm, Int32 id)
+        {
+            using (var context = new SpaceBookEntities1())
             {
                 Facility fac = context.Facilities.Where(x => x.Id == id).FirstOrDefault();
-                if (fac != null) {
+                if (fac != null)
+                {
                     fac.ActiveFlag = false;
                     context.SaveChanges();
                 }
@@ -1106,11 +1086,11 @@ namespace SpaceBook.Controllers
             }
         }
 
-        public ActionResult ViewOwnerFacilities() 
+        public ActionResult ViewOwnerFacilities()
         {
-            if (Session["UserID"] != null) 
+            if (Session["UserID"] != null)
             {
-                using (var context = new SpaceBookEntities1()) 
+                using (var context = new SpaceBookEntities1())
                 {
                     var userID = Convert.ToInt32(Session["UserID"]);
                     List<Facility> ownersFacilities = context.Facilities.Where(x => x.OwnerId == userID && x.ActiveFlag == true).ToList();
@@ -1164,44 +1144,46 @@ namespace SpaceBook.Controllers
             }
         }
 
-        public ActionResult OwnerViewBookings(string filter) 
+        public ActionResult OwnerViewBookings(string filter)
         {
-            using (var context = new SpaceBookEntities1()) 
+            using (var context = new SpaceBookEntities1())
             {
-                if (Session["UserID"] != null) {
+                if (Session["UserID"] != null)
+                {
                     var userId = Convert.ToInt32(Session["UserID"]);
                     var user = context.Users.Where(u => u.Id == userId && u.ActiveFlag == true).FirstOrDefault();
                     List<Facility> fac = context.Facilities.Where(x => x.OwnerId == userId && x.ActiveFlag == true).ToList();
                     var bookings = new List<Booking>();
 
-                    for (int i = 0; i < fac.Count; i++) 
+                    for (int i = 0; i < fac.Count; i++)
                     {
                         Booking owners = context.Bookings.Where(x => x.FacilityId == fac[i].Id).FirstOrDefault();
                         if (owners != null)
                             bookings.Add(owners);
                     }
-                        
+
                     if (bookings.Count > 0)
-                        foreach (var booking in bookings) {
+                        foreach (var booking in bookings)
+                        {
                             booking.Facility.Name.FirstOrDefault();
                             booking.EndDateTime = booking.EndDateTime.Value.AddMinutes(30);
                         }
 
-                    if (user != null) 
+                    if (user != null)
                     {
                         if (filter == "upcoming")
-                            foreach (Booking item in bookings.ToList()) 
+                            foreach (Booking item in bookings.ToList())
                             {
-                                if (item.EndDateTime <= DateTime.Now) 
+                                if (item.EndDateTime <= DateTime.Now)
                                 {
                                     bookings.Remove(item);
                                 }
                             }
 
                         else if (filter == "completed")
-                            foreach (Booking item in bookings.ToList()) 
+                            foreach (Booking item in bookings.ToList())
                             {
-                                if (item.EndDateTime > DateTime.Now) 
+                                if (item.EndDateTime > DateTime.Now)
                                 {
                                     bookings.Remove(item);
                                 }
