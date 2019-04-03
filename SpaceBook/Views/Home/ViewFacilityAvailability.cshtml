@@ -124,9 +124,9 @@
             //changes the selected button color to red
             $buttonClicked.css("background-color", "red");
 
-                var day = $buttonClicked.attr('data-day');
-                var facilityId = $buttonClicked.attr('data-facilityId');
-                var date = "@Model.selectedDateMonday.ToString()";
+            var day = $buttonClicked.attr('data-day');
+            var facilityId = $buttonClicked.attr('data-facilityId');
+            var date = "@Model.selectedDateMonday.ToString()";
 
             $.ajax({
                 url: '@Url.Action("PartialViewTimes")',

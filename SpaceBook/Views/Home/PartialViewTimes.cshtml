@@ -481,10 +481,7 @@
     <h3>Cost: </h3>
     <p id="cost" data-totalCost="0.00">-</p>
     <button href="#" disabled="disabled" id="confirmEnd" data-realEndTime="ConfirmEnd" class="confirmEnd btn btn-sm btn-primary">Confirm End</button>
-    @Html.ActionLink("Cancel", "ViewFacilityAvailability", new { facilityId = Model.times.FirstOrDefault().FacilityId,
-    dateMondayString = Model.selectedDateMonday.ToString(),
-    day_of_week = ((int)Model.times.FirstOrDefault().Day)},
-    new { @class = "cancelBooking btn btn-sm btn-primary", @style = "color:white", @id = "cancelBooking" })
+    <button href="#" id="reset" class="reset btn btn-sm btn-primary">Reset</button>
     <button href="#" disabled="disabled" id="submitBooking" class="submitBooking btn btn-sm btn-primary">Submit</button>
 
 </div>
@@ -496,6 +493,7 @@
         $('.bookTime').click(function () {
 
             $('.bookTime').css("background-color", "#007bff");
+            $(this).blur();
 
             var $buttonClicked = $(this);
             var confirmStartDisabled = $('#confirmStart').is(':disabled');
@@ -678,6 +676,52 @@
                     window.location.href = url;
                 }
             });
+
+        });
+    });
+
+</script>
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+
+
+    $(function () {
+        $('#reset').click(function () {
+
+            $(this).blur();
+
+            //disbables the buttons
+            $('#confirmStart').attr('disabled', true);
+            $('#confirmEnd').attr('disabled', true);
+            $('#submitBooking').attr('disabled', true);
+
+            //resets the colour of the booking buttons
+            $('.bookTime').css("background-color", "#007bff");
+
+            //resets the text of the labels
+            $('#cost').text("-");
+            $('#start').text("Choose Start Time");
+            $('#end').text("Choose End Time");
+
+            //resets the values of the data
+            $('#start').attr("data-realStartTime", "ChooseStartTime");
+            $('#end').attr("data-realEndTime", "ChooseEndTime");
+            $('#cost').attr('data-totalCost', "0.00");
+
+            var day =  "@Model.times.FirstOrDefault().Day.ToString()";
+            var facilityId = @Model.times.FirstOrDefault().FacilityId;
+            var date = "@Model.selectedDateMonday.ToString()";
+
+            $.ajax({
+                url: '@Url.Action("PartialViewTimes")',
+                type: 'GET',
+                data: { day: day, facilityId: facilityId, dateMondayString : date},
+                success: function (partialView) {
+                    $('#showPartialView').html(partialView);
+                    $('#showPartialView').show();
+                    }
+                });
 
         });
     });
