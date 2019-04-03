@@ -62,6 +62,9 @@ namespace SpaceBook.Controllers
                 var results = new List<Facility>();
                 var tagName = Request.Form["tagInput"];
                 var tag = context.TagTypes.Where(x => x.Name == tagName).FirstOrDefault();
+                if (tag == null)
+                    return View("SearchResults", results);
+
                 var tagAssignments = context.TagAssignments.Where(x => x.TagId == tag.Id).ToList();
 
                 foreach (var item in tagAssignments)
@@ -1157,7 +1160,8 @@ namespace SpaceBook.Controllers
 
                     for (int i = 0; i < fac.Count; i++)
                     {
-                        Booking owners = context.Bookings.Where(x => x.FacilityId == fac[i].Id).FirstOrDefault();
+                        var tempId = fac[i].Id;
+                        Booking owners = context.Bookings.Include(b => b.Reviews).Include(b => b.User).Where(x => x.FacilityId == tempId).FirstOrDefault();
                         if (owners != null)
                             bookings.Add(owners);
                     }
@@ -1189,7 +1193,7 @@ namespace SpaceBook.Controllers
                                 }
                             }
 
-                        return View("ViewBookings", bookings);
+                        return View("OwnerViewBookings", bookings);
                     }
                 }
                 //if the user is not logged in, return to the login view
