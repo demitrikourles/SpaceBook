@@ -671,8 +671,8 @@
                     facilityID: facilityID
                 },
                 success: function () {
-                    //returns user to the facility view page upon submission
-                    var url = '@Url.Action("ViewFacility", "Home", new { id = Model.times.ElementAtOrDefault(0).FacilityId})';
+                    //brings the user to the upcoming bookings view upon submission
+                    var url = '@Url.Action("ViewBookings", "Home", new { filter = "upcoming"})';
                     window.location.href = url;
                 }
             });

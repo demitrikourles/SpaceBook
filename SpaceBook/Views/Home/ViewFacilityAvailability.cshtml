@@ -31,10 +31,14 @@
         }
         <div class="col-md-3">
             <div>
-                <h4 class="align-content-center" id="currentWeekText">
-                    Week of:
-                    @Model.selectedDateMonday.Month.ToString()/@Model.selectedDateMonday.Day.ToString()/@Model.selectedDateMonday.Year.ToString()
-                </h4>
+                @if (isCurrentWeek)
+                {
+                <h3 class="align-content-center" id="currentDateText" data-dateString="@Model.selectedDateMonday.ToString()">@((Model.selectedDateMonday.AddDays(day_of_week_now - 1)).ToString("D"))</h3>
+                }
+                else
+                {
+                    <h3 class="align-content-center" id="currentDateText" data-dateString="@Model.selectedDateMonday.ToString()">@Model.selectedDateMonday.ToString("D")</h3>
+                }
             </div>
         </div>
         @Html.ActionLink(">", "ViewFacilityAvailability", new { facilityId = Model.times.FirstOrDefault().FacilityId, dateMondayString = Model.selectedDateMonday.AddDays(7).ToString() }, new { @class = "weekNav btn btn-primary", @style = "color:white", @id = "weekNavNext" })
@@ -114,7 +118,7 @@
     $(function () {
         $('.showTimes').click(function () {
 
-                var $buttonClicked = $(this);
+            var $buttonClicked = $(this);
 
             //selection is indicated by button color so the focus indicator is removed
             $buttonClicked.blur();
@@ -127,6 +131,14 @@
             var day = $buttonClicked.attr('data-day');
             var facilityId = $buttonClicked.attr('data-facilityId');
             var date = "@Model.selectedDateMonday.ToString()";
+
+            //makes date readable for users, updates date to reflect currently selected day of the week
+            var dateJS = new Date(Date.parse($('#currentDateText').attr('data-dateString')));
+            dateJS.setDate(dateJS.getDate() + parseInt(day) - 1);
+            var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            var dateText = days[(day == 7 ? 0 : day)] + ", " + months[dateJS.getMonth()] + " " + dateJS.getDate().toString() + ", " + dateJS.getFullYear();
+            $('#currentDateText').text(dateText);
 
             $.ajax({
                 url: '@Url.Action("PartialViewTimes")',
@@ -150,11 +162,19 @@
             var day_comp = "@day_of_week_now.ToString()";
             var isCurrentWeek_comp = "@isCurrentWeek.ToString()";
 
+            //formats the date in a readable format as a string
+            var date = new Date(Date.parse($('#currentDateText').attr('data-dateString')));
+            var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            var dateText = days[date.getDay()] + ", " + months[date.getMonth()] + " " + date.getDate().toString() + ", " + date.getFullYear();
+
             //resets all weekday buttons to their original color
             $('.showTimes').css("background-color", "#007bff");
             //if the current week is not the same as the selected week, Monday will be highlighted by default
-            if (isCurrentWeek_comp == "False")
+            if (isCurrentWeek_comp == "False") {
                 $('#Monday').css("background-color", "red");
+                $('#currentDateText').text(dateText);
+            }
             //If the current week is also the same as the selected week, the button highlighted will correspond to the current day
             else if (isCurrentWeek_comp == "True") {
                 if(day_comp == "1")
