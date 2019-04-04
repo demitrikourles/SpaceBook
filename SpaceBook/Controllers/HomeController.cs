@@ -342,11 +342,11 @@ namespace SpaceBook.Controllers
             //if the date string is invalid or if it is earlier than or in the same week as the current week, load the view with the current week
             if (!valid || isWeekEarlier >= 0)
             {
-                return RedirectToAction("ViewFacilityAvailability", new { facilityId = facId, dateMondayString = refMonday.ToString()});
+                return RedirectToAction("ViewFacilityAvailability", new { facilityId = facId, dateMondayString = refMonday.ToString() });
             }
             else
             {
-                return RedirectToAction("ViewFacilityAvailability", new { facilityId = facId, dateMondayString = dt.ToString()});
+                return RedirectToAction("ViewFacilityAvailability", new { facilityId = facId, dateMondayString = dt.ToString() });
             }
         }
 
@@ -363,7 +363,7 @@ namespace SpaceBook.Controllers
         {
             using (var context = new SpaceBookEntities1())
             {
-                if(ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
                     var user = context.Users.Where(u => u.Email == userParam.Email).FirstOrDefault();
                     if (user != null)
@@ -1060,11 +1060,12 @@ namespace SpaceBook.Controllers
             {
                 List<FacilityTime> FacilityTimeList = context.FacilityTimes.Where(x => x.FacilityId == id).ToList();
 
-                if (FacilityTimeList.Count > 0) 
+                if (FacilityTimeList.Count > 0)
                 {
                     int iterator = 0;
 
-                    for (int day = 1; day < 8; day++) {
+                    for (int day = 1; day < 8; day++)
+                    {
                         List<string> currDay = dayList[day - 1];
                         List<string> currDayRate = rateList[day - 1];
 
@@ -1076,7 +1077,8 @@ namespace SpaceBook.Controllers
                             FacilityTimeList[iterator].Rate = 0;
                             FacilityTimeList[iterator].IsAvailable = false;
 
-                            for (int i = 0; i < currDay.Count / 2; i++) {
+                            for (int i = 0; i < currDay.Count / 2; i++)
+                            {
                                 if (currDay[i] == "")
                                     continue;
 
@@ -1088,13 +1090,15 @@ namespace SpaceBook.Controllers
 
                                 double rate = 0;
                                 double halfRate = 0;
-                                if (currDayRate[i] != null && currDayRate[i] != "") {
+                                if (currDayRate[i] != null && currDayRate[i] != "")
+                                {
                                     rate = Math.Round(Convert.ToDouble(currDayRate[i]), 3);
                                     halfRate = Math.Round(rate / 2, 3);
                                 }
 
 
-                                if ((interval >= start) && (interval < end)) {
+                                if ((interval >= start) && (interval < end))
+                                {
                                     FacilityTimeList[iterator].IsAvailable = true;
 
                                     if (rate != 0)
@@ -1108,10 +1112,10 @@ namespace SpaceBook.Controllers
                             interval = interval.Add(new TimeSpan(0, 30, 0));
                         }
                     }
+                    context.SaveChanges();
                 }
-                context.SaveChanges();
+                return;
             }
-            return;
         }
 
         public ActionResult UnactivateFacility(bool confirm, Int32 id)
