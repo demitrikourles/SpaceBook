@@ -118,6 +118,7 @@
     @Html.Action("PartialViewTimes", "Home", new { facilityId = Model.times.FirstOrDefault().FacilityId, dateMondayString = Model.selectedDateMonday.ToString(), day = isCurrentWeek == true ? day_of_week_now : 1 })
 </div>
 
+
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
     $(function () {
@@ -159,10 +160,12 @@
         });
 </script>
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/umd/popper.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
 <script type="text/javascript">
     $(function () {
         $(document).ready(function () {
-
+            $('[data-toggle="popover"]').popover(); 
             //stores c# values found at the time of the page loading
             var day_comp = "@day_of_week_now.ToString()";
             var isCurrentWeek_comp = "@isCurrentWeek.ToString()";

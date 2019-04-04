@@ -58,7 +58,7 @@
                                         data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
                                         data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59)) }).ToString()"
                                         data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
-                                        data-available="available">
+                                        data-available="available" title="Cost" data-toggle="popover" data-trigger="hover" data-content="$@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()">
                                     @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                                 </button>
                             </div>
@@ -141,7 +141,7 @@
                                         data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
                                         data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59)) }).ToString()"
                                         data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
-                                        data-available="available">
+                                        data-available="available" title="Cost" data-toggle="popover" data-trigger="hover" data-content="$@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()">
                                     @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                                 </button>
                             </div>
@@ -223,7 +223,7 @@
                                         data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
                                         data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59)) }).ToString()"
                                         data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
-                                        data-available="available">
+                                        data-available="available" title="Cost" data-toggle="popover" data-trigger="hover" data-content="$@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()">
                                     @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                                 </button>
                             </div>
@@ -305,7 +305,7 @@
                                         data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
                                         data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59)) }).ToString()"
                                         data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
-                                        data-available="available">
+                                        data-available="available" title="Cost" data-toggle="popover" data-trigger="hover" data-content="$@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()">
                                     @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                                 </button>
                             </div>
@@ -388,7 +388,7 @@
                                         data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
                                         data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59)) }).ToString()"
                                         data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
-                                        data-available="available">
+                                        data-available="available" title="Cost" data-toggle="popover" data-trigger="hover" data-content="$@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()">
                                     @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                                 </button>
                             </div>
@@ -470,7 +470,7 @@
                                         data-timeStartAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime }).ToString()"
                                         data-timeEndAdjusted="@Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value.Add(new TimeSpan(0, 29, 59)) }).ToString()"
                                         data-rate="@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()"
-                                        data-available="available">
+                                        data-available="available" title="Cost" data-toggle="popover" data-trigger="hover" data-content="$@Decimal.Round(Model.times.ElementAtOrDefault(x).Rate.Value, 2).ToString()">
                                     @Html.Action("AdjustTime", "Home", new { time = Model.times.ElementAtOrDefault(x).StartTime.Value }).ToString()
                                 </button>
                             </div>
@@ -498,6 +498,7 @@
     }
 </div>
 <div>
+
     <h3>Booking Details:</h3>
     <h4>Start Time: </h4>
     <p id="start">Choose Start Time</p>
@@ -510,6 +511,7 @@
     <button href="#" id="reset" class="reset btn btn-sm btn-primary">Reset</button>
     <button href="#" disabled="disabled" id="submitBooking" class="submitBooking btn btn-sm btn-primary">Submit</button>
 </div>
+
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
 
@@ -612,6 +614,7 @@
 
     $(function () {
         $('#confirmStart').click(function () {
+            $(this).blur();
 
             //disables confirm start button, enables confirm end button
             $('#confirmStart').attr('disabled', true);
@@ -619,25 +622,32 @@
 
             //iterates through all the bookTime buttons, diabling all of them up to the selected start time slot
             $('.bookTime').each(function (i) {
+
                 var time = $(this).attr('data-time');
                 $(this).attr('disabled', true);
+                $(this).popover("disable"); //disables the popover on disabled buttons
 
                 if (time == $('#start').attr('data-realStartTime')) {
+
                     //makes sure to enable the start time time slot incase the user only wants to book a half hour time
                     $(this).attr('disabled', false);
+                    $(this).popover("enable"); //enables the popover on the start time's button
 
                     //Iterates through the remaining enabled buttons and updates their times to reflect the end time of each time slot
                     $('.bookTime').each(function (j) {
+
                         if (j <= i) return true;
                         $(this).text($(this).attr('data-timeEndAdjusted'));
 
                         //This disables any time slots separated from the start time by an unavailable time slot
                         //This means you cannot create a booking across an unavailable time slot
                         if ($(this).attr('data-available') == "notAvailable") {
+
                             $('.bookTime').each(function (k) {
                                 if (k <= j) return true;
                                 $(this).text($(this).attr('data-timeEndAdjusted'));
                                 $(this).attr('disabled', true);
+                                $(this).popover("disable"); //disables the popover on disabled buttons
                             });
                         }
 
@@ -658,6 +668,7 @@
 
     $(function () {
         $('#confirmEnd').click(function () {
+            $(this).blur();
 
             //enables the submit button and disables all other buttons
             $('#confirmStart').attr('disabled', true);
@@ -751,7 +762,17 @@
     });
 
 </script>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/umd/popper.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(document).ready(function () {
+            $('[data-toggle="popover"]').popover();
 
+        });
+    });
+</script>
 <style>
     .btn-primary.disabled, .btn-primary:disabled {
         color: #fff;
