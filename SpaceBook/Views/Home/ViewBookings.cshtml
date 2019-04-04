@@ -41,7 +41,7 @@
                         }
                         else
                         {
-                            <button style="margin-top:20%" type="button" onclick="location.href='@Url.Action("#", new { Id = item.Id })'" class="btn btn-danger">Cancel Booking</button>
+                            <button style="margin-top:20%" type="button" onclick="location.href='@Url.Action("userCancelBooking", new { Id = item.Id })'" class="btn btn-danger">Cancel Booking</button>
                         }
                         @*<button style="margin-top:20%" type="button" onclick="location.href='@Url.Action("LeaveReview", new { Id = item.Id })'" class="btn btn-primary">Leave Review</button>
         <button style="margin-top:20%" type="button" onclick="location.href='@Url.Action("ViewReview", new { Id = item.Id })'" class="btn btn-primary">See Review</button>*@

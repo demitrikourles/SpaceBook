@@ -1279,5 +1279,18 @@ namespace SpaceBook.Controllers
             }
         }
 
+        //user initiated cancellling of a booking
+        public ActionResult userCancelBooking(int Id)
+        {
+            using (var context = new SpaceBookEntities1())
+            {
+                Booking booking = context.Bookings.Where(b => b.Id == Id).FirstOrDefault();
+                booking.Cancelled = true;
+                context.SaveChanges();
+
+            }
+                return RedirectToAction("ViewBookings", new { filter = "upcoming" });
+        }
+
     }
 }
