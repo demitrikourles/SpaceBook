@@ -29,6 +29,10 @@
                             <br />
                             <small class="text-muted">$@Math.Round(item.Cost.Value, 2)</small>
                             <br />
+                            @if(item.EndDateTime > DateTime.Now)
+                            {
+                                <button style="margin-top:20%" type="button" onclick="location.href='@Url.Action("ownerCancelBooking", new { Id = item.Id })'" class="btn btn-danger">Cancel Booking</button>
+                            }
                         </div>
                     </div>
                 </div>

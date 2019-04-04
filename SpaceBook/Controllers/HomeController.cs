@@ -1207,7 +1207,7 @@ namespace SpaceBook.Controllers
                     for (int i = 0; i < fac.Count; i++)
                     {
                         var tempId = fac[i].Id;
-                        Booking owners = context.Bookings.Include(b => b.Reviews).Include(b => b.User).Where(x => x.FacilityId == tempId).FirstOrDefault();
+                        Booking owners = context.Bookings.Include(b => b.Reviews).Include(b => b.User).Where(x => x.FacilityId == tempId && x.Cancelled == false).FirstOrDefault();
                         if (owners != null)
                             bookings.Add(owners);
                     }
@@ -1289,8 +1289,20 @@ namespace SpaceBook.Controllers
                 context.SaveChanges();
 
             }
-                return RedirectToAction("ViewBookings", new { filter = "upcoming" });
+            return RedirectToAction("ViewBookings", new { filter = "upcoming" });
         }
 
+        //owner initiated cancellling of a booking
+        public ActionResult ownerCancelBooking(int Id)
+        {
+            using (var context = new SpaceBookEntities1())
+            {
+                Booking booking = context.Bookings.Where(b => b.Id == Id).FirstOrDefault();
+                booking.Cancelled = true;
+                context.SaveChanges();
+
+            }
+            return RedirectToAction("OwnerViewBookings", new { filter = "upcoming" });
+        }
     }
 }
