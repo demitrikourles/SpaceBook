@@ -20,16 +20,13 @@
         <nav class="navbar fixed-top navbar-expand-sm bg-dark navbar-dark">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="@Url.Action("Index", "Home")">SpaceBook</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("RegisterFacility", "Home")">Register a Facility</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="@Url.Action("ViewUserProfile", "Home")">Profile</a>
+                    <a class="nav-link" href="@Url.Action("Index", "Home")">Home</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="@Url.Action("ViewBookings", "Home", "")">Bookings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("RegisterFacility", "Home")">Register a Facility</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">For Owners<span class="caret"></span></a>
@@ -44,6 +41,9 @@
                 </li>
             </ul>
             <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="@Url.Action("ViewUserProfile", "Home")">Profile</a>
+                </li>
                 <li class="nav-item"><a class="nav-link" href="@Url.Action("Logout", "Home")">Logout</a></li>
             </ul>
         </nav>

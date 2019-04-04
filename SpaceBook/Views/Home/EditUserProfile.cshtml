@@ -4,7 +4,7 @@
     ViewBag.Title = "EditUserProfile";
 }
 
-<h2 style="margin-top: 10%">Edit Profile</h2>
+<h2 style="margin: 2% 0% 2% 0%">Edit Profile</h2>
 @Scripts.Render("~/bundles/jquery")
 @Scripts.Render("~/bundles/jqueryval")
 
@@ -12,8 +12,50 @@
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<div class="form-horizontal">
+    <hr />
+    <div class="row">
+        <div class="col-8">
+            <div class="row">
+                <div class="col-5" style="margin: 2%">
+                    <label>First name: </label>
+                    @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col-5" style="margin: 2%">
+                    <label>Last name: </label>
+                    @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-5" style="margin: 2%">
+                    <label>Email: </label>
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col-5" style="margin: 2%">
+                    <label>Phone: </label>
+                    @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <img class="card-img-top" src="~/Content/ProfilePics/@(Model.ProfilePicFilename)" alt="Profile_Pic" height="300" width="42" />
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    @Html.ValidationMessageFor(model => model.ProfilePicFilename, "", new { @class = "text-danger" })
+                    <input type="file" name="ProfilePicFilename" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-8 text-center">
+        <button class="btn btn-primary" type="submit" value="EditUserProfile">Save Profile</button>
+    </div>
+
+
+
+
+    @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -60,15 +102,12 @@
                 @Html.ValidationMessageFor(model => model.ProfilePicFilename, "", new { @class = "text-danger" })
                 <input type="file" name="ProfilePicFilename" class="btn btn-default" />
             </div>
-        </div>
+        </div>*@
 
-        <div class="form-group">
+    @*<div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <button class="btn btn-primary" type="submit" value="EditUserProfile">Update Profile</button>
             </div>
-        </div>
-    </div>
+        </div>*@
+</div>
 }
-
-</body>
-</html>

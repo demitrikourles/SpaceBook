@@ -4,23 +4,40 @@
     ViewBag.Title = "ViewUserProfile";
 }
 
-<h2>
-    @Html.DisplayFor(model => model.FirstName)
-    @Html.DisplayFor(model => Model.LastName)
-</h2>
+@*<h2>
+        @Html.DisplayFor(model => model.FirstName)
+        @Html.DisplayFor(model => Model.LastName)
+    </h2>*@
 
-<div>
-    <div class="col-md-10">
+<h2 style="margin: 2% 0% 2% 0%">My Profile</h2>
+<hr />
+<div class="row">
+    <div class="col-8">
+        <div class="row">
+            <div class="col-5" style="margin: 2%">
+                <label>First name: </label>
+                <input type="text" class="form-control" value="@Model.FirstName" disabled />
+            </div>
+            <div class="col-5" style="margin: 2%">
+                <label>Last name: </label>
+                <input type="text" class="form-control" value="@Model.LastName" disabled />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-5" style="margin: 2%">
+                <label>Email: </label>
+                <input type="text" class="form-control" value="@Model.Email" disabled />
+            </div>
+            <div class="col-5" style="margin: 2%">
+                <label>Phone: </label>
+                <input type="text" class="form-control" value="@Model.Phone" disabled />
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
         <img class="card-img-top" src="~/Content/ProfilePics/@(Model.ProfilePicFilename)" alt="Profile_Pic" height="300" width="42" />
     </div>
-    <div class="col-md-10">
-        <label>Phone Number: </label>
-        @Html.DisplayFor(model => model.Phone)
-    </div>
-    <div class="col-md-10">
-        <label>Email Address: </label>
-        @Html.DisplayFor(model => model.Email)
-    </div>
-
-    <button type="button" onclick="location.href='@Url.Action("EditUserProfile")'" class="btn btn-primary">Edit Profile</button>
+</div>
+<div class="col-8 text-center">
+    <button type="button" onclick="location.href='@Url.Action("EditUserProfile", new { id = Model.Id})'" class="btn btn-primary">Edit Profile</button>
 </div>

@@ -609,11 +609,14 @@ namespace SpaceBook.Controllers
 
 
         [HttpGet]
-        public ActionResult EditUserProfile()
+        public ActionResult EditUserProfile(int id)
         {
             ViewBag.Message = "Edit User Profile Page";
-
-            return View();
+            using (var context = new SpaceBookEntities1())
+            {
+                User user = context.Users.Where(u => u.Id == id).FirstOrDefault();
+                return View(user);
+            }
         }
 
         [HttpPost]
