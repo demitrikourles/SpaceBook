@@ -344,11 +344,11 @@ namespace SpaceBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(User userParam)
+        public ActionResult Login(LoginViewModel userParam)
         {
             using (var context = new SpaceBookEntities1())
             {
-                if (!string.IsNullOrEmpty(userParam.Email) && !string.IsNullOrEmpty(userParam.Password))
+                if(ModelState.IsValid)
                 {
                     var user = context.Users.Where(u => u.Email == userParam.Email).FirstOrDefault();
                     if (user != null)
@@ -359,8 +359,9 @@ namespace SpaceBook.Controllers
                             return RedirectToAction("Index");
                         }
                     }
+                    TempData["UserMessage"] = new MessageViewModel() { CssClassName = "alert-danger", Message = "You have entered an invalid email or password. Please try again" };
+                    return RedirectToAction("Login");
                 }
-                TempData["UserMessage"] = new MessageViewModel() { CssClassName = "alert-danger", Message = "You have entered an invalid username or password. Please try again" };
                 return RedirectToAction("Login");
             }
         }
@@ -564,7 +565,7 @@ namespace SpaceBook.Controllers
                         //Adds the user to the User table in the database
                         context.Users.Add(newUser);
                         context.SaveChanges();
-
+                        TempData["UserMessage"] = new MessageViewModel() { CssClassName = "alert-success", Message = "Your account has been created." };
                         //Redirects the user to the login page when the "Create" button is pressed
                         return RedirectToAction("Login");
                     }
