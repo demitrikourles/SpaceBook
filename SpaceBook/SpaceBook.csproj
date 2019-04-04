@@ -392,6 +392,8 @@
     <Content Include="Views\Home\OwnerViewBookings.cshtml" />
     <Content Include="Views\Home\Notifications.cshtml" />
     <Content Include="Views\Home\GetNotificationCount.cshtml" />
+	<Content Include="Views\Home\ViewReview.cshtml" />
+  </ItemGroup>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

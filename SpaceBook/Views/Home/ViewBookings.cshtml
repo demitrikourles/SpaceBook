@@ -37,7 +37,7 @@
                         }
                         else if (item.Reviews.Any())
                         {
-                            <button style="margin-top:20%" type="button" onclick="location.href='@Url.Action("ViewReview", new { Id = item.Id })'" class="btn btn-primary">See Review</button>
+                            <button style="margin-top:20%" type="button" onclick="location.href='@Url.Action("ViewReview", new { Id = item.Reviews.First().Id })'" class="btn btn-primary">See Review</button>
                         }
                         else
                         {

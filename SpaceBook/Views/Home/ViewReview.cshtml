@@ -1,0 +1,68 @@
+﻿@model SpaceBook.ViewModels.ReviewViewModel
+@{
+    /**/
+
+    ViewBag.Title = "View Review";
+}
+
+<h2 style="margin: 2% 0% 2% 0%">View Review</h2>
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <div class="form-group" style="margin: 15% 0% 5% 0%">
+                    <h4>Rating</h4>
+                    <div>
+                        @{
+                            var stars = Model.Rating;
+                            for (int i = 0; i < 5; i++)
+                            {
+                                if (stars > 0)
+                                {
+                                    <span class="star rated">&nbsp;</span>
+                                }
+                                else
+                                {
+                                    <span class="star">&nbsp;</span>
+                                }
+                                stars = stars - 1;
+                            };
+                        }
+                    </div>
+                    <input type="hidden" id="ratingInput" name="Rating" />
+                </div>
+                <div class="form-group" style="margin: 2% 0% 5% 0%">
+                    <h4>Review</h4>
+                    @Html.TextAreaFor(model => model.Review, new { @class = "form-control form-control-lg", @rows = "6", @placeholder = "Briefly describe your experience...", disabled = "true" })
+                </div>
+                @Html.ActionLink("Back to Bookings", "ViewBookings")
+            </div>
+        </div>
+
+        <style>
+
+            /* Set the size of the div element that contains the map */
+            #map {
+                height: 400px; /* The height is 400 pixels */
+                width: 100%; /* The width is the width of the web page */
+            }
+
+            .star {
+                color: goldenrod;
+                font-size: 1.5rem;
+            }
+
+                .star::before {
+                    content: '\2606'; /* star outline */
+                    cursor: pointer;
+                }
+
+                .star.rated::before {
+                    /* the style for a selected star */
+                    content: '\2605'; /* filled star */
+                }
+
+                .star.rated {
+                    counter-increment: rateme 1;
+                }
+        </style>
+
+
