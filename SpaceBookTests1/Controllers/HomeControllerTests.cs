@@ -16,8 +16,8 @@ namespace SpaceBook.Controllers.Tests
         public void IndexTestView()
         {
             var controller = new HomeController();
-            var result = controller.Index() as ViewResult;
-            Assert.AreEqual("Index", result.ViewName);
+            var result = controller.Login() as ViewResult;
+            Assert.AreEqual("Login", result.ViewName);
         }
     }
 }
