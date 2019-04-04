@@ -2,9 +2,13 @@
 
 <br />
 
-<h2>@Model.times.FirstOrDefault().Facility.Name</h2>
-<div class="container">
-    <div class="row">
+<div class="container-fluid">
+    <div class="col-md-12 justify-content-center d-flex">
+        <h2 class="facilityNameLabel">@Model.times.FirstOrDefault().Facility.Name</h2>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row align-content-center">
         @{
             //gets the current day of the week
             int day_of_week_now = (int)DateTime.Now.DayOfWeek == 0 ? 7 : (int)DateTime.Now.DayOfWeek;
@@ -16,9 +20,10 @@
             //comparison checks if the selected date is before the current week (Compare < 0)
             //Compare = 0 -> equal, Compare < 0 -> t1 is earlier than t2, Compare > 0 -> t1 is later than t2
             var isCurrentWeek = (bool)(DateTime.Compare(Model.selectedDateMonday, refMonday) <= 0);
-
-            //disables the "prev" button if it is the current week since you cannot make bookings in the past
-            if (isCurrentWeek)
+        }
+        <div class="col-md-1 justify-content-start d-flex">
+            <!--disables the "prev" button if it is the current week since you cannot make bookings in the past-->
+            @if (isCurrentWeek)
             {
                 <button href="#" disabled="disabled" id="weekNavPrev" class="weekNav btn btn-primary"><</button>
 
@@ -26,91 +31,91 @@
             else
             {
                 @Html.ActionLink("<", "ViewFacilityAvailability", new { facilityId = Model.times.FirstOrDefault().FacilityId, dateMondayString = Model.selectedDateMonday.AddDays(-7).ToString() }, new { @class = "weekNav btn btn-primary", @style = "color:white", @id = "weekNavPrev" })
-
             }
-        }
-        <div class="col-md-3">
-            <div>
-                @if (isCurrentWeek)
-                {
-                <h3 class="align-content-center" id="currentDateText" data-dateString="@Model.selectedDateMonday.ToString()">@((Model.selectedDateMonday.AddDays(day_of_week_now - 1)).ToString("D"))</h3>
-                }
-                else
-                {
-                    <h3 class="align-content-center" id="currentDateText" data-dateString="@Model.selectedDateMonday.ToString()">@Model.selectedDateMonday.ToString("D")</h3>
-                }
-            </div>
         </div>
-        @Html.ActionLink(">", "ViewFacilityAvailability", new { facilityId = Model.times.FirstOrDefault().FacilityId, dateMondayString = Model.selectedDateMonday.AddDays(7).ToString() }, new { @class = "weekNav btn btn-primary", @style = "color:white", @id = "weekNavNext" })
+        <div class="col-md-10 justify-content-center d-flex">
+            @if (isCurrentWeek)
+            {
+                <h3 class="justify-content-center" id="currentDateText" data-dateString="@Model.selectedDateMonday.ToString()">@((Model.selectedDateMonday.AddDays(day_of_week_now - 1)).ToString("D"))</h3>
+            }
+            else
+            {
+                <h3 class="justify-content-center" id="currentDateText" data-dateString="@Model.selectedDateMonday.ToString()">@Model.selectedDateMonday.ToString("D")</h3>
+            }
+        </div>
+        <div class="col-md-1 justify-content-end d-flex">
+            @Html.ActionLink(">", "ViewFacilityAvailability", new { facilityId = Model.times.FirstOrDefault().FacilityId, dateMondayString = Model.selectedDateMonday.AddDays(7).ToString() }, new { @class = "weekNav btn btn-primary", @style = "color:white", @id = "weekNavNext" })
+        </div>
     </div>
 </div>
-<div class="col justify-content-center">
-    <table class="table">
-        <tr>
+
+<div class="container-fluid">
+    <table style="float:left" class="table table-borderless col-md-12 table-md d-flex justify-content-center">
+        <tr class="row align-content-center">
             <th>
                 @if (1 < day_of_week_now && DateTime.Compare(Model.selectedDateMonday, refMonday) <= 0)
                 {
-                    <button href="#" disabled="disabled" id="Monday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="1">Monday</button>
+                    <button href="#" disabled="disabled" id="Monday" class="showTimes btn btn-md btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="1">Monday</button>
                 }
                 else
                 {
-                    <button href="#" background-color="red" id="Monday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="1">Monday</button>
+                    <button href="#" background-color="red" id="Monday" class="showTimes btn btn-md btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="1">Monday</button>
                 }
                 @if (2 < day_of_week_now && DateTime.Compare(Model.selectedDateMonday, refMonday) <= 0)
                 {
-                    <button href="#" disabled="disabled" id="Tuesday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="2">Tuesday</button>
+                    <button href="#" disabled="disabled" id="Tuesday" class="showTimes btn btn-md btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="2">Tuesday</button>
                 }
                 else
                 {
-                    <button href="#" id="Tuesday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="2">Tuesday</button>
+                    <button href="#" id="Tuesday" class="showTimes btn btn-md btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="2">Tuesday</button>
                 }
                 @if (3 < day_of_week_now && DateTime.Compare(Model.selectedDateMonday, refMonday) <= 0)
                 {
-                    <button href="#" disabled="disabled" id="Wednesday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="3">Wednesday</button>
+                    <button href="#" disabled="disabled" id="Wednesday" class="showTimes btn btn-md btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="3">Wednesday</button>
                 }
                 else
                 {
-                    <button href="#" id="Wednesday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="3">Wednesday</button>
+                    <button href="#" id="Wednesday" class="showTimes btn btn-md btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="3">Wednesday</button>
                 }
                 @if (4 < day_of_week_now && DateTime.Compare(Model.selectedDateMonday, refMonday) <= 0)
                 {
-                    <button href="#" disabled="disabled" id="Thursday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="4">Thursday</button>
+                    <button href="#" disabled="disabled" id="Thursday" class="showTimes btn btn-md btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="4">Thursday</button>
                 }
                 else
                 {
-                    <button href="#" id="Thursday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="4">Thursday</button>
+                    <button href="#" id="Thursday" class="showTimes btn btn-md btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="4">Thursday</button>
                 }
                 @if (5 < day_of_week_now && DateTime.Compare(Model.selectedDateMonday, refMonday) <= 0)
                 {
-                    <button href="#" disabled="disabled" id="Friday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="5">Friday</button>
+                    <button href="#" disabled="disabled" id="Friday" class="showTimes btn btn-md btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="5">Friday</button>
                 }
                 else
                 {
-                    <button href="#" id="Friday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="5">Friday</button>
+                    <button href="#" id="Friday" class="showTimes btn btn-md btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="5">Friday</button>
                 }
                 @if (6 < day_of_week_now && DateTime.Compare(Model.selectedDateMonday, refMonday) <= 0)
                 {
-                    <button href="#" disabled="disabled" id="Saturday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="6">Saturday</button>
+                    <button href="#" disabled="disabled" id="Saturday" class="showTimes btn btn-md btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="6">Saturday</button>
                 }
                 else
                 {
-                    <button href="#" id="Saturday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="6">Saturday</button>
+                    <button href="#" id="Saturday" class="showTimes btn btn-md btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="6">Saturday</button>
                 }
                 @if (7 == day_of_week_now && DateTime.Compare(Model.selectedDateMonday, refMonday) <= 0)
                 {
-                    <button href="#" id="Sunday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="7">Sunday</button>
+                    <button href="#" id="Sunday" class="showTimes btn btn-md btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="7">Sunday</button>
                 }
                 else
                 {
-                    <button href="#" id="Sunday" class="showTimes btn btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="7">Sunday</button>
+                    <button href="#" id="Sunday" class="showTimes btn btn-md btn-primary" data-facilityID="@Model.times.FirstOrDefault().FacilityId" data-day="7">Sunday</button>
                 }
             </th>
         </tr>
     </table>
-    <div class="col justify-content-center" id="showPartialView">
-        <!--if the current week is the same as the selected week, the partial view for the current date will be generated-, otherwise the partial view for the monday of that week will be generated-->
-        @Html.Action("PartialViewTimes", "Home", new { facilityId = Model.times.FirstOrDefault().FacilityId, dateMondayString = Model.selectedDateMonday.ToString(), day = isCurrentWeek == true ? day_of_week_now : 1 })
-    </div>
+</div>
+<div class="justify-content-center" id="showPartialView">
+    <!--if the current week is the same as the selected week, the partial view for the current date will be generated-, otherwise the partial view for the monday of that week will be generated-->
+    @Html.Action("PartialViewTimes", "Home", new { facilityId = Model.times.FirstOrDefault().FacilityId, dateMondayString = Model.selectedDateMonday.ToString(), day = isCurrentWeek == true ? day_of_week_now : 1 })
 </div>
 
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
@@ -195,3 +200,9 @@
         });
     });
 </script>
+
+<style>
+    .facilityNameLabel {
+        color: #1E1EBE !important;
+    }
+</style>
