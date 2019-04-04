@@ -359,11 +359,11 @@ namespace SpaceBook.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(User userParam)
+        public ActionResult Login(LoginViewModel userParam)
         {
             using (var context = new SpaceBookEntities1())
             {
-                if (!string.IsNullOrEmpty(userParam.Email) && !string.IsNullOrEmpty(userParam.Password))
+                if(ModelState.IsValid)
                 {
                     var user = context.Users.Where(u => u.Email == userParam.Email).FirstOrDefault();
                     if (user != null)
@@ -374,8 +374,9 @@ namespace SpaceBook.Controllers
                             return RedirectToAction("Index");
                         }
                     }
+                    TempData["UserMessage"] = new MessageViewModel() { CssClassName = "alert-danger", Message = "You have entered an invalid email or password. Please try again" };
+                    return RedirectToAction("Login");
                 }
-                TempData["UserMessage"] = new MessageViewModel() { CssClassName = "alert-danger", Message = "You have entered an invalid username or password. Please try again" };
                 return RedirectToAction("Login");
             }
         }
@@ -579,7 +580,7 @@ namespace SpaceBook.Controllers
                         //Adds the user to the User table in the database
                         context.Users.Add(newUser);
                         context.SaveChanges();
-
+                        TempData["UserMessage"] = new MessageViewModel() { CssClassName = "alert-success", Message = "Your account has been created." };
                         //Redirects the user to the login page when the "Create" button is pressed
                         return RedirectToAction("Login");
                     }
@@ -623,11 +624,14 @@ namespace SpaceBook.Controllers
 
 
         [HttpGet]
-        public ActionResult EditUserProfile()
+        public ActionResult EditUserProfile(int id)
         {
             ViewBag.Message = "Edit User Profile Page";
-
-            return View();
+            using (var context = new SpaceBookEntities1())
+            {
+                User user = context.Users.Where(u => u.Id == id).FirstOrDefault();
+                return View(user);
+            }
         }
 
         [HttpPost]
@@ -1055,54 +1059,54 @@ namespace SpaceBook.Controllers
             using (var context = new SpaceBookEntities1())
             {
                 List<FacilityTime> FacilityTimeList = context.FacilityTimes.Where(x => x.FacilityId == id).ToList();
-                int iterator = 0;
 
-                for (int day = 1; day < 8; day++)
+                if (FacilityTimeList.Count > 0) 
                 {
-                    List<string> currDay = dayList[day - 1];
-                    List<string> currDayRate = rateList[day - 1];
+                    int iterator = 0;
 
-                    TimeSpan interval = new TimeSpan(0, 0, 0);
-                    for (int y = 0; y < 48; y++)  //y = number of time slots to create per day
-                    {
-                        //FacilityTimeList[iterator].StartTime = interval;
-                        //FacilityTimeList[iterator].Day = day;
-                        FacilityTimeList[iterator].Rate = 0;
-                        FacilityTimeList[iterator].IsAvailable = false;
+                    for (int day = 1; day < 8; day++) {
+                        List<string> currDay = dayList[day - 1];
+                        List<string> currDayRate = rateList[day - 1];
 
-                        for (int i = 0; i < currDay.Count / 2; i++)
+                        TimeSpan interval = new TimeSpan(0, 0, 0);
+                        for (int y = 0; y < 48; y++)  //y = number of time slots to create per day
                         {
-                            if (currDay[i] == "")
-                                continue;
+                            //FacilityTimeList[iterator].StartTime = interval;
+                            //FacilityTimeList[iterator].Day = day;
+                            FacilityTimeList[iterator].Rate = 0;
+                            FacilityTimeList[iterator].IsAvailable = false;
 
-                            string startString = currDay[i].Remove(currDay[i].Length - 2, 2) + " " + currDay[i].Substring(currDay[i].Length - 2).ToUpper();
-                            string endString = currDay[currDay.Count / 2 + i].Remove(currDay[currDay.Count / 2 + i].Length - 2, 2) + " " + currDay[currDay.Count / 2 + i].Substring(currDay[currDay.Count / 2 + i].Length - 2).ToUpper();
+                            for (int i = 0; i < currDay.Count / 2; i++) {
+                                if (currDay[i] == "")
+                                    continue;
 
-                            TimeSpan start = DateTime.ParseExact(startString, "h:mm tt", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
-                            TimeSpan end = DateTime.ParseExact(endString, "h:mm tt", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
+                                string startString = currDay[i].Remove(currDay[i].Length - 2, 2) + " " + currDay[i].Substring(currDay[i].Length - 2).ToUpper();
+                                string endString = currDay[currDay.Count / 2 + i].Remove(currDay[currDay.Count / 2 + i].Length - 2, 2) + " " + currDay[currDay.Count / 2 + i].Substring(currDay[currDay.Count / 2 + i].Length - 2).ToUpper();
 
-                            double rate = 0;
-                            double halfRate = 0;
-                            if (currDayRate[i] != null && currDayRate[i] != "")
-                            {
-                                rate = Math.Round(Convert.ToDouble(currDayRate[i]), 3);
-                                halfRate = Math.Round(rate / 2, 3);
+                                TimeSpan start = DateTime.ParseExact(startString, "h:mm tt", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
+                                TimeSpan end = DateTime.ParseExact(endString, "h:mm tt", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
+
+                                double rate = 0;
+                                double halfRate = 0;
+                                if (currDayRate[i] != null && currDayRate[i] != "") {
+                                    rate = Math.Round(Convert.ToDouble(currDayRate[i]), 3);
+                                    halfRate = Math.Round(rate / 2, 3);
+                                }
+
+
+                                if ((interval >= start) && (interval < end)) {
+                                    FacilityTimeList[iterator].IsAvailable = true;
+
+                                    if (rate != 0)
+                                        FacilityTimeList[iterator].Rate = (decimal)halfRate;
+
+                                    break;
+                                }
                             }
 
-
-                            if ((interval >= start) && (interval < end))
-                            {
-                                FacilityTimeList[iterator].IsAvailable = true;
-
-                                if (rate != 0)
-                                    FacilityTimeList[iterator].Rate = (decimal)halfRate;
-
-                                break;
-                            }
+                            iterator++;
+                            interval = interval.Add(new TimeSpan(0, 30, 0));
                         }
-
-                        iterator++;
-                        interval = interval.Add(new TimeSpan(0, 30, 0));
                     }
                 }
                 context.SaveChanges();
