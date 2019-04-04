@@ -1,0 +1,55 @@
+﻿@model IEnumerable<SpaceBook.Models.Notification>
+@{
+    ViewBag.Title = "Notifications";
+}
+
+<br />
+
+<div class="container-fluid">
+    <div class="col-md-12 justify-content-center d-flex">
+        <h2> Notifications (@Model.Count().ToString())</h2>
+    </div>
+</div>
+<br />
+@if (Model != null)
+{
+    <table class="table table-striped" id="datatable">
+        @foreach (var item in Model)
+        {
+            <tr class="row align-content-center container-fluid">
+                <td class="col-md-10 justify-content-start d-flex">
+                    @if (item.Type == 1 || item.Type == 2)
+                    {
+                        //if the notificaiton is about a user booking, link will go to the owner's facility bookings view
+                        <a style="color:#000;" href="@Url.Action("OwnerViewBookings", new { filter = "upcoming"})">@item.Message </a>
+                    }
+                    else if (item.Type == 3 || item.Type == 4)
+                    {
+                        //if the notifcation is about a message, go to messages
+                        <a style="color:#000;" href="@Url.Action("index")">@item.Message </a>
+                    }
+                    else if (item.Type == 5)
+                    {
+                        //if the notificaiton is about a booking cancelled by the facility owner, link will go to the bookings page
+                        <a style="color:#000;" href="@Url.Action("ViewBookings", new { filter = "upcoming"})">@item.Message </a>
+                    }
+                    else if (item.Type == 6)
+                    {
+                        //if the notification says that a user has left a review, link will go to the facility owner's list of facilities
+                        <a style="color:#000;" href="@Url.Action("ViewOwnerFacilities")">@item.Message </a>
+                    }
+                    else
+                    {
+                        //index as default
+                        <a style="color:#000;" href="@Url.Action("index")">@item.Message </a>
+                    }
+
+
+                </td>
+                <td class="col-md-2 justify-content-start d-flex">
+                    <a style="float: right;" href="@Url.Action("DismissNotification", new { id = item.Id})">Dismiss</a>
+                </td>
+            </tr>
+        }
+    </table>
+}

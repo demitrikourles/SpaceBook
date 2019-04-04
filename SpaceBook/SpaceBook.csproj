@@ -390,6 +390,8 @@
     <Content Include="Views\Home\EditFacilityAddress.cshtml" />
     <Content Include="Views\Home\EditFacilityHours.cshtml" />
     <Content Include="Views\Home\OwnerViewBookings.cshtml" />
+    <Content Include="Views\Home\Notifications.cshtml" />
+    <Content Include="Views\Home\GetNotificationCount.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

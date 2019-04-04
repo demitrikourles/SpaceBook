@@ -273,8 +273,20 @@ namespace SpaceBook.Controllers
                     newBooking.Cost = bookingCost;
 
                     context.Bookings.Add(newBooking);
-                    context.SaveChanges();
+                    
 
+                    //sends notification to the facility owner
+                    Notification notification = new Notification();
+                    notification.UserId = context.Facilities.Where(x => x.Id == FacID).FirstOrDefault().OwnerId.Value;
+                    notification.Message = context.Users.Where(x => x.Id == uID).FirstOrDefault().FirstName.ToString() + " has made a booking at the facility: " + context.Facilities.Where(x => x.Id == FacID).FirstOrDefault().Name.ToString()
+                        + ", scheduled for " + AdjustTime(newBooking.StartDateTime.Value.TimeOfDay).ToString() + " to " + AdjustTime(newBooking.EndDateTime.Value.TimeOfDay).ToString(); ;
+                    notification.ActiveFlag = true;
+                    notification.IsReadFlag = false;
+                    notification.DateTime = DateTime.Now;
+                    notification.Type = 1; //facilityOwner_venueBooked
+                    context.Notifications.Add(notification);
+
+                    context.SaveChanges();
                     return true;
                 }
                 return false;
@@ -1207,7 +1219,7 @@ namespace SpaceBook.Controllers
                     for (int i = 0; i < fac.Count; i++)
                     {
                         var tempId = fac[i].Id;
-                        Booking owners = context.Bookings.Include(b => b.Reviews).Include(b => b.User).Where(x => x.FacilityId == tempId && x.Cancelled == false).FirstOrDefault();
+                        Booking owners = context.Bookings.Include(b => b.Reviews).Include(b => b.User).Where(x => x.FacilityId == tempId).FirstOrDefault();
                         if (owners != null)
                             bookings.Add(owners);
                     }
@@ -1273,6 +1285,20 @@ namespace SpaceBook.Controllers
                 review.UserId = reviewParam.UserID;
                 review.ActiveFlag = true;
                 context.Reviews.Add(review);
+
+                //sends notification to the facility owner
+                Notification notification = new Notification();
+                notification.UserId = context.Facilities.Where(x => x.Id == review.FacilityId).FirstOrDefault().OwnerId.Value;
+                notification.Message = context.Users.Where(x => x.Id == review.UserId).FirstOrDefault().FirstName.ToString() + " has sumitted a review for your facility: " +
+                    context.Facilities.Where(x => x.Id == review.FacilityId).FirstOrDefault().Name.ToString();
+                notification.ActiveFlag = true;
+                notification.IsReadFlag = false;
+                notification.DateTime = DateTime.Now;
+                notification.Type = 6; //facilityOwner_ReviewReceived
+                context.Notifications.Add(notification);
+
+                context.SaveChanges();
+
                 context.SaveChanges();
                 TempData["UserMessage"] = new MessageViewModel() { CssClassName = "alert-success", Message = "Your review has been submitted." };
                 return RedirectToAction("Index");
@@ -1286,6 +1312,19 @@ namespace SpaceBook.Controllers
             {
                 Booking booking = context.Bookings.Where(b => b.Id == Id).FirstOrDefault();
                 booking.Cancelled = true;
+                
+                //sends notification to the facility owner
+                Notification notification = new Notification();
+                notification.UserId = context.Facilities.Where(x => x.Id == booking.FacilityId).FirstOrDefault().OwnerId.Value;
+                notification.Message = context.Users.Where(x => x.Id == booking.UserId).FirstOrDefault().FirstName.ToString() + " has cancelled a booking at the facility: " + 
+                    context.Facilities.Where(x => x.Id == booking.FacilityId).FirstOrDefault().Name.ToString() + ", scheduled for " +  booking.StartDateTime.Value.ToString("D") +  " from " + 
+                    AdjustTime(booking.StartDateTime.Value.TimeOfDay).ToString() + " to " + AdjustTime(booking.EndDateTime.Value.TimeOfDay).ToString();
+                notification.ActiveFlag = true;
+                notification.IsReadFlag = false;
+                notification.DateTime = DateTime.Now;
+                notification.Type = 2; //facilityOwner_UserCancelledBooking
+                context.Notifications.Add(notification);
+
                 context.SaveChanges();
 
             }
@@ -1299,10 +1338,64 @@ namespace SpaceBook.Controllers
             {
                 Booking booking = context.Bookings.Where(b => b.Id == Id).FirstOrDefault();
                 booking.Cancelled = true;
-                context.SaveChanges();
+                
+                //sends notification to the user
+                Notification notification = new Notification();
+                notification.UserId = context.Users.Where(x => x.Id == booking.UserId).FirstOrDefault().Id;
+                notification.Message = "The facility manager of " + context.Facilities.Where(x => x.Id == booking.FacilityId).FirstOrDefault().Name.ToString() + " has cancelled your booking at the facility on "
+                    + booking.StartDateTime.Value.ToString("D") + ", scheduled for " +
+                    AdjustTime(booking.StartDateTime.Value.TimeOfDay).ToString() + " to " + AdjustTime(booking.EndDateTime.Value.TimeOfDay).ToString();
+                notification.ActiveFlag = true;
+                notification.IsReadFlag = false;
+                notification.DateTime = DateTime.Now;
+                notification.Type = 5; //user_FacilityOwnerCancelledBooking
+                context.Notifications.Add(notification);
 
+                context.SaveChanges();
             }
             return RedirectToAction("OwnerViewBookings", new { filter = "upcoming" });
+        }
+
+        public ActionResult Notifications()
+        {
+            using (var context = new SpaceBookEntities1())
+            {
+                if (Session["UserID"] != null)
+                {
+                    int userId = Convert.ToInt32(Session["UserID"]);
+                    var notifictaions = context.Notifications.Where(x => x.UserId == userId).ToList();
+                    return View(notifictaions);
+                }
+                else
+                {
+                    return RedirectToAction("Login");
+                }
+            }
+        }
+
+        public ActionResult GetNotificationCount()
+        {
+            using (var context = new SpaceBookEntities1())
+            {
+                int userId = Convert.ToInt32(Session["UserID"]);
+                var count = context.Notifications.Where(x => x.UserId == userId).Count();
+                return PartialView(count);
+            }
+        }
+
+        public ActionResult DismissNotification(int id)
+        {
+            using (var context = new SpaceBookEntities1())
+            {
+
+                var notification = context.Notifications.Where(x => x.Id == id).FirstOrDefault();
+                if (notification != null)
+                {
+                    context.Notifications.Remove(notification);
+                    context.SaveChanges();
+                }
+                return RedirectToAction("Notifications");
+            }
         }
     }
 }
