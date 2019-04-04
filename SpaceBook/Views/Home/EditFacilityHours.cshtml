@@ -396,11 +396,11 @@
         $('#sunRate').val(sunRates);
 
         if (validateHours())
-            return true; // return false to cancel form action
+            return true;
         else {
             clearArrays();
             $("#errorMessage").show();
-            return false;
+            return false; // return false to cancel form action
         }
     });
 
@@ -447,8 +447,7 @@
                 || (thuStartTimes[i] >= thuEndTimes[i]) || (friStartTimes[i] >= friEndTimes[i]) || (satStartTimes[i] >= satEndTimes[i])
                 || (sunStartTimes[i] >= sunEndTimes[i]))
                 return false;
-
-            //if there are any duplicates in any list, return false
+            
             for (var j = 0; j < 10; j++) {
                 if (i == j)
                     continue;
