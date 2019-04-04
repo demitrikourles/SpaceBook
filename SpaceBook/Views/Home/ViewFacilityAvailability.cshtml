@@ -50,6 +50,19 @@
 </div>
 
 <div class="container-fluid">
+    <div class="col-md-12 justify-content-center d-flex">
+        @using (Html.BeginForm("parseDateString", "Home", FormMethod.Post))
+        {
+            @Html.TextBox("month", null, new { @maxLength = "2", @placeholder = "MM" });
+            @Html.TextBox("day", null, new { @maxLength = "2", @placeholder = "DD" });
+            @Html.TextBox("year", null, new { @maxLength = "4", @placeholder = "YYYY" });
+            @Html.Hidden("facId", Model.times.FirstOrDefault().FacilityId);
+            <input type="submit" value="Submit">
+        }
+    </div>
+</div>
+
+<div class="container-fluid">
     <table style="float:left" class="table table-borderless col-md-12 table-md d-flex justify-content-center">
         <tr class="row align-content-center">
             <th>
@@ -165,7 +178,9 @@
 <script type="text/javascript">
     $(function () {
         $(document).ready(function () {
-            $('[data-toggle="popover"]').popover(); 
+            $('[data-toggle="popover"]').popover();
+            $('[data-toggle="dropdown"]').dropdown();
+
             //stores c# values found at the time of the page loading
             var day_comp = "@day_of_week_now.ToString()";
             var isCurrentWeek_comp = "@isCurrentWeek.ToString()";
@@ -207,5 +222,11 @@
 <style>
     .facilityNameLabel {
         color: #1E1EBE !important;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit - appearance: none;
+        margin: 0;
     }
 </style>

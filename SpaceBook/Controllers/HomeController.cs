@@ -312,6 +312,44 @@ namespace SpaceBook.Controllers
             return modifiedTime;
         }
 
+        //used to parse manually entered dates
+        [HttpPost]
+        public ActionResult parseDateString(int month = 0, int day = 0, int year = 0, int facId = 0)
+        {
+            string dateString = month.ToString("00") + "-" + day.ToString("00") + "-" + year.ToString("0000"); //date in format MM-dd-yyyy
+            DateTime dt;
+            bool valid = DateTime.TryParse(dateString, out dt);
+
+            int day_of_week_now = (int)DateTime.Now.DayOfWeek == 0 ? 7 : (int)DateTime.Now.DayOfWeek;
+            //Gets reference monday using DateTime.Now
+            DateTime refMonday = DateTime.Now.AddDays((Convert.ToInt32(DayOfWeek.Monday) - day_of_week_now));
+            refMonday = new DateTime(refMonday.Year, refMonday.Month, refMonday.Day, 0, 0, 0);
+
+            var isWeekEarlier = -1;
+
+            //if the date string is valid, check when it is relative to the current week
+            if (valid)
+            {
+                int dt_day_of_week = (int)dt.DayOfWeek == 0 ? 7 : (int)dt.DayOfWeek;
+                dt = dt.AddDays(Convert.ToInt32(DayOfWeek.Monday) - dt_day_of_week);
+                dt = new DateTime(dt.Year, dt.Month, dt.Day, 0, 0, 0);
+
+                //Compare = 0 -> equal, Compare < 0 -> t1 is earlier than t2, Compare > 0 -> t1 is later than t2
+                //If todays date and the selected date are not in the same week or earlier, return false
+                isWeekEarlier = DateTime.Compare(refMonday, dt);
+            }
+
+            //if the date string is invalid or if it is earlier than or in the same week as the current week, load the view with the current week
+            if (!valid || isWeekEarlier >= 0)
+            {
+                return RedirectToAction("ViewFacilityAvailability", new { facilityId = facId, dateMondayString = refMonday.ToString()});
+            }
+            else
+            {
+                return RedirectToAction("ViewFacilityAvailability", new { facilityId = facId, dateMondayString = dt.ToString()});
+            }
+        }
+
         [HttpGet]
         public ActionResult Login()
         {
