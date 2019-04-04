@@ -1279,5 +1279,18 @@ namespace SpaceBook.Controllers
             }
         }
 
+        public ActionResult ViewReview(int id)
+        {
+            using (var context = new SpaceBookEntities1())
+            {
+                ReviewViewModel model = new ReviewViewModel();
+                var review = context.Reviews.Where(u => u.Id == id && u.ActiveFlag == true).FirstOrDefault();
+                model.Rating = review.Rating.Value;
+                model.Review = review.Comment;
+                model.UserID = review.UserId;
+                return View(model);
+            }
+        }
+
     }
 }
