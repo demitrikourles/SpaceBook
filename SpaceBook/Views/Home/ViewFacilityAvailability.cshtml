@@ -4,7 +4,7 @@
 
 <div class="container-fluid">
     <div class="col-md-12 justify-content-center d-flex">
-        <h2 class="facilityNameLabel">@Model.times.FirstOrDefault().Facility.Name</h2>
+        <h2 class="facilityNameLabel">@Html.ActionLink(Model.times.FirstOrDefault().Facility.Name.ToString(), "ViewFacility", new { id = Model.times.FirstOrDefault().FacilityId } )</h2>
     </div>
 </div>
 <div class="container-fluid">
