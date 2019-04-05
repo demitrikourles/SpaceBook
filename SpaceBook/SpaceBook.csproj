@@ -202,6 +202,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\FacilityPhotoViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\ReviewViewModel.cs" />
     <Compile Include="ViewModels\facilityTimesAndBookingsViewModel.cs" />
@@ -392,7 +393,7 @@
     <Content Include="Views\Home\OwnerViewBookings.cshtml" />
     <Content Include="Views\Home\Notifications.cshtml" />
     <Content Include="Views\Home\GetNotificationCount.cshtml" />
-	<Content Include="Views\Home\ViewReview.cshtml" />
+    <Content Include="Views\Home\ViewReview.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
