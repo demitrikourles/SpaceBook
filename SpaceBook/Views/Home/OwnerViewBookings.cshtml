@@ -29,9 +29,13 @@
                             <br />
                             <small class="text-muted">$@Math.Round(item.Cost.Value, 2)</small>
                             <br />
-                            @if(item.EndDateTime > DateTime.Now)
+                            @if (item.Reviews.Any())
                             {
-                                <button style="margin-top:20%" type="button" onclick="location.href='@Url.Action("ownerCancelBooking", new { Id = item.Id })'" class="btn btn-danger">Cancel Booking</button>
+                            <button style="margin-top:20%" type="button" onclick="location.href='@Url.Action("ViewReview", new { Id = item.Reviews.First().Id })'" class="btn btn-primary">See Review</button>
+                            }
+                            else if (item.EndDateTime > DateTime.Now)
+                            {
+                            <button style="margin-top:20%" type="button" onclick="location.href='@Url.Action("ownerCancelBooking", new { Id = item.Id })'" class="btn btn-danger">Cancel Booking</button>
                             }
                         </div>
                     </div>

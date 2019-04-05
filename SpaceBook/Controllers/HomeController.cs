@@ -1219,9 +1219,14 @@ namespace SpaceBook.Controllers
                     for (int i = 0; i < fac.Count; i++)
                     {
                         var tempId = fac[i].Id;
-                        Booking owners = context.Bookings.Include(b => b.Reviews).Include(b => b.User).Where(x => x.FacilityId == tempId).FirstOrDefault();
-                        if (owners != null)
-                            bookings.Add(owners);
+                        List <Booking> tempBookings = context.Bookings.Include(b => b.Reviews).Include(b => b.User).Where(x => x.FacilityId == tempId).ToList();
+                        for (int j = 0; j < tempBookings.Count; j++) {
+                            //var tempId = fac[i].Id;
+                            //Booking owners = context.Bookings.Include(b => b.Reviews).Include(b => b.User).Where(x => x.FacilityId == tempId).FirstOrDefault();
+                            Booking owners = tempBookings[j];
+                            if (owners != null)
+                                bookings.Add(owners);
+                        }
                     }
 
                     if (bookings.Count > 0)
