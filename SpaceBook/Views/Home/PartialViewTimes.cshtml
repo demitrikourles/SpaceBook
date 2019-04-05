@@ -499,16 +499,24 @@
 </div>
 <div>
     <h3>Booking Details:</h3>
-    <h4>Start Time: </h4>
-    <p id="start">Choose Start Time</p>
-    <button href="#" disabled="disabled" id="confirmStart" data-realStartTime="ConfirmStart" class="confirmStart btn btn-sm btn-primary">Confirm Start</button>
-    <h4>End Time: </h4>
-    <p id="end">Choose End Time</p>
-    <button href="#" disabled="disabled" id="confirmEnd" data-realEndTime="ConfirmEnd" class="confirmEnd btn btn-sm btn-primary">Confirm End</button>
-    <h4>Total Cost: </h4>
-    <p id="cost" data-totalCost="0.00">-</p>
-    <button href="#" id="reset" class="reset btn btn-sm btn-primary">Reset</button>
-    <button href="#" disabled="disabled" id="submitBooking" class="submitBooking btn btn-sm btn-primary">Submit</button>
+    <div class="row">
+        <div class="col-4">
+            <h4>Start Time: </h4>
+            <p id="start">Choose Start Time</p>
+            <button href="#" disabled="disabled" id="confirmStart" data-realStartTime="ConfirmStart" class="confirmStart btn btn-sm btn-primary">Confirm Start</button>
+        </div>
+        <div class="col-4">
+            <h4>End Time: </h4>
+            <p id="end">Choose End Time</p>
+            <button href="#" disabled="disabled" id="confirmEnd" data-realEndTime="ConfirmEnd" class="confirmEnd btn btn-sm btn-primary">Confirm End</button>
+        </div>
+        <div class="col-4">
+            <h4>Total Cost: </h4>
+            <p id="cost" data-totalCost="0.00">-</p>
+            <button href="#" id="reset" class="reset btn btn-sm btn-primary">Reset</button>
+            <button href="#" disabled="disabled" id="submitBooking" class="submitBooking btn btn-sm btn-primary">Submit</button>
+        </div>
+    </div>
 </div>
 
 <script src="~/Scripts/jquery-3.3.1.min.js"></script>
