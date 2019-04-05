@@ -1,0 +1,41 @@
+﻿@model SpaceBook.ViewModels.FacilityPhotoViewModel
+
+@{
+    ViewBag.Title = "Upload Facility Photo";
+}
+
+<h1 style="margin: 2% 0% 2% 0%" align="center">Facility Successfully Registered</h1>
+
+<div class="row justify-content-center" style="margin: 2% 0% 2% 0%">
+    <div class="col-8">
+        <div class="progress" style="height: 25px;">
+            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="0"
+                 aria-valuemin="0" aria-valuemax="100" style="width:100%">
+                Upload a facility photo (Optional)
+            </div>
+        </div>
+    </div>
+</div>
+
+@using (Html.BeginForm("UploadFacilityPhoto", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <p style="margin: 0% 0% 5% 0%" align="center">Your facilities  default photo is shown below. To change this photot please upload a photo</p>
+            <hr />
+
+            <div class="form-group">
+                <label class="col-md-2">Facility Photo</label>
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="file" name="FacilityPhotoFile" class="btn btn-default" />
+                </div>
+            </div>
+            @Html.HiddenFor(x => x.FacilityId)
+            <div class="form-group" style="text-align:center">
+                <input type="submit" value="Submit" class="btn btn-primary" style="margin-left: 5%" />
+            </div>
+
+        </div>
+    </div>
+}
+

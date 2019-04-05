@@ -38,6 +38,7 @@
           <Property Name="EndTime" Type="time" Precision="7" />
           <Property Name="HourlyRate" Type="money" />
           <Property Name="ActiveFlag" Type="bit" />
+          <Property Name="FacilityPhotoFileName" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="FacilityTime">
           <Key>
@@ -360,6 +361,7 @@
           <NavigationProperty Name="TagAssignments" Relationship="SpaceBookModel.FK_TagAssignment_Facility" FromRole="Facility" ToRole="TagAssignment" />
           <Property Name="OwnerId" Type="Int32" />
           <NavigationProperty Name="User" Relationship="SpaceBookModel.FK_Facility_User" FromRole="Facility" ToRole="User" />
+          <Property Name="FacilityPhotoFileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="FacilityType">
           <Key>
@@ -690,6 +692,7 @@
           <EntitySetMapping Name="Facilities">
             <EntityTypeMapping TypeName="SpaceBookModel.Facility">
               <MappingFragment StoreEntitySet="Facility">
+                <ScalarProperty Name="FacilityPhotoFileName" ColumnName="FacilityPhotoFileName" />
                 <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
                 <ScalarProperty Name="Country" ColumnName="Country" />
                 <ScalarProperty Name="Province" ColumnName="Province" />

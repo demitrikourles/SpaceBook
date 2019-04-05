@@ -39,6 +39,7 @@ namespace SpaceBook.Models
         public string Province { get; set; }
         public string Country { get; set; }
         public Nullable<int> OwnerId { get; set; }
+        public string FacilityPhotoFileName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Booking> Bookings { get; set; }
