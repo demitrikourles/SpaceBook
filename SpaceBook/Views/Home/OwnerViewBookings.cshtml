@@ -25,7 +25,7 @@
                             <p class="card-text">Booked by @item.User.FirstName @item.User.LastName</p>
                         </div>
                         <div class="col-2" style="float:left">
-                            <small class="text-muted">@item.StartDateTime.Value.ToShortTimeString() - @item.EndDateTime.Value.ToShortTimeString()</small>
+                            <small class="text-muted">@item.StartDateTime.Value.ToShortTimeString() - @item.EndDateTime.Value.AddMinutes(-29).ToShortTimeString()</small>
                             <br />
                             <small class="text-muted">$@Math.Round(item.Cost.Value, 2)</small>
                             <br />
