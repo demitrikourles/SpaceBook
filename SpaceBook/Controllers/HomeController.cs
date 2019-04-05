@@ -915,7 +915,9 @@ namespace SpaceBook.Controllers
                 }
 
                 context.SaveChanges();
-                return View("index", Tags);
+                FacilityPhotoViewModel model = new FacilityPhotoViewModel();
+                model.FacilityId = facilityId;
+                return View("UploadFacilityPhoto", model);
             }
         }
 
@@ -1415,5 +1417,53 @@ namespace SpaceBook.Controllers
                 return RedirectToAction("Notifications");
             }
         }
+
+        [HttpGet]
+        public ActionResult UploadFacilityPhoto(int facilityId)
+        {
+            FacilityPhotoViewModel model = new FacilityPhotoViewModel();
+            model.FacilityId = facilityId;
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult UploadFacilityPhoto(FacilityPhotoViewModel param, HttpPostedFileBase FacilityPhotoFile)
+        {
+            FacilityPhotoFile = FacilityPhotoFile ?? Request.Files["FacilityPhotoFile"];
+
+            using (var context = new SpaceBookEntities1())
+            {
+
+                var facility = context.Facilities.Where(x => x.Id == param.FacilityId).First();
+
+                var FacilityPhotoFileName = "";
+                var FacilityPhotoFilePath = "";
+                var ProfilePicFolderPath = "~/Content/FacilityPhotos";
+
+                //If a file was selected, save the file to the specified folder
+                if (FacilityPhotoFile != null && FacilityPhotoFile.ContentLength > 0)
+                {
+                    //gets the name of the file
+                    FacilityPhotoFileName = Path.GetFileName(FacilityPhotoFile.FileName);
+                    //Saves the uploaded picture to the specified folder
+                    FacilityPhotoFilePath = Path.Combine(Server.MapPath(ProfilePicFolderPath), FacilityPhotoFileName);
+                    FacilityPhotoFile.SaveAs(FacilityPhotoFilePath);
+                    facility.FacilityPhotoFileName = FacilityPhotoFileName;
+                }
+                else
+                {
+                    //if no file was selected, use the default profile picture
+                    facility.FacilityPhotoFileName = "defaultFacilityPhoto.jpg";
+                }
+
+                //Adds the user to the User table in the database
+                context.SaveChanges();
+                //TempData["UserMessage"] = new MessageViewModel() { CssClassName = "alert-success", Message = "Your account has been created." };
+                //Redirects the user to the login page when the "Create" button is pressed
+                return RedirectToAction("Index");
+            }
+            return View("Index");
+        }
+
     }
 }
