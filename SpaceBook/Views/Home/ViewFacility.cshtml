@@ -45,8 +45,8 @@
     {
         <div class="row">
             <div class="col-3">
-                <img class="card-img-top" src="~/Content/ProfilePics/@(review.User.ProfilePicFilename)" alt="Profile_Pic" style="width:50% ; height:50%" />
-                <p>@review.User.FirstName</p>
+                <img class="card-img-top" src="~/Content/ProfilePics/@(review.User.ProfilePicFilename)" alt="Profile_Pic" height="100px" style="width:100px;"/>
+                <p>@review.User.FirstName @review.User.LastName</p>
             </div>
             <div class="col-6">
                 <p>@review.Comment</p>

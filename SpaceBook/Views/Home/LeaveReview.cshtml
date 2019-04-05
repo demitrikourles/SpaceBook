@@ -14,22 +14,12 @@
             <div class="col-6">
                 <div class="form-group" style="margin: 15% 0% 5% 0%">
                     <h4>Rating</h4>
-                    <div>
-                        @{
-                            var stars = Model.Rating;
-                            for (int i = 0; i < 5; i++)
-                            {
-                                if (stars > 0)
-                                {
-                                    <span class="star rated">&nbsp;</span>
-                                }
-                                else
-                                {
-                                    <span class="star">&nbsp;</span>
-                                }
-                                stars = stars - 1;
-                            };
-                        }
+                    <div class="stars" data-rating="3" id="starRating">
+                        <span class="star">&nbsp;</span>
+                        <span class="star">&nbsp;</span>
+                        <span class="star">&nbsp;</span>
+                        <span class="star">&nbsp;</span>
+                        <span class="star">&nbsp;</span>
                     </div>
                     <input type="hidden" id="ratingInput" name="Rating" />
                 </div>
@@ -89,7 +79,7 @@
     <style>
         .star {
             color: goldenrod;
-            font-size: 1.0rem;
+            font-size: 1.5rem;
             padding: 1%; /* space out the stars */
         }
 
@@ -105,7 +95,7 @@
 
         .stars {
             counter-reset: rateme 0;
-            font-size: 2.0rem;
+            font-size: 1.5rem;
             font-weight: 900;
         }
 
