@@ -46,7 +46,29 @@ namespace SpaceBook.Controllers.Tests
         //    Assert.AreEqual("SearchResults", result.ViewName);
         //}
 
+        [TestMethod()]
+        public void TestForgotPasswordView()
+        {
+            var controller = new HomeController();
+            var result = controller.ForgotPassword() as ViewResult;
+            Assert.AreEqual("ForgotPassword", result.ViewName);
+        }
 
+        [TestMethod()]
+        public void TestUserRegistrationView()
+        {
+            var controller = new HomeController();
+            var result = controller.UserRegistration() as ViewResult;
+            Assert.AreEqual("UserRegistration", result.ViewName);
+        }
+
+        [TestMethod()]
+        public void TestRegisterFacilityView()
+        {
+            var controller = new HomeController();
+            var result = controller.RegisterFacility() as ViewResult;
+            Assert.AreEqual("~/Views/Home/RegisterFacility/Info.cshtml", result.ViewName);
+        }
 
         [TestMethod()]
         public void TestEditFacilityAddressView()
@@ -70,6 +92,25 @@ namespace SpaceBook.Controllers.Tests
             var result = controller.ViewFacility(29) as ViewResult; //just make sure that the parameter is the id of a valid facility
             Assert.AreEqual("ViewFacility", result.ViewName);
         }
+
+        [TestMethod()]
+        public void TestViewFacilityViewData()
+        {
+            var controller = new HomeController();
+            var result = controller.ViewFacility(29) as ViewResult; //just make sure that the parameter is the id of a valid facility
+            var facility = (Models.Facility)result.ViewData.Model;
+            Assert.AreEqual("Mosaic Stadium", facility.Name);
+        }
+
+        //[TestMethod()]
+        //public void TestLogoutRedirect()
+        //{
+        //    var controller = new HomeController();
+        //    controller.Session.Add("UserID", "1");
+        //    var result = (RedirectToRouteResult)controller.Logout(); //just make sure that the parameter is the id of a valid facility
+        //    Assert.AreEqual("Login", result.RouteValues["action"]);
+        //}
+
 
     }
 }

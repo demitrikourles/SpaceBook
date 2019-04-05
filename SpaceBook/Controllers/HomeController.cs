@@ -367,7 +367,7 @@ namespace SpaceBook.Controllers
         {
             if (Session["UserID"] != null)
                 return RedirectToAction("Index");
-            return View();
+            return View("Login");
         }
 
         [HttpPost]
@@ -402,7 +402,7 @@ namespace SpaceBook.Controllers
         [HttpGet]
         public ActionResult ForgotPassword()
         {
-            return View();
+            return View("ForgotPassword");
         }
 
         [HttpPost]
@@ -535,7 +535,7 @@ namespace SpaceBook.Controllers
         {
             ViewBag.Message = "User registration page";
 
-            return View();
+            return View("UserRegistration");
         }
 
         [HttpPost]
