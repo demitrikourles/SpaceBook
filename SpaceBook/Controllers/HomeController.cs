@@ -819,6 +819,7 @@ namespace SpaceBook.Controllers
                     newFacility.ActiveFlag = true;
                     newFacility.Type = 1; //
                     newFacility.HourlyRate = (decimal)facilityParam.DefaultHourlyRate;
+                    newFacility.FacilityPhotoFileName = "defaultFacilityPhoto.jpg";
 
 
                     context.Facilities.Add(newFacility);
