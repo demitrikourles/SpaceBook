@@ -4,7 +4,7 @@
 
 <div class="container-fluid">
     <div class="col-md-12 justify-content-center d-flex">
-        <h2 class="facilityNameLabel">@Model.times.FirstOrDefault().Facility.Name</h2>
+        <h2 class="facilityNameLabel">@Html.ActionLink(Model.times.FirstOrDefault().Facility.Name.ToString(), "ViewFacility", new { id = Model.times.FirstOrDefault().FacilityId } )</h2>
     </div>
 </div>
 <div class="container-fluid">
@@ -144,8 +144,8 @@
 
             //resets all weekday buttons to their original color
             $('.showTimes').css("background-color", "#007bff");
-            //changes the selected button color to red
-            $buttonClicked.css("background-color", "red");
+            //changes the selected button color to green
+            $buttonClicked.css("background-color", "green");
 
             var day = $buttonClicked.attr('data-day');
             var facilityId = $buttonClicked.attr('data-facilityId');
@@ -195,25 +195,25 @@
             $('.showTimes').css("background-color", "#007bff");
             //if the current week is not the same as the selected week, Monday will be highlighted by default
             if (isCurrentWeek_comp == "False") {
-                $('#Monday').css("background-color", "red");
+                $('#Monday').css("background-color", "green");
                 $('#currentDateText').text(dateText);
             }
             //If the current week is also the same as the selected week, the button highlighted will correspond to the current day
             else if (isCurrentWeek_comp == "True") {
                 if(day_comp == "1")
-                    $('#Monday').css("background-color", "red");
+                    $('#Monday').css("background-color", "green");
                 else if (day_comp == "2")
-                    $('#Tuesday').css("background-color", "red");
+                    $('#Tuesday').css("background-color", "green");
                 else if (day_comp == "3")
-                    $('#Wednesday').css("background-color", "red");
+                    $('#Wednesday').css("background-color", "green");
                 else if (day_comp == "4")
-                    $('#Thursday').css("background-color", "red");
+                    $('#Thursday').css("background-color", "green");
                 else if (day_comp == "5")
-                    $('#Friday').css("background-color", "red");
+                    $('#Friday').css("background-color", "green");
                 else if (day_comp == "6")
-                    $('#Saturday').css("background-color", "red");
+                    $('#Saturday').css("background-color", "green");
                 else if (day_comp == "7")
-                    $('#Sunday').css("background-color", "red");
+                    $('#Sunday').css("background-color", "green");
             }
         });
     });
