@@ -10,11 +10,23 @@
     @foreach (var result in Model) 
     {
     <div class="col-sm-4">
-        <div class="card">
+        <div class="card" style="margin:4%">
             <div class="card-body">
                 <h5 class="card-title">@Html.DisplayFor(modelResult => result.Name)</h5>
+                <hr />
+                <div style="text-align:center; margin:5% 0% 5% 0%">
+                    <img class="card-img-top" src="\Content\FacilityPhotos\@result.FacilityPhotoFileName" alt="Card image cap" height="200" style="width:300px;">
+                </div>
+                <hr />
                 <p class="card-text">@Html.DisplayFor(modelResult => result.Description)</p>
-                <button type="button" onclick="location.href='@Url.Action("ViewFacility", new { Id = result.Id })'" class="btn btn-primary">View Facility</button>
+                <hr />
+                <p><span class="fa fa-map-marker fa-fw"></span>@result.Address, @result.City</p>
+                <p><span class="fa fa-phone fa-fw"></span>@result.Phone</p>
+                <p><span class="fa fa-envelope fa-fw"></span>@result.Email</p>
+                <hr />
+                <div class="text-center">
+                    <button type="button" onclick="location.href='@Url.Action("ViewFacility", new { Id = result.Id })'" class="btn btn-primary">View Facility</button>
+                </div>
             </div>
         </div>
     </div>

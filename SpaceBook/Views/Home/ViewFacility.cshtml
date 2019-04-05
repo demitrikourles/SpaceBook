@@ -7,7 +7,7 @@
 <div class="col-md-3">
     <h2>View Facility</h2>
 </div>
-<div class="row">
+<div class="row" style="margin-top:5%">
     <div class="col-md-5">
         <div class="card">
             <div class="card-body">
@@ -29,22 +29,23 @@
             </div>
         </div>
     </div>
-    <div class="col-md-7">
-        <img class="card-img-top" src="\Content\Images\MosaicStadium.jpg" alt="Card image cap" height="300" width="42">
+    <div class="col-md-7" style="text-align: center">
+        <img class="card-img-top" src="\Content\FacilityPhotos\@Model.FacilityPhotoFileName" alt="Card image cap" height="350px" style="width:525px;">
+        @*<img class="card-img-top" src="\Content\Images\defaultFacilityPhoto" alt="Card image cap" style="width:50% ; height:50%">*@
     </div>
 </div>
 
 <!--The div element for the map -->
-<div id="map"></div>
+<div id="map" style="margin-top:5%"></div>
 
 
-<div class="col-12">
+<div class="col-12" style="margin-top:5%">
     <h2>Reviews (@Model.Reviews.Count)</h2>
     @foreach (var review in Model.Reviews)
     {
         <div class="row">
             <div class="col-3">
-                <img class="card-img-top" src="~/Content/ProfilePics/@(review.User.ProfilePicFilename)" alt="Profile_Pic"  style="width:50% ; height:50%"/>
+                <img class="card-img-top" src="~/Content/ProfilePics/@(review.User.ProfilePicFilename)" alt="Profile_Pic" style="width:50% ; height:50%" />
                 <p>@review.User.FirstName</p>
             </div>
             <div class="col-6">

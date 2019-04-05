@@ -1,6 +1,6 @@
 ﻿@model IEnumerable<SpaceBook.Models.Facility>
 @{
-    ViewBag.Title = "OwnerFacilities";
+    ViewBag.Title = "Owner Facilities";
 }
 
 <br />
@@ -10,17 +10,23 @@
 <div class="row">
     @foreach (var result in Model) {
         <div class="col-sm-4">
-            <div class="card">
+            <div class="card" style="margin:4%">
                 <div class="card-body">
                     <h5 class="card-title">@Html.DisplayFor(modelResult => result.Name)</h5>
+                    <hr />
+                    <div style="text-align:center; margin:5% 0% 5% 0%">
+                        <img class="card-img-top" src="\Content\FacilityPhotos\@result.FacilityPhotoFileName" alt="Card image cap" height="200" style="width:300px;">
+                    </div>
+                    <hr />
                     <p class="card-text">@Html.DisplayFor(modelResult => result.Description)</p>
+                    <hr />
                     <button type="button" onclick="location.href='@Url.Action("ViewFacility", new { Id = result.Id })'" class="btn btn-primary btn-sm">View Facility</button>
                     <br />
                     <button type="button" onclick="location.href='@Url.Action("EditFacilityInfo", new { Id = result.Id })'" class="btn btn-primary btn-sm" style="margin-top:2%">Edit Facility Info</button>
                     <button type="button" onclick="location.href='@Url.Action("EditFacilityHours", new { Id = result.Id })'" class="btn btn-primary btn-sm" style="margin-top:2%">Edit Facility Hours</button>
-                    
+
                 </div>
-                <div class="card-footer text-right">
+                <div class="card-footer text-center">
                     @*<button type="button" onclick="location.href='@Url.Action("UnactivateFacility", new { Id = result.Id })'" class="btn btn-danger" style="margin-top:2%">Delete Facility</button>*@
                     <button class="btn btn-danger" style="margin-top:2%; color:white">
                         @Html.ActionLink("Delete Facility", "UnactivateFacility", "Home",

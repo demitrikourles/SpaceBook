@@ -1179,6 +1179,7 @@ namespace SpaceBook.Controllers
                         {
                             booking.Facility.Name.FirstOrDefault();
                             booking.EndDateTime = booking.EndDateTime.Value.AddMinutes(30);
+                            booking.Facility.FacilityPhotoFileName.First();
                         }
                     if (user != null)
                     {
@@ -1237,6 +1238,7 @@ namespace SpaceBook.Controllers
                         {
                             booking.Facility.Name.FirstOrDefault();
                             booking.EndDateTime = booking.EndDateTime.Value.AddMinutes(30);
+                            booking.Facility.FacilityPhotoFileName.First();
                         }
 
                     if (user != null)
