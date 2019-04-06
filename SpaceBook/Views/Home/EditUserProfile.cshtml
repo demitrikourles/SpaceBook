@@ -38,7 +38,7 @@
             </div>
         </div>
         <div class="col-4">
-            <img class="card-img-top" src="~/Content/ProfilePics/@(Model.ProfilePicFilename)" alt="Profile_Pic" height="300" width="42" />
+            <img class="card-img-top" src="@Url.Content("~/Content/ProfilePics/" + @Model.ProfilePicFilename.ToString())" alt="Profile_Pic" height="300" width="42" />
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     @Html.ValidationMessageFor(model => model.ProfilePicFilename, "", new { @class = "text-danger" })

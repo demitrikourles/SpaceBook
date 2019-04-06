@@ -16,8 +16,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="col-3" style="float:left">
-                        @*<img class="card-img-top" src="\Content\Images\MosaicStadium.jpg" alt="Card image cap" style="height:100%; width:100%">*@
-                        <img class="card-img-top" src="\Content\FacilityPhotos\@item.Facility.FacilityPhotoFileName" alt="Card image cap" height="100" style="width:150px;">
+                        <img class="card-img-top" src="@Url.Content("~/Content/FacilityPhotos/" + @item.Facility.FacilityPhotoFileName.ToString())" alt="Card image cap" height="100" style="width:150px;">
                     </div>
                     <div class="col-6" style="float:left">
                         <a href="@Url.Action("ViewFacility", "Home", new { id = item.FacilityId })">

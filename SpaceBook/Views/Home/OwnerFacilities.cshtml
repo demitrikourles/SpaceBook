@@ -15,7 +15,7 @@
                     <h5 class="card-title">@Html.DisplayFor(modelResult => result.Name)</h5>
                     <hr />
                     <div style="text-align:center; margin:5% 0% 5% 0%">
-                        <img class="card-img-top" src="\Content\FacilityPhotos\@result.FacilityPhotoFileName" alt="Card image cap" height="200" style="width:300px;">
+                        <img class="card-img-top" src="@Url.Content("~/Content/FacilityPhotos/" + @result.FacilityPhotoFileName.ToString())" alt="Card image cap" height="200" style="width:300px;">
                     </div>
                     <hr />
                     <p class="card-text">@Html.DisplayFor(modelResult => result.Description)</p>

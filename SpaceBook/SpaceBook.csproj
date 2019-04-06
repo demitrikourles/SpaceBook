@@ -222,14 +222,32 @@
     <Content Include="Content\Email_Templates\forgotPassword.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\FacilityPhotos\basketabll.jpg" />
+    <Content Include="Content\FacilityPhotos\default.jpg" />
+    <Content Include="Content\FacilityPhotos\default1.jpg" />
+    <Content Include="Content\FacilityPhotos\defaultFacilityPhoto.jpg" />
+    <Content Include="Content\FacilityPhotos\leibel.jpg" />
+    <Content Include="Content\FacilityPhotos\mosaic.jpg" />
+    <Content Include="Content\FacilityPhotos\players-fill-each-courts-lakeshore-tennis-club-reg1.jpg" />
+    <Content Include="Content\FacilityPhotos\regina-al_ritchie_arena-235.jpg" />
+    <Content Include="Content\FacilityPhotos\swimmingpool.jpg" />
     <Content Include="Content\font-awesome.css" />
     <Content Include="Content\font-awesome.min.css" />
     <Content Include="Content\fontawesome-all.css" />
     <Content Include="Content\fontawesome-all.min.css" />
     <Content Include="Content\fontawesome.css" />
     <Content Include="Content\fontawesome.min.css" />
+    <Content Include="Content\Images\logo.png" />
+    <Content Include="Content\Images\MosaicStadium.jpg" />
     <Content Include="Content\Images\Skyline.jpg" />
+    <Content Include="Content\Images\Skyline1.jpg" />
+    <Content Include="Content\ProfilePics\bezos-5321ceb5255d639dacc5930a703722cd.jpg" />
+    <Content Include="Content\ProfilePics\Darth Maul.jpg" />
+    <Content Include="Content\ProfilePics\default-user-image.png" />
     <Content Include="Content\ProfilePics\default.jpg" />
+    <Content Include="Content\ProfilePics\default1.jpg" />
+    <Content Include="Content\ProfilePics\luke1.jpg" />
+    <Content Include="Content\ProfilePics\todd.jpg" />
     <Content Include="Content\ProfilePics\yoda1.jpg" />
     <Content Include="Content\ProfilePics\yoda2.jpg" />
     <Content Include="Content\rateit.css" />
@@ -394,6 +412,7 @@
     <Content Include="Views\Home\Notifications.cshtml" />
     <Content Include="Views\Home\GetNotificationCount.cshtml" />
     <Content Include="Views\Home\ViewReview.cshtml" />
+    <Content Include="Views\Home\UploadFacilityPhoto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -30,8 +30,7 @@
         </div>
     </div>
     <div class="col-md-7" style="text-align: center">
-        <img class="card-img-top" src="\Content\FacilityPhotos\@Model.FacilityPhotoFileName" alt="Card image cap" height="350px" style="width:525px;">
-        @*<img class="card-img-top" src="\Content\Images\defaultFacilityPhoto" alt="Card image cap" style="width:50% ; height:50%">*@
+        <img class="card-img-top" src="@Url.Content("~/Content/FacilityPhotos/" + @Model.FacilityPhotoFileName.ToString())" alt="Card image cap" style="width:525px; height:350px;">
     </div>
 </div>
 
@@ -45,7 +44,7 @@
     {
         <div class="row">
             <div class="col-3">
-                <img class="card-img-top" src="~/Content/ProfilePics/@(review.User.ProfilePicFilename)" alt="Profile_Pic" height="100px" style="width:100px;"/>
+                <img class="card-img-top" src="@Url.Content("~/Content/ProfilePics/" + @review.User.ProfilePicFilename)" alt="Profile_Pic" height="100px" style="width:100px;"/>
                 <p>@review.User.FirstName @review.User.LastName</p>
             </div>
             <div class="col-6">
