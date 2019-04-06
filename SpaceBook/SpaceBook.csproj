@@ -202,6 +202,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\EditFacilityPhotoViewModel.cs" />
     <Compile Include="ViewModels\FacilityPhotoViewModel.cs" />
     <Compile Include="ViewModels\LoginViewModel.cs" />
     <Compile Include="ViewModels\ReviewViewModel.cs" />
@@ -413,6 +414,7 @@
     <Content Include="Views\Home\GetNotificationCount.cshtml" />
     <Content Include="Views\Home\ViewReview.cshtml" />
     <Content Include="Views\Home\UploadFacilityPhoto.cshtml" />
+    <Content Include="Views\Home\EditFacilityPhoto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

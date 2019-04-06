@@ -1429,6 +1429,55 @@ namespace SpaceBook.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public ActionResult EditFacilityPhoto(int facilityId)
+        {
+            using (var context = new SpaceBookEntities1())
+            {
+                EditFacilityPhotoViewModel model = new EditFacilityPhotoViewModel();
+                var facility = context.Facilities.Where(x => x.Id == facilityId).First();
+
+                model.facility = facility;
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult EditFacilityPhoto(EditFacilityPhotoViewModel param, HttpPostedFileBase FacilityPhotoFile)
+        {
+            FacilityPhotoFile = FacilityPhotoFile ?? Request.Files["FacilityPhotoFile"];
+
+            using (var context = new SpaceBookEntities1())
+            {
+
+                var facility = context.Facilities.Where(x => x.Id == param.facility.Id).First();
+
+                var FacilityPhotoFileName = "";
+                var FacilityPhotoFilePath = "";
+                var ProfilePicFolderPath = "~/Content/FacilityPhotos";
+
+                //If a file was selected, save the file to the specified folder
+                if (FacilityPhotoFile != null && FacilityPhotoFile.ContentLength > 0)
+                {
+                    //gets the name of the file
+                    FacilityPhotoFileName = Path.GetFileName(FacilityPhotoFile.FileName);
+                    //Saves the uploaded picture to the specified folder
+                    FacilityPhotoFilePath = Path.Combine(Server.MapPath(ProfilePicFolderPath), FacilityPhotoFileName);
+                    FacilityPhotoFile.SaveAs(FacilityPhotoFilePath);
+                    facility.FacilityPhotoFileName = FacilityPhotoFileName;
+                    context.SaveChanges();
+                }
+
+                //Adds the user to the User table in the database
+                //context.SaveChanges();
+                //TempData["UserMessage"] = new MessageViewModel() { CssClassName = "alert-success", Message = "Your account has been created." };
+                //Redirects the user to the login page when the "Create" button is pressed
+                return RedirectToAction("Index");
+            }
+            return View("Index");
+        }
+
         [HttpPost]
         public ActionResult UploadFacilityPhoto(FacilityPhotoViewModel param, HttpPostedFileBase FacilityPhotoFile)
         {
