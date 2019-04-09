@@ -930,7 +930,7 @@ namespace SpaceBook.Controllers
             }
         }
 
-        //Function pulls facility froom db and then updates edited facility info
+        //Function pulls facility from db and then updates edited facility info
         public ActionResult EditFacilityInfo(Int32 id)
         {
             if (Session["UserID"] != null)
