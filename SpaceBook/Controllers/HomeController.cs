@@ -894,6 +894,7 @@ namespace SpaceBook.Controllers
             return;
         }
 
+        //Pulls facility from db and writes tags to db associated with a given facility
         [HttpPost]
         public ActionResult RegisterFacilityAddTags()
         {
@@ -922,6 +923,7 @@ namespace SpaceBook.Controllers
             }
         }
 
+        //Function pulls facility froom db and then updates edited facility info
         public ActionResult EditFacilityInfo(Int32 id)
         {
             if (Session["UserID"] != null)
@@ -955,6 +957,7 @@ namespace SpaceBook.Controllers
 
         public ActionResult EditFacilityAddress(RegisterFacilityViewModel facilityParam)
         {
+            //Validation performed before next view is returned
             if (ModelState.IsValidField("Name") && ModelState.IsValidField("Description") && ModelState.IsValidField("Email") && ModelState.IsValidField("Phone") && ModelState.IsValidField("DefaultHourlyRate"))
             {
                 ModelState.Clear();
@@ -971,6 +974,7 @@ namespace SpaceBook.Controllers
         {
             using (var context = new SpaceBookEntities1())
             {
+                //Code below uses fields from function parameter to create new facility in db
                 Facility record = context.Facilities.Where(x => x.Id == facilityParam.Id).FirstOrDefault();
                 record.Name = facilityParam.Name;
                 record.Description = facilityParam.Description;
@@ -987,6 +991,7 @@ namespace SpaceBook.Controllers
                 context.SaveChanges();
 
                 var userID = Convert.ToInt32(Session["UserID"]);
+                //code below used to fetch data for the next view being returned
                 List<Facility> ownersFacilities = context.Facilities.Where(x => x.OwnerId == userID && x.ActiveFlag == true).ToList();
                 return View("OwnerFacilities", ownersFacilities);
             }
@@ -997,6 +1002,7 @@ namespace SpaceBook.Controllers
             return View("EditFacilityInfo", facilityParam);
         }
 
+        //Used to fetch a facility's hours and then return a view allowing user to edit them
         public ActionResult EditFacilityHours(Int32 id)
         {
             using (var context = new SpaceBookEntities1())
@@ -1014,7 +1020,7 @@ namespace SpaceBook.Controllers
         {
             using (var context = new SpaceBookEntities1())
             {
-
+                //Code below fetches form input for both hours and hourly rates
                 List<string> monList = Request.Form["monStart"].Split(',').ToList<string>();
                 monList.AddRange(Request.Form["monEnd"].Split(',').ToList<string>());
                 List<string> monRates = Request.Form["monRate"].Split(',').ToList<string>();
@@ -1087,8 +1093,6 @@ namespace SpaceBook.Controllers
                         TimeSpan interval = new TimeSpan(0, 0, 0);
                         for (int y = 0; y < 48; y++)  //y = number of time slots to create per day
                         {
-                            //FacilityTimeList[iterator].StartTime = interval;
-                            //FacilityTimeList[iterator].Day = day;
                             FacilityTimeList[iterator].Rate = 0;
                             FacilityTimeList[iterator].IsAvailable = false;
 
@@ -1150,6 +1154,7 @@ namespace SpaceBook.Controllers
             }
         }
 
+        //Returns view showing all facilities owned by a user
         public ActionResult ViewOwnerFacilities()
         {
             if (Session["UserID"] != null)
@@ -1172,17 +1177,18 @@ namespace SpaceBook.Controllers
                 {
                     var sessionID = Convert.ToInt32(Session["UserID"]);
                     var user = context.Users.Where(u => u.Id == sessionID && u.ActiveFlag == true).FirstOrDefault();
-                    //var bookings = context.Bookings.Where(x => x.UserId == sessionID && x.Cancelled == false).ToList();
                     var bookings = context.Bookings.Include(b => b.Reviews).Where(x => x.UserId == sessionID && x.Cancelled == false).ToList();
                     if (bookings.Count > 0)
                         foreach (var booking in bookings)
                         {
+                            //Code below loads booking related information
                             booking.Facility.Name.FirstOrDefault();
                             booking.EndDateTime = booking.EndDateTime.Value.AddMinutes(30);
                             booking.Facility.FacilityPhotoFileName.First();
                         }
                     if (user != null)
                     {
+                        //code below used to filter bookings so that only upcoming bookings are diplayed
                         if (filter == "upcoming")
                             foreach (Booking item in bookings.ToList())
                             {
@@ -1191,7 +1197,7 @@ namespace SpaceBook.Controllers
                                     bookings.Remove(item);
                                 }
                             }
-
+                        //code below used to filter bookings so that only completed bookings are diplayed
                         else if (filter == "completed")
                             foreach (Booking item in bookings.ToList())
                             {
@@ -1217,6 +1223,7 @@ namespace SpaceBook.Controllers
                 {
                     var userId = Convert.ToInt32(Session["UserID"]);
                     var user = context.Users.Where(u => u.Id == userId && u.ActiveFlag == true).FirstOrDefault();
+                    //code below pulls all facilities owned by a perticular user
                     List<Facility> fac = context.Facilities.Where(x => x.OwnerId == userId && x.ActiveFlag == true).ToList();
                     var bookings = new List<Booking>();
 
@@ -1225,17 +1232,15 @@ namespace SpaceBook.Controllers
                         var tempId = fac[i].Id;
                         List <Booking> tempBookings = context.Bookings.Include(b => b.Reviews).Include(b => b.User).Where(x => x.FacilityId == tempId).ToList();
                         for (int j = 0; j < tempBookings.Count; j++) {
-                            //var tempId = fac[i].Id;
-                            //Booking owners = context.Bookings.Include(b => b.Reviews).Include(b => b.User).Where(x => x.FacilityId == tempId).FirstOrDefault();
                             Booking owners = tempBookings[j];
                             if (owners != null)
                                 bookings.Add(owners);
                         }
                     }
-
                     if (bookings.Count > 0)
                         foreach (var booking in bookings)
                         {
+                            //Code below is used for loading booking info
                             booking.Facility.Name.FirstOrDefault();
                             booking.EndDateTime = booking.EndDateTime.Value.AddMinutes(30);
                             booking.Facility.FacilityPhotoFileName.First();
@@ -1310,6 +1315,7 @@ namespace SpaceBook.Controllers
                 context.SaveChanges();
 
                 context.SaveChanges();
+                //Generate success message for user leaving a review
                 TempData["UserMessage"] = new MessageViewModel() { CssClassName = "alert-success", Message = "Your review has been submitted." };
                 return RedirectToAction("Index");
             }
@@ -1354,11 +1360,12 @@ namespace SpaceBook.Controllers
             return RedirectToAction("ViewBookings", new { filter = "upcoming" });
         }
 
-        //owner initiated cancellling of a booking
+        //owner initiated cancelling of a booking
         public ActionResult ownerCancelBooking(int Id)
         {
             using (var context = new SpaceBookEntities1())
             {
+                //Pull booking from db and set the cancelled flag
                 Booking booking = context.Bookings.Where(b => b.Id == Id).FirstOrDefault();
                 booking.Cancelled = true;
                 
@@ -1386,6 +1393,7 @@ namespace SpaceBook.Controllers
                 if (Session["UserID"] != null)
                 {
                     int userId = Convert.ToInt32(Session["UserID"]);
+                    //Pull all of a user's notifications  from db
                     var notifictaions = context.Notifications.Where(x => x.UserId == userId).ToList();
                     return View(notifictaions);
                 }
@@ -1410,7 +1418,7 @@ namespace SpaceBook.Controllers
         {
             using (var context = new SpaceBookEntities1())
             {
-
+                //Pull notification fom db
                 var notification = context.Notifications.Where(x => x.Id == id).FirstOrDefault();
                 if (notification != null)
                 {
@@ -1435,8 +1443,9 @@ namespace SpaceBook.Controllers
             using (var context = new SpaceBookEntities1())
             {
                 EditFacilityPhotoViewModel model = new EditFacilityPhotoViewModel();
+                //Pull facility from db
                 var facility = context.Facilities.Where(x => x.Id == facilityId).First();
-
+                //Set facility in view model to the facility record pulled from db
                 model.facility = facility;
 
                 return View(model);
@@ -1450,7 +1459,7 @@ namespace SpaceBook.Controllers
 
             using (var context = new SpaceBookEntities1())
             {
-
+                //Pull facility from db
                 var facility = context.Facilities.Where(x => x.Id == param.facility.Id).First();
 
                 var FacilityPhotoFileName = "";
@@ -1468,11 +1477,6 @@ namespace SpaceBook.Controllers
                     facility.FacilityPhotoFileName = FacilityPhotoFileName;
                     context.SaveChanges();
                 }
-
-                //Adds the user to the User table in the database
-                //context.SaveChanges();
-                //TempData["UserMessage"] = new MessageViewModel() { CssClassName = "alert-success", Message = "Your account has been created." };
-                //Redirects the user to the login page when the "Create" button is pressed
                 return RedirectToAction("Index");
             }
             return View("Index");
@@ -1485,7 +1489,7 @@ namespace SpaceBook.Controllers
 
             using (var context = new SpaceBookEntities1())
             {
-
+                //Pull facility from db
                 var facility = context.Facilities.Where(x => x.Id == param.FacilityId).First();
 
                 var FacilityPhotoFileName = "";
@@ -1507,11 +1511,7 @@ namespace SpaceBook.Controllers
                     //if no file was selected, use the default profile picture
                     facility.FacilityPhotoFileName = "defaultFacilityPhoto.jpg";
                 }
-
-                //Adds the user to the User table in the database
                 context.SaveChanges();
-                //TempData["UserMessage"] = new MessageViewModel() { CssClassName = "alert-success", Message = "Your account has been created." };
-                //Redirects the user to the login page when the "Create" button is pressed
                 return RedirectToAction("Index");
             }
             return View("Index");
