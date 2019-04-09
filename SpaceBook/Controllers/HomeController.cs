@@ -19,6 +19,7 @@ namespace SpaceBook.Controllers
         {
             using (var context = new SpaceBookEntities1())
             {
+                //Index takes a list of tags to display in the select input
                 List<TagType> list = context.TagTypes.ToList();
                 return View(list);
             }
@@ -44,11 +45,11 @@ namespace SpaceBook.Controllers
             using (var context = new SpaceBookEntities1())
             {
                 var results = new List<Facility>();
-                var nameString = Request.Form["nameInput"];
+                var nameString = Request.Form["nameInput"]; //input string entered by the user from index page
                 foreach (var item in context.Facilities.Where(x => x.ActiveFlag == true).ToList())
                 {
                     if (item.Name.ToUpper().Contains(nameString.ToUpper()))
-                        results.Add(item);
+                        results.Add(item); //if the facility name contains the substring searched for, add it to results
                 }
                 return View("SearchResults", results);
             }
@@ -60,16 +61,16 @@ namespace SpaceBook.Controllers
             using (var context = new SpaceBookEntities1())
             {
                 var results = new List<Facility>();
-                var tagName = Request.Form["tagInput"];
+                var tagName = Request.Form["tagInput"]; //select input chosen by user on index page
                 var tag = context.TagTypes.Where(x => x.Name == tagName).FirstOrDefault();
                 if (tag == null)
-                    return View("SearchResults", results);
+                    return View("SearchResults", results); //send empty results list if searched for tag doesn't exist
 
-                var tagAssignments = context.TagAssignments.Where(x => x.TagId == tag.Id).ToList();
+                var tagAssignments = context.TagAssignments.Where(x => x.TagId == tag.Id).ToList(); //look at the tag assignment table to find matches
 
                 foreach (var item in tagAssignments)
                 {
-                    results.Add(context.Facilities.Where(x => x.Id == item.FacilityId).FirstOrDefault());
+                    results.Add(context.Facilities.Where(x => x.Id == item.FacilityId).FirstOrDefault()); //add one instance of facility to results
                 }
 
                 return View("SearchResults", results);
@@ -80,10 +81,10 @@ namespace SpaceBook.Controllers
         {
             using (var context = new SpaceBookEntities1())
             {
-                var facility = context.Facilities.Include(x => x.Reviews).Where(x => x.Id == id).FirstOrDefault();
+                var facility = context.Facilities.Include(x => x.Reviews).Where(x => x.Id == id).FirstOrDefault(); //load the reviews and facility
                 foreach (var review in facility.Reviews)
                 {
-                    review.User.FirstName.First();
+                    review.User.FirstName.First(); //lazy load first nad last names pf reviewer
                     review.User.LastName.First();
                 }
                 return View("ViewFacility", facility);
@@ -377,17 +378,17 @@ namespace SpaceBook.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var user = context.Users.Where(u => u.Email == userParam.Email).FirstOrDefault();
+                    var user = context.Users.Where(u => u.Email == userParam.Email).FirstOrDefault(); //find matching user account
                     if (user != null)
                     {
-                        if (user.Password == userParam.Password)
+                        if (user.Password == userParam.Password) //if password also matches, log the user in
                         {
                             Session["UserID"] = user.Id.ToString();
                             return RedirectToAction("Index");
                         }
                     }
                     TempData["UserMessage"] = new MessageViewModel() { CssClassName = "alert-danger", Message = "You have entered an invalid email or password. Please try again" };
-                    return RedirectToAction("Login");
+                    return RedirectToAction("Login"); //if user not found, return to login page
                 }
                 return RedirectToAction("Login");
             }
@@ -641,7 +642,7 @@ namespace SpaceBook.Controllers
             ViewBag.Message = "Edit User Profile Page";
             using (var context = new SpaceBookEntities1())
             {
-                User user = context.Users.Where(u => u.Id == id).FirstOrDefault();
+                User user = context.Users.Where(u => u.Id == id).FirstOrDefault(); //find matching user baseed on id
                 return View(user);
             }
         }
@@ -715,7 +716,7 @@ namespace SpaceBook.Controllers
         [HttpGet]
         public ActionResult RegisterFacility()
         {
-            return View("~/Views/Home/RegisterFacility/Info.cshtml");
+            return View("~/Views/Home/RegisterFacility/Info.cshtml"); //first step of facility registration
         }
 
         public ActionResult RegisterFacilityInfo(RegisterFacilityViewModel facilityParam)
@@ -723,11 +724,11 @@ namespace SpaceBook.Controllers
             if (ModelState.IsValidField("Name") && ModelState.IsValidField("Description") && ModelState.IsValidField("Email") && ModelState.IsValidField("Phone") && ModelState.IsValidField("DefaultHourlyRate"))
             {
                 ModelState.Clear();
-                return View("~/Views/Home/RegisterFacility/Address.cshtml", facilityParam);
+                return View("~/Views/Home/RegisterFacility/Address.cshtml", facilityParam); //proceed to second step of registration if info is valid
             }
             else
             {
-                return View("~/Views/Home/RegisterFacility/Info.cshtml", facilityParam);
+                return View("~/Views/Home/RegisterFacility/Info.cshtml", facilityParam); //go back to first step if info is invalid
             }
         }
 
@@ -736,17 +737,17 @@ namespace SpaceBook.Controllers
             if (ModelState.IsValidField("Address") && ModelState.IsValidField("City") && ModelState.IsValidField("PostalCode") && ModelState.IsValidField("Province") && ModelState.IsValidField("Country"))
             {
                 ModelState.Clear();
-                return View("~/Views/Home/RegisterFacility/Hours.cshtml", facilityParam);
+                return View("~/Views/Home/RegisterFacility/Hours.cshtml", facilityParam); //proceed to third step of registration if info is valid
             }
             else
             {
-                return View("~/Views/Home/RegisterFacility/Address.cshtml", facilityParam);
+                return View("~/Views/Home/RegisterFacility/Address.cshtml", facilityParam); //go back to second step if info is invalid
             }
         }
 
         public ActionResult RegisterFacilityAddressBack(RegisterFacilityViewModel facilityParam)
         {
-            return View("~/Views/Home/RegisterFacility/Info.cshtml", facilityParam);
+            return View("~/Views/Home/RegisterFacility/Info.cshtml", facilityParam); // go back to first step if back button is clicked
         }
 
 
@@ -755,37 +756,38 @@ namespace SpaceBook.Controllers
         {
             using (var context = new SpaceBookEntities1())
             {
-                Facility newFacility = new Facility();
+                Facility newFacility = new Facility(); // form is complete, create new facility object
                 newFacility.OwnerId = Convert.ToInt32(Session["UserID"]);
 
-                List<string> monList = Request.Form["monStart"].Split(',').ToList<string>();
-                monList.AddRange(Request.Form["monEnd"].Split(',').ToList<string>());
-                List<string> monRates = Request.Form["monRate"].Split(',').ToList<string>();
+                List<string> monList = Request.Form["monStart"].Split(',').ToList<string>(); //collects list of start times for day
+                monList.AddRange(Request.Form["monEnd"].Split(',').ToList<string>()); //collects list of end times for day
+                List<string> monRates = Request.Form["monRate"].Split(',').ToList<string>(); //collects list of rates for day
 
-                List<string> tueList = Request.Form["tueStart"].Split(',').ToList<string>();
-                tueList.AddRange(Request.Form["tueEnd"].Split(',').ToList<string>());
-                List<string> tueRates = Request.Form["tueRate"].Split(',').ToList<string>();
+                List<string> tueList = Request.Form["tueStart"].Split(',').ToList<string>(); //collects list of start times for day
+                tueList.AddRange(Request.Form["tueEnd"].Split(',').ToList<string>()); //collects list of end times for day
+                List<string> tueRates = Request.Form["tueRate"].Split(',').ToList<string>(); //collects list of rates for day
 
-                List<string> wedList = Request.Form["wedStart"].Split(',').ToList<string>();
-                wedList.AddRange(Request.Form["wedEnd"].Split(',').ToList<string>());
-                List<string> wedRates = Request.Form["wedRate"].Split(',').ToList<string>();
+                List<string> wedList = Request.Form["wedStart"].Split(',').ToList<string>(); //collects list of start times for day
+                wedList.AddRange(Request.Form["wedEnd"].Split(',').ToList<string>()); //collects list of end times for day
+                List<string> wedRates = Request.Form["wedRate"].Split(',').ToList<string>(); //collects list of rates for day
 
-                List<string> thuList = Request.Form["thuStart"].Split(',').ToList<string>();
-                thuList.AddRange(Request.Form["thuEnd"].Split(',').ToList<string>());
-                List<string> thuRates = Request.Form["thuRate"].Split(',').ToList<string>();
+                List<string> thuList = Request.Form["thuStart"].Split(',').ToList<string>(); //collects list of start times for day
+                thuList.AddRange(Request.Form["thuEnd"].Split(',').ToList<string>()); //collects list of end times for day
+                List<string> thuRates = Request.Form["thuRate"].Split(',').ToList<string>(); //collects list of rates for day
 
-                List<string> friList = Request.Form["friStart"].Split(',').ToList<string>();
-                friList.AddRange(Request.Form["friEnd"].Split(',').ToList<string>());
-                List<string> friRates = Request.Form["friRate"].Split(',').ToList<string>();
+                List<string> friList = Request.Form["friStart"].Split(',').ToList<string>(); //collects list of start times for day
+                friList.AddRange(Request.Form["friEnd"].Split(',').ToList<string>()); //collects list of end times for day
+                List<string> friRates = Request.Form["friRate"].Split(',').ToList<string>(); //collects list of rates for day
 
-                List<string> satList = Request.Form["satStart"].Split(',').ToList<string>();
-                satList.AddRange(Request.Form["satEnd"].Split(',').ToList<string>());
-                List<string> satRates = Request.Form["satRate"].Split(',').ToList<string>();
+                List<string> satList = Request.Form["satStart"].Split(',').ToList<string>(); //collects list of start times for day
+                satList.AddRange(Request.Form["satEnd"].Split(',').ToList<string>()); //collects list of end times for day
+                List<string> satRates = Request.Form["satRate"].Split(',').ToList<string>(); //collects list of rates for day
 
-                List<string> sunList = Request.Form["sunStart"].Split(',').ToList<string>();
-                sunList.AddRange(Request.Form["sunEnd"].Split(',').ToList<string>());
-                List<string> sunRates = Request.Form["sunRate"].Split(',').ToList<string>();
+                List<string> sunList = Request.Form["sunStart"].Split(',').ToList<string>(); //collects list of start times for day
+                sunList.AddRange(Request.Form["sunEnd"].Split(',').ToList<string>()); //collects list of end times for day
+                List<string> sunRates = Request.Form["sunRate"].Split(',').ToList<string>(); //collects list of rates for day
 
+                // compile all day lists into one list of lists to pass to CreateTimeSlots()
                 List<List<string>> dayList = new List<List<string>>();
                 dayList.Add(monList);
                 dayList.Add(tueList);
@@ -795,6 +797,7 @@ namespace SpaceBook.Controllers
                 dayList.Add(satList);
                 dayList.Add(sunList);
 
+                // compile all rate lists into one list of lists to pass to CreateTimeSlots()
                 List<List<string>> rateList = new List<List<string>>();
                 rateList.Add(monRates);
                 rateList.Add(tueRates);
@@ -807,6 +810,7 @@ namespace SpaceBook.Controllers
 
                 if (ModelState.IsValid)
                 {
+                    // set the info of the new facility based on the facilityParam model collected from the view
                     newFacility.Name = facilityParam.Name;
                     newFacility.Description = facilityParam.Description;
                     newFacility.Email = facilityParam.Email;
@@ -817,18 +821,18 @@ namespace SpaceBook.Controllers
                     newFacility.Province = facilityParam.Province;
                     newFacility.Country = facilityParam.Country;
                     newFacility.ActiveFlag = true;
-                    newFacility.Type = 1; //
+                    newFacility.Type = 1;
                     newFacility.HourlyRate = (decimal)facilityParam.DefaultHourlyRate;
-                    newFacility.FacilityPhotoFileName = "defaultFacilityPhoto.jpg";
+                    newFacility.FacilityPhotoFileName = "defaultFacilityPhoto.jpg"; //use this as default photo, will be able to change later
 
 
-                    context.Facilities.Add(newFacility);
+                    context.Facilities.Add(newFacility); // add the facility to the db
                     CreateTimeSlots(newFacility, dayList, rateList); //Creation of time slots
-                    context.SaveChanges();
+                    context.SaveChanges(); // save the updated db information
 
                     Session["FacilityId"] = newFacility.Id;
 
-                    List<TagType> viewTypes = context.TagTypes.ToList();
+                    List<TagType> viewTypes = context.TagTypes.ToList(); //generate tag list to send back to index
                     return View("~/Views/Home/RegisterFacility/AddTags.cshtml", viewTypes);
                 }
 
@@ -840,14 +844,15 @@ namespace SpaceBook.Controllers
         {
             using (var context = new SpaceBookEntities1())
             {
-                for (int day = 1; day < 8; day++)
+                for (int day = 1; day < 8; day++) //loop through all days
                 {
-                    List<string> currDay = dayList[day - 1];
-                    List<string> currDayRate = rateList[day - 1];
+                    List<string> currDay = dayList[day - 1]; //get the individual current day dayList from the list of dayLists parameter
+                    List<string> currDayRate = rateList[day - 1]; //get the individual currentDayRate rateList from the list of rateLists parameter
 
-                    TimeSpan interval = new TimeSpan(0, 0, 0);
-                    for (int y = 0; y < 48; y++)  //y = number of time slots to create per day
+                    TimeSpan interval = new TimeSpan(0, 0, 0); // The initial time to use for the first time slot
+                    for (int y = 0; y < 48; y++)  //y = number of time slots to create per day. =48 as day is split into half hours
                     {
+                        // create the time slot and set its info
                         FacilityTime newFacilityTime = new FacilityTime();
                         newFacilityTime.Facility = newFacility;
                         newFacilityTime.FacilityId = newFacility.Id;
@@ -856,14 +861,16 @@ namespace SpaceBook.Controllers
                         newFacilityTime.Rate = 0;
                         newFacilityTime.IsAvailable = false;
 
-                        for (int i = 0; i < currDay.Count / 2; i++)
+                        for (int i = 0; i < currDay.Count / 2; i++) // first half of list is for start times, second half is for end times. So we only need to loop through the first half
                         {
                             if (currDay[i] == "")
-                                continue;
+                                continue; //skip if empty
 
+                            // gets the matching start and end string. this is the first element from the first half of the list and the first element from the second half of the same list
                             string startString = currDay[i].Remove(currDay[i].Length - 2, 2) + " " + currDay[i].Substring(currDay[i].Length - 2).ToUpper();
                             string endString = currDay[currDay.Count / 2 + i].Remove(currDay[currDay.Count / 2 + i].Length - 2, 2) + " " + currDay[currDay.Count / 2 + i].Substring(currDay[currDay.Count / 2 + i].Length - 2).ToUpper();
 
+                            // parse the start and end time strings into date times
                             TimeSpan start = DateTime.ParseExact(startString, "h:mm tt", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
                             TimeSpan end = DateTime.ParseExact(endString, "h:mm tt", System.Globalization.CultureInfo.InvariantCulture).TimeOfDay;
 
@@ -871,12 +878,12 @@ namespace SpaceBook.Controllers
                             double halfRate = 0;
                             if (currDayRate[i] != null && currDayRate[i] != "")
                             {
-                                rate = Math.Round(Convert.ToDouble(currDayRate[i]), 3);
-                                halfRate = Math.Round(rate / 2, 3);
+                                rate = Math.Round(Convert.ToDouble(currDayRate[i]), 3); //hourly rate as entered by the user, round to 2 decimals as it is money
+                                halfRate = Math.Round(rate / 2, 3); //divide hourly rate by 2 to get half hourly rate, as our time slots are half hour slots
                             }
 
 
-                            if ((interval >= start) && (interval < end))
+                            if ((interval >= start) && (interval < end)) // if the time slot falls into the range of one of te start/end time pairs, then make it available and set the rate
                             {
                                 newFacilityTime.IsAvailable = true;
                                 if (rate != 0)
@@ -886,8 +893,8 @@ namespace SpaceBook.Controllers
                             }
                         }
 
-                        context.FacilityTimes.Add(newFacilityTime);
-                        interval = interval.Add(new TimeSpan(0, 30, 0));
+                        context.FacilityTimes.Add(newFacilityTime); // add the time slot to the db
+                        interval = interval.Add(new TimeSpan(0, 30, 0)); // increase the interval by 30mins for the next time slot, and go back to top of loop
                     }
                 }
             }
