@@ -33,7 +33,6 @@
 
             <div class="form-group" style="margin: 5% 0% 5% 0%">
                 <label>Facility description</label>
-                @*<textarea class="form-control form-control-lg" name="Description" rows="6" id="Description" placeholder="Briefly describe your facility...">@Model.Description</textarea>*@
                 @Html.TextAreaFor(x => x.Description, new { @class = "form-control form-control-lg", @rows = "6", @placeholder = "Briefly describe your facility..." })
                 @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>

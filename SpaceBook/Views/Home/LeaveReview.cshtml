@@ -45,6 +45,8 @@
             let target = stars[rating - 1];
             target.dispatchEvent(new MouseEvent('click'));
         });
+
+        //sets the rating based on the star that was clicked
         function setRating(ev) {
             let span = ev.currentTarget;
             let stars = document.querySelectorAll('.star');
@@ -66,10 +68,8 @@
             document.querySelector('.stars').setAttribute('data-rating', num);
         }
 
+        //submits the review
         $('#reviewForm').submit(function () {
-            //var classVar = document.getElementsByClassName("mondayStarts");
-            //var rating = document.getElementById('ratingInput');
-            //rating.value = num;
             document.getElementById('ratingInput').value = rating;
             return true; // return false to cancel form action
         });
