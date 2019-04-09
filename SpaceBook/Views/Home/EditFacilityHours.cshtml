@@ -133,6 +133,8 @@
 }
 
 <script type="text/javascript">
+    //store the start and end times for each time period defined by the user
+
     var monStartTimes = [];
     var tueStartTimes = [];
     var wedStartTimes = [];
@@ -157,6 +159,7 @@
     var satRates = [];
     var sunRates = [];
 
+    //default rate for a time period is provided by the user already
     var defaultRate = @rate;
 </script>
 
@@ -179,29 +182,36 @@
         _this.parentNode.parentNode.remove();
     };
 
+    //called when adding a new time block
     function newStartAndEndTime(day) {
 
+        //creates a new row for defining a new time block
         var formRowDiv = document.createElement('div');
         formRowDiv.className = "form-row";
         formRowDiv.style.margin = "1% 0% 1% 0%";
 
+        //creates div for the start time selector
         var startTimeDiv = document.createElement('div');
         startTimeDiv.className = "col col-2 offset-1";
 
+        //creates input for the start time
         var startTimeInput = document.createElement('input');
         startTimeInput.type = "text";
         startTimeInput.className = "form-control timepicker";
         startTimeInput.classList.add(day + "Starts");
         startTimeInput.onkeypress = false;
+
+        //if this is the first time block being added that day, set it to start at 9:00 A.M.
         if (document.getElementById(day + "HoursContainer").childElementCount < 1)
         {
             startTimeInput.value = "09:00 AM"
         }
+        //otherwise, set it to start one hour later than the previous block's end time
         else {
             startTimeInput.value = increaseTimeByOneHour(document.getElementsByClassName(day + "Ends").item(document.getElementsByClassName(day + "Ends").length - 1).value);
         }
 
-
+        //adds a dash between the start and end times
         var dashDiv = document.createElement('div');
         dashDiv.className = "col";
 
@@ -209,21 +219,27 @@
         dash.style.textAlign = "center";
         dash.innerHTML = " - ";
 
+        //creates a div for the end time selector
         var endTimeDiv = document.createElement('div');
         endTimeDiv.className = "col col-2";
 
+        //creates input for the end time
         var endTimeInput = document.createElement('input');
         endTimeInput.type = "text";
         endTimeInput.className = "form-control timepicker";
         endTimeInput.classList.add(day + "Ends");
         endTimeInput.onkeypress = false;
+
+        //if this is the first time block being added that day, set it to end at 5:00 P.M.
         if (document.getElementById(day + "HoursContainer").childElementCount < 1) {
             endTimeInput.value = "05:00 PM"
         }
+        //otherwise, set it to start one hour later than the start time
         else {
             endTimeInput.value = increaseTimeByOneHour(startTimeInput.value);
         }
 
+        //creates div for the hourly rate input
         var hourlyRateDiv = document.createElement('div');
         hourlyRateDiv.className = "col col-3";
 
@@ -234,6 +250,7 @@
         var hourlyRateLabel = document.createElement('label');
         hourlyRateLabel.innerText = "$"
 
+        //creates the hourly rate input
         var hourlyRateInput = document.createElement('input');
         hourlyRateInput.type = "number";
         hourlyRateInput.className = "form-control";
@@ -241,15 +258,18 @@
         hourlyRateInput.placeholder = "Hourly rate"
         hourlyRateInput.value = defaultRate;
 
+        //creates the delete button div for the row
         var deleteButtonDiv = document.createElement('div');
         deleteButtonDiv.className = "col col-1";
 
+        //creates the delete button for the row
         var deleteButton = document.createElement('button');
         deleteButton.type = "button";
         deleteButton.className = "close";
         deleteButton.innerHTML = "&times;";
         deleteButton.onclick = function () { removeThis(this) };
 
+        //appends the created divs to position them under the previous time block row in the given day
         formRowDiv.appendChild(startTimeDiv);
         formRowDiv.appendChild(dashDiv);
         formRowDiv.appendChild(endTimeDiv);
@@ -265,6 +285,7 @@
         deleteButtonDiv.appendChild(deleteButton);
         document.getElementById(day + "HoursContainer").appendChild(formRowDiv);
 
+        //sets the time interval for each input option (30 minutes minimum)
         $('.timepicker').timepicker({
             'step': 30,
         });
@@ -275,6 +296,7 @@
         });
     }
 
+    //submits all time blocks and corresponding rates
     $('#editVenueForm').submit(function () {
         var classVar = document.getElementsByClassName("mondayStarts");
         for (var i = 0; i < classVar.length; i++) {
@@ -404,6 +426,7 @@
         }
     });
 
+    //checks that the hours do not overlap, there are no duplicates and that the start time is before the end time
     function validateHours() {
         for (var i = 0; i < monStartTimes.length; i++) {
             monStartTimes[i] = new Date(Date.parse(["2013/05/29 ", monStartTimes[i].slice(0, monStartTimes[i].length - 2), " ", monStartTimes[i].slice(monStartTimes[i].length - 2)].join('')));
@@ -447,7 +470,8 @@
                 || (thuStartTimes[i] >= thuEndTimes[i]) || (friStartTimes[i] >= friEndTimes[i]) || (satStartTimes[i] >= satEndTimes[i])
                 || (sunStartTimes[i] >= sunEndTimes[i]))
                 return false;
-            
+
+            //if there are any duplicates in any list, return false
             for (var j = 0; j < 10; j++) {
                 if (i == j)
                     continue;
@@ -465,6 +489,7 @@
         return true;
     }
 
+    //resets start/end time and rate arrays
     function clearArrays() {
         monStartTimes = [];
         tueStartTimes = [];
@@ -491,11 +516,10 @@
         sunRates = [];
     }
 
+    //given a time string, increases it by 1 hour
     function increaseTimeByOneHour(timeStr) {
         var splitedTimeStr = timeStr.split(':');
         var hours = parseInt(splitedTimeStr[0]);
-        //var meridiem = splitedTimeStr[1].split("pm")[1];
-        //var minutes = splitedTimeStr[1].split(" ")[0];
         var minutes = splitedTimeStr[1].match(/[a-z]+|[^a-z]+/gi)[0]
         var meridiem = splitedTimeStr[1].match(/[a-z]+|[^a-z]+/gi)[1]
         var nextHours = (hours + 1);

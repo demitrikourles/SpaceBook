@@ -28,7 +28,6 @@
 
                 </div>
                 <div class="card-footer text-center">
-                    @*<button type="button" onclick="location.href='@Url.Action("UnactivateFacility", new { Id = result.Id })'" class="btn btn-danger" style="margin-top:2%">Delete Facility</button>*@
                     <button class="btn btn-danger" style="margin-top:2%; color:white">
                         @Html.ActionLink("Delete Facility", "UnactivateFacility", "Home",
                         new { confirm = true, id = result.Id},

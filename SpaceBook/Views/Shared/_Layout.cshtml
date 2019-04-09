@@ -58,6 +58,7 @@
             @using SpaceBook.ViewModels
             @if (TempData["UserMessage"] != null)
             {
+                //space for messages to be displayed to the user
                 var message = (MessageViewModel)TempData["UserMessage"];
                 <div class="col-lg-offset-1 alert @message.CssClassName alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -73,7 +74,6 @@
         <footer></footer>
     </div>
 
-    @*@Scripts.Render("~/bundles/jquery")*@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
 </body>
